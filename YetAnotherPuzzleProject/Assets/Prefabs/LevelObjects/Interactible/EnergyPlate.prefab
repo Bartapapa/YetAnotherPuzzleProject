@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 5958006061780437754}
   - component: {fileID: 5578820677039717257}
   - component: {fileID: 4232512751035310491}
-  - component: {fileID: 730335623962152095}
+  - component: {fileID: 2648019486136748489}
   m_Layer: 0
   m_Name: EnergyPlate
   m_TagString: Untagged
@@ -115,7 +115,7 @@ MonoBehaviour:
   _conditions: []
   _periodicActivation: 0
   _activationDuration: 5
---- !u!114 &730335623962152095
+--- !u!114 &2648019486136748489
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3848116956887914948}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89c4bbb5602578f4684e34201747bc21, type: 3}
+  m_Script: {fileID: 11500000, guid: 309ae31355c330147afb50382bd8c22f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _activateable: {fileID: 4232512751035310491}
