@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Sc_Interactor : MonoBehaviour
 {
+    [Header("OBJECT REFS")]
+    public Sc_Inventory _inventory;
+
     [Header("PARAMETERS")]
     public float _interactionRange = 1.5f;
     private SphereCollider _interactionSphere;
@@ -68,7 +71,36 @@ public class Sc_Interactor : MonoBehaviour
         {
             if (interactible.CanBeInteractedWith)
             {
-                localChosenInteractibles.Add(interactible);
+                if (interactible._usesKey)
+                {
+                    if (_inventory == null)
+                    {
+                        //Do nothing
+                    }
+                    else
+                    {
+                        if (_inventory._currentlyHeldItem == null)
+                        {
+                            //Do nothing
+                        }
+                        else
+                        {
+                            int currentHeldItemKey = _inventory._currentlyHeldItem._itemID;
+                            if (interactible.InteractorHasCorrectKey(currentHeldItemKey))
+                            {
+                                localChosenInteractibles.Add(interactible);
+                            }
+                            else
+                            {
+                                //Do nothing
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    localChosenInteractibles.Add(interactible);
+                }            
             }
         }
 

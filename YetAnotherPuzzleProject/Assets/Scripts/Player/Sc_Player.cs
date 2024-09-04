@@ -14,7 +14,7 @@ public struct CharacterInput
 public class Sc_Player : MonoBehaviour
 {
     [Header("OBJECT REFERENCES")]
-    [SerializeField] private Sc_Character _playerCharacter;
+    [SerializeField] private Sc_Character_Player _playerCharacter;
     
     private Vector2 _movement;
 
@@ -37,7 +37,7 @@ public class Sc_Player : MonoBehaviour
         {
             if (_playerCharacter.Interactor.CurrentSelectedInteractible != null)
             {
-                _playerCharacter.Interactor.CurrentSelectedInteractible.Interact(_playerCharacter.Interactor);
+                _playerCharacter.Interactor.CurrentSelectedInteractible.Interact(_playerCharacter);
             }
         }
     }

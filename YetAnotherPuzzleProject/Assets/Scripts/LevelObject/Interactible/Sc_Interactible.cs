@@ -6,7 +6,7 @@ using UnityEngine.Events;
 public class Sc_Interactible : MonoBehaviour
 {
     [Header("UNITY EVENTS")]
-    public UnityEvent<Sc_Interactor> OnInteractedWith;
+    public UnityEvent<Sc_Character> OnInteractedWith;
 
     [Header("OBJECT REFS")]
     public Material _debugSelectedMat;
@@ -19,6 +19,7 @@ public class Sc_Interactible : MonoBehaviour
 
     [Header("KEY")]
     public bool _usesKey = false;
+    public List<int> _keyIDs = new List<int>();
 
     private bool _canBeInteractedWith = true;
     public bool CanBeInteractedWith { get { return _canBeInteractedWith; } set { _canBeInteractedWith = value; } }
@@ -38,11 +39,23 @@ public class Sc_Interactible : MonoBehaviour
         _meshRenderer.material = _debugUnselectedMat;
     }
 
-    public void Interact(Sc_Interactor interactor, bool force = false)
+    public void Interact(Sc_Character interactor, bool force = false)
     {
         if (_canBeInteractedWith)
-        {
-            OnInteractedWith?.Invoke(interactor);
+        {          
+            if (_usesKey)
+            {
+                Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+                if (player)
+                {
+                    player.Inventory._currentlyHeldItem.UseItem();
+                    OnInteractedWith?.Invoke(interactor);
+                }
+            }
+            else
+            {
+                OnInteractedWith?.Invoke(interactor);
+            }
         }
         else
         {
@@ -51,5 +64,10 @@ public class Sc_Interactible : MonoBehaviour
                 OnInteractedWith?.Invoke(interactor);
             }
         }
+    }
+
+    public bool InteractorHasCorrectKey(int id)
+    {
+        return _keyIDs.Contains(id);
     }
 }

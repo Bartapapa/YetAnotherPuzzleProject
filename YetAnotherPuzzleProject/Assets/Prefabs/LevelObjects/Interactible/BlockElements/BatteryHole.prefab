@@ -286,7 +286,8 @@ MonoBehaviour:
   _debugUnselectedMat: {fileID: 2100000, guid: 1b4d1e77b0c202b428ed34ffb9d63a97, type: 2}
   _mesh: {fileID: 1208794880622121941}
   _priority: 0
-  _usesKey: 0
+  _usesKey: 1
+  _keyIDs: 00000000
 --- !u!114 &7571637042409345236
 MonoBehaviour:
   m_ObjectHideFlags: 0
