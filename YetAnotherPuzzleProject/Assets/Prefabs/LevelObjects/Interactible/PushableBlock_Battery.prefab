@@ -461,6 +461,8 @@ GameObject:
   - component: {fileID: 253775003874132503}
   - component: {fileID: 308035704760415027}
   - component: {fileID: 6502130381306768576}
+  - component: {fileID: 2053105722028253018}
+  - component: {fileID: 7470539738603941545}
   m_Layer: 0
   m_Name: PushableBlock_Battery
   m_TagString: Untagged
@@ -544,6 +546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a741ce267eab24ca0135bc5ac0552d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _activateable: {fileID: 6502130381306768576}
   _frontElementAnchor: {fileID: 8266444288400645407}
   _backElementAnchor: {fileID: 6483015878625638162}
   _rightElementAnchor: {fileID: 7671026213011178953}
@@ -551,7 +554,9 @@ MonoBehaviour:
   _frontBlockElement: 0
   _backBlockElement: 0
   _rightBlockElement: 0
-  _leftBlockElement: 0
+  _leftBlockElement: 1
+  _batteryHolePrefab: {fileID: 217489669567972189, guid: cfcabd263cfd58d4c996e0f80117d1d7,
+    type: 3}
   _maxSpeed: 3
   _speedSharpness: 15
   _groundLayers:
@@ -605,7 +610,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnActivate:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2053105722028253018}
+        m_TargetAssemblyTypeName: Sc_PowerGenerator, Assembly-CSharp
+        m_MethodName: GeneratePower
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnForceActivate:
     m_PersistentCalls:
       m_Calls: []
@@ -629,6 +646,41 @@ MonoBehaviour:
   _conditions: []
   _periodicActivation: 0
   _activationDuration: 5
+--- !u!114 &2053105722028253018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3874516146704767000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0d6019f777b33c459fcee675f66f5e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!136 &7470539738603941545
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3874516146704767000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.99, z: 0}
 --- !u!1 &3984980723771086968
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,10 +35,23 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
+            if (_playerCharacter.Controller.IsClimbing)
+            {
+                _playerCharacter.Controller.StopClimbing();
+            }
+
             if (_playerCharacter.Interactor.CurrentSelectedInteractible != null)
             {
                 _playerCharacter.Interactor.CurrentSelectedInteractible.Interact(_playerCharacter);
             }
+        }
+    }
+
+    public void OnQuack(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerCharacter.Quacker.Quack();
         }
     }
 

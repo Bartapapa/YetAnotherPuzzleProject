@@ -5,6 +5,7 @@ using UnityEngine;
 public class Sc_Interactor : MonoBehaviour
 {
     [Header("OBJECT REFS")]
+    public Sc_Character Character;
     public Sc_Inventory _inventory;
 
     [Header("PARAMETERS")]
@@ -13,8 +14,7 @@ public class Sc_Interactor : MonoBehaviour
 
     private Sc_Interactible _currentSelectedInteractible;
     private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
-    private bool _canInteract = true;
-    public bool CanInteract { get { return _canInteract; } }
+    public bool CanInteract { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || !Character.Controller.IsGrounded ? false : true; } }
     public Sc_Interactible CurrentSelectedInteractible { get { return _currentSelectedInteractible; } }
 
     private void Start()
@@ -63,7 +63,7 @@ public class Sc_Interactor : MonoBehaviour
     {
         Sc_Interactible chosenInteractible = null;
 
-        if (!_canInteract) return chosenInteractible;
+        if (!CanInteract) return chosenInteractible;
 
         List<Sc_Interactible> localChosenInteractibles = new List<Sc_Interactible>();
 

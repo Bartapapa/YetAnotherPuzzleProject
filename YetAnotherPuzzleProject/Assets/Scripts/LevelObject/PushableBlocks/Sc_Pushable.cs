@@ -45,6 +45,7 @@ public class Sc_Pushable : MonoBehaviour
     private RaycastHit _groundHit;
 
     private Rigidbody _rb;
+    public Rigidbody RB { get { return _rb; } }
 
     private void Start()
     {
