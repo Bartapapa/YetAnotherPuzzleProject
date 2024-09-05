@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 7928514506142923720}
   - component: {fileID: 6982318457857571188}
   - component: {fileID: 7997201025475106202}
+  - component: {fileID: 1781143009102776685}
   m_Layer: 0
   m_Name: PillarRotate_2x2
   m_TagString: Untagged
@@ -334,6 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38031fc7121fdd4bb9b5142ad0e068d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _characterParenter: {fileID: 0}
   _travelDistance: 4
   _overTime: 4
   _movementCurve:
@@ -362,6 +364,27 @@ MonoBehaviour:
     m_RotationOrder: 4
   _rotateAngle: 90
   _rotateOverTime: 1
+--- !u!65 &1781143009102776685
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7654891711046621455}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4, y: 1, z: 1.4}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7975966406870833888
 GameObject:
   m_ObjectHideFlags: 0

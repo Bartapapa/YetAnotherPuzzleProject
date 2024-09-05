@@ -42,10 +42,27 @@ public class Sc_Pushable : MonoBehaviour
 
     [Header("GROUND")]
     public LayerMask _groundLayers;
+    private RaycastHit _obstacleHit;
+    private RaycastHit _slopeHit;
     private RaycastHit _groundHit;
 
+    private Sc_CharacterController _pushedBy;
+    public Sc_CharacterController PushedBy { get { return _pushedBy; } set { _pushedBy = value; } }
+
+    private BoxCollider _collider;
+    public Collider Collider { get { return _collider; } }
     private Rigidbody _rb;
     public Rigidbody RB { get { return _rb; } }
+    private Vector3 _boxColliderCenter;
+    private Vector3 _boxColliderHalfExtents;
+    private bool _onSlope;
+    private Vector3 _cachedLastPushDirection;
+    private bool _isBeingPushed;
+    public bool IsBeingPushed { get { return _isBeingPushed; } set { _isBeingPushed = value; } }
+    private bool _isSliding;
+    public bool IsSliding { get { return _isSliding; } }
+    private bool _isOnRotatingPlatform = false;
+    public bool IsOnRotatingPlatform { get { return _isOnRotatingPlatform; } set { _isOnRotatingPlatform = value; } }
 
     private void Start()
     {
@@ -60,6 +77,16 @@ public class Sc_Pushable : MonoBehaviour
             Debug.LogWarning(this.name + " doesn't have a Rigidbody!");
             return;
         }
+
+        _collider = GetComponent<BoxCollider>();
+        if (_collider == null)
+        {
+            Debug.LogWarning(this.name + " doesn't have a BoxCollider!");
+            return;
+        }
+
+        _boxColliderCenter = _collider.center;
+        _boxColliderHalfExtents = new Vector3(_collider.size.x*.5f, _collider.size.y*.5f, _collider.size.z*.5f);
 
         InitializeBlockElements();
     }
@@ -108,16 +135,24 @@ public class Sc_Pushable : MonoBehaviour
 
     public void Push(Vector3 direction)
     {
+        if (CheckObstacle(direction) || _onSlope) return;
         Vector3 targetMovementVelocity = direction * _maxSpeed;
         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_speedSharpness * Time.fixedDeltaTime));
     }
 
-    private bool CheckObstacle()
+    private bool CheckObstacle(Vector3 direction)
     {
-        Physics.BoxCast(transform.position + Vector3.up, new Vector3(1.1f, 1.1f, 1.1f), Vector3.down, out _groundHit, transform.rotation, _groundLayers);
-        float angle = Vector3.Angle(Vector3.up, _groundHit.normal);
-        return (angle != 0 && angle <= 1) ? true : false;
+        Physics.BoxCast(transform.position + _boxColliderCenter, new Vector3(_boxColliderHalfExtents.x -.1f, _boxColliderHalfExtents.y - .1f, _boxColliderHalfExtents.z - .1f), direction, out _obstacleHit, transform.rotation, .3f, _groundLayers, QueryTriggerInteraction.Ignore);
+        float angle = Vector3.Angle(Vector3.up, _obstacleHit.normal);
+        return Mathf.Abs(angle) <= 1 || Mathf.Abs(angle) >= 80 ? false : true;
     }
+
+    //private bool SlopeCheck()
+    //{
+    //    Physics.Raycast(transform.position + _boxColliderCenter, Vector3.down, out _slopeHit, 2f, _groundLayers, QueryTriggerInteraction.Ignore);
+    //    float angle = Vector3.Angle(Vector3.up, _slopeHit.normal);
+    //    return Mathf.Abs(angle) > 1 ? true : false;
+    //}
 
     //private void RegisterObject(Sc_WeightedObject wObject)
     //{

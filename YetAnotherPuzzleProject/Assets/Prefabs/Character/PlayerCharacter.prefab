@@ -450,7 +450,7 @@ GameObject:
   - component: {fileID: 2435217427720209724}
   - component: {fileID: 5573489547609364782}
   - component: {fileID: 4082066170031847616}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: RunParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5535,7 +5535,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _maxClimbSpeed: 4
-  _climbMovementSharpness: 10
+  _climbMovementSharpness: 15
 --- !u!136 &2613430712200823566
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5938,7 +5938,7 @@ GameObject:
   - component: {fileID: 6489618668060497778}
   - component: {fileID: 8084786853120568642}
   - component: {fileID: 8420164566012096545}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: QuackParticles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11354,7 +11354,7 @@ GameObject:
   - component: {fileID: 8964239474461900187}
   - component: {fileID: 395256113360152140}
   - component: {fileID: 1116991760617330520}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: SmallQuacks
   m_TagString: Untagged
   m_Icon: {fileID: 0}

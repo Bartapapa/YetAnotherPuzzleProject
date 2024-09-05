@@ -66,11 +66,13 @@ public class Sc_Pillar : MonoBehaviour
         {
             float alpha = _movementCurve.Evaluate(time / _overTime);
             Vector3 newPos = Vector3.Lerp(fromPos, toPos, alpha);
+            //transform.position = newPos;
             _rb.Move(newPos, _rb.rotation);
             time += Time.deltaTime;
             yield return null;
         }
         _rb.Move(toPos, _rb.rotation);
+        //transform.position = toPos;
         if (up)
         {
             OnReachedTop();

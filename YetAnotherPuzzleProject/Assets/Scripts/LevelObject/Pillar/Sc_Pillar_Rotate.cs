@@ -10,6 +10,8 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
     private Coroutine _rotateCo;
 
+    private List<Sc_Pushable> _registeredPushables = new List<Sc_Pushable>();
+
     protected override void OnReachedTop()
     {
         if (_rotateCo != null)
@@ -36,13 +38,37 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             float alpha = _movementCurve.Evaluate(time / _rotateOverTime);
             Quaternion toRot = Quaternion.Lerp(originalRot, destRot, alpha);
             //Vector3 toRot = Vector3.Slerp(originalRot, toEulerRot, alpha);
-            _rb.Move(_rb.position, toRot);
+            //_rb.Move(_rb.position, toRot);
+            _rb.MoveRotation(toRot);
+            //transform.rotation = toRot;
             time += Time.deltaTime;
             yield return null;
         }
-        _rb.Move(_rb.position, destRot);
+        //_rb.Move(_rb.position, destRot);
+        //transform.rotation = destRot;
+        _rb.MoveRotation(destRot);
         _rotateCo = null;
 
         Move(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+
+        if (pushable)
+        {
+            pushable.IsOnRotatingPlatform = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+
+        if (pushable)
+        {
+            pushable.IsOnRotatingPlatform = false;
+        }
     }
 }

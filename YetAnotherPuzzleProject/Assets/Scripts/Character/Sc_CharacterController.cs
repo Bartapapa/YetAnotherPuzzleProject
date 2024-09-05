@@ -400,6 +400,13 @@ public class Sc_CharacterController : MonoBehaviour
 
             if (_currentPushable)
             {
+                if (_currentPushable.IsBeingPushed)
+                {
+                    if (_currentPushable.PushedBy != this) return;
+                }
+
+                if (_currentPushable.IsSliding) return;
+
                 float dot = Vector3.Dot(_pushableHit.normal, _moveInputVector);
                 if (-dot > .8f)
                 {
@@ -419,7 +426,6 @@ public class Sc_CharacterController : MonoBehaviour
         }
         else
         {
-            _currentPushable = null;
             EndPush();
         }
     }
@@ -432,7 +438,10 @@ public class Sc_CharacterController : MonoBehaviour
 
         if (_currentPushable)
         {
-            _currentPushable.RB.constraints = RigidbodyConstraints.FreezeRotation;
+            _currentPushable.IsBeingPushed = true;
+            _currentPushable.PushedBy = this;
+
+            //_currentPushable.RB.constraints = RigidbodyConstraints.FreezeRotation;
         }       
     }
 
@@ -445,8 +454,11 @@ public class Sc_CharacterController : MonoBehaviour
 
         if (_currentPushable)
         {
-            _currentPushable.RB.constraints = RigidbodyConstraints.None;
-            _currentPushable.RB.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            _currentPushable.IsBeingPushed = false;
+            _currentPushable.PushedBy = null;
+
+            //_currentPushable.RB.constraints = RigidbodyConstraints.None;
+            //_currentPushable.RB.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
     }
 
@@ -533,7 +545,6 @@ public class Sc_CharacterController : MonoBehaviour
     private void HandleParticles()
     {       
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
-        Debug.Log(Mathf.Abs(horizontalVelocity.magnitude));
         if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f)
         {
             if (!_runParticles.isPlaying)
