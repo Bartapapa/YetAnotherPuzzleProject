@@ -58,10 +58,23 @@ public class Sc_Player : MonoBehaviour
         {
             Sc_Character_Player newCharacter = Instantiate<Sc_Character_Player>(_characterPrefab, spawnPoint, Quaternion.identity);
             _playerCharacter = newCharacter;
+
+            if (Sc_CameraManager.instance)
+            {
+                Sc_CameraManager.instance.AddFocus(Sc_CameraManager.instance._defaultCameraFocus, _playerCharacter.transform);
+            }
         }
         else
         {
             _playerCharacter.Controller.RB.MovePosition(spawnPoint);
+
+            if (Sc_CameraManager.instance)
+            {
+                if (!Sc_CameraManager.instance.DoesCameraFocusHaveFocus(Sc_CameraManager.instance._defaultCameraFocus, _playerCharacter.transform))
+                {
+                    Sc_CameraManager.instance.AddFocus(Sc_CameraManager.instance._defaultCameraFocus, _playerCharacter.transform);
+                }
+            }
         }
 
         //if (Sc_LevelManager.instance != null)

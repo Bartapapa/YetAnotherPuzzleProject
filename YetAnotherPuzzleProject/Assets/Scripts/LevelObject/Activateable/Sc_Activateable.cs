@@ -67,6 +67,7 @@ public class Sc_Activateable : MonoBehaviour
 
     public void Activate(bool toggleOn)
     {
+
         if (toggleOn == _isActivated) return;
         if (toggleOn && !HasFilledConditionsForActivation())
         {
@@ -86,35 +87,7 @@ public class Sc_Activateable : MonoBehaviour
         {
             Debug.Log(this.name + " has been deactivated!");
         }
-        //if (force)
-        //{
-        //    _isActivated = toggleOn;
-        //    _meshRenderer.material = toggleOn ? _debugActivatedMat : _debugDeactivatedMat;
-
-        //    OnActivate?.Invoke(toggleOn);
-        //}
     }
-
-    //public void Deactivate(bool force = false)
-    //{
-    //    if (force)
-    //    {
-    //        _isActivated = false;
-    //        _meshRenderer.material = _debugDeactivatedMat;
-
-    //        OnDeactivate?.Invoke(force);
-    //    }
-    //    else
-    //    {
-    //        if (!_isActivated) return;
-    //        _isActivated = false;
-    //        _meshRenderer.material = _debugDeactivatedMat;
-
-    //        OnDeactivate?.Invoke(force);
-
-    //        Debug.Log(this.name + " has been deactivated!");
-    //    }
-    //}
 
     public void ToggleActivation()
     {

@@ -37,6 +37,24 @@ public class Sc_Pillar : MonoBehaviour
         _movementCo = StartCoroutine(Movement(activated));
     }
 
+    public void GaugeMove(float gauge)
+    {
+        if (gauge > 1f) gauge = 1f;
+
+        float alpha = _movementCurve.Evaluate(gauge / 1f);
+        Vector3 newPos = Vector3.Lerp(_bottomPos, _topPos, alpha);
+        _rb.Move(newPos, _rb.rotation);
+
+        if (gauge >= 1f)
+        {
+            OnReachedTop();
+        }
+        else if (gauge <= 0f)
+        {
+            OnReachedBottom();
+        }
+    }
+
     public void ForceMove(bool activated)
     {
         if (_movementCo != null)

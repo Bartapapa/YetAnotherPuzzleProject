@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sc_Button : MonoBehaviour
@@ -11,8 +12,8 @@ public class Sc_Button : MonoBehaviour
 
     [Header("PARAMETERS")]
     public float _activationDuration = 1f;
+    public bool _onlyActivateOnPush = false;
     private float _activationTimer = 0f;
-
     private bool _buttonPushed = false;
 
     private void Update()
@@ -45,7 +46,10 @@ public class Sc_Button : MonoBehaviour
     {
         _buttonPushed = false;
         _interactible.CanBeInteractedWith = true;
-        _activateable.ToggleActivation();
+        if (!_onlyActivateOnPush)
+        {
+            _activateable.ToggleActivation();
+        }      
 
         _buttonPivot.localPosition = new Vector3(0f, 0f, 0f);
     }

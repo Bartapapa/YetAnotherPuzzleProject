@@ -39,6 +39,8 @@ public class Sc_Pushable : MonoBehaviour
     [Header("MOVEMENT")]
     public float _maxSpeed = 1f;
     public float _speedSharpness = 15f;
+    public Vector3 _gravity = new Vector3(0f, -30f, 0f);
+    private Vector3 _pushedDirection = Vector3.zero;
 
     [Header("GROUND")]
     public LayerMask _groundLayers;
@@ -133,11 +135,29 @@ public class Sc_Pushable : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        HandleVelocity();
+    }
+
+    private void HandleVelocity()
+    {
+        Vector3 targetMovementVelocity = Vector3.zero;
+        if (_pushedDirection != Vector3.zero)
+        {
+            targetMovementVelocity = _pushedDirection * _maxSpeed;
+            _pushedDirection = Vector3.zero;
+        }
+        _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_speedSharpness * Time.fixedDeltaTime));
+        _rb.velocity += _gravity * Time.fixedDeltaTime;
+    }
+
     public void Push(Vector3 direction)
     {
         if (CheckObstacle(direction) || _onSlope) return;
-        Vector3 targetMovementVelocity = direction * _maxSpeed;
-        _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_speedSharpness * Time.fixedDeltaTime));
+        _pushedDirection = direction;
+        //Vector3 targetMovementVelocity = direction * _maxSpeed;
+        //_rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_speedSharpness * Time.fixedDeltaTime));
     }
 
     private bool CheckObstacle(Vector3 direction)

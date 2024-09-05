@@ -459,7 +459,6 @@ GameObject:
   - component: {fileID: 239925580081401669}
   - component: {fileID: 2363078905782989912}
   - component: {fileID: 253775003874132503}
-  - component: {fileID: 308035704760415027}
   - component: {fileID: 6502130381306768576}
   - component: {fileID: 2053105722028253018}
   - component: {fileID: 7470539738603941545}
@@ -499,7 +498,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -557,8 +556,9 @@ MonoBehaviour:
   _leftBlockElement: 1
   _batteryHolePrefab: {fileID: 217489669567972189, guid: cfcabd263cfd58d4c996e0f80117d1d7,
     type: 3}
-  _maxSpeed: 3
+  _maxSpeed: 4
   _speedSharpness: 15
+  _gravity: {x: 0, y: -30, z: 0}
   _groundLayers:
     serializedVersion: 2
     m_Bits: 1
@@ -575,27 +575,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weight: 10
---- !u!65 &308035704760415027
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3874516146704767000}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Size: {x: 1.7, y: 1.2, z: 1.7}
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!114 &6502130381306768576
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,16 +650,16 @@ CapsuleCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.9
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0.99, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &3984980723771086968
 GameObject:
   m_ObjectHideFlags: 0
