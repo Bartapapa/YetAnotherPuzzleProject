@@ -363,7 +363,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interactible: {fileID: 2485996936256105821}
-  _itemID: 0
+  _inInventory: {fileID: 0}
+  _itemData: {fileID: 11400000, guid: 0b3d41d0d87be76429b96d70c7d7bdc8, type: 2}
 --- !u!114 &2485996936256105821
 MonoBehaviour:
   m_ObjectHideFlags: 0

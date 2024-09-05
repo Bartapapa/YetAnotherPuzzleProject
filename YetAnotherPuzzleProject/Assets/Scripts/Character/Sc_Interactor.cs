@@ -85,7 +85,7 @@ public class Sc_Interactor : MonoBehaviour
                         }
                         else
                         {
-                            int currentHeldItemKey = _inventory._currentlyHeldItem._itemID;
+                            int currentHeldItemKey = _inventory._currentlyHeldItem._itemData.ID;
                             if (interactible.InteractorHasCorrectKey(currentHeldItemKey))
                             {
                                 localChosenInteractibles.Add(interactible);

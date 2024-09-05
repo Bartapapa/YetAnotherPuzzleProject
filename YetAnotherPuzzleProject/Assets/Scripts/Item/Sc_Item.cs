@@ -9,7 +9,7 @@ public class Sc_Item : MonoBehaviour
     [ReadOnly] public Sc_Inventory _inInventory;
 
     [Header("ITEM DATA")]
-    public int _itemID = -1;
+    public SO_ItemData _itemData;
 
     public virtual void OnInteractedWith(Sc_Character interactor)
     {

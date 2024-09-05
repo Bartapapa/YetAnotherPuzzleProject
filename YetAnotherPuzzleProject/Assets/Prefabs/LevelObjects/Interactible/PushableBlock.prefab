@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 1440113707186372052}
   - component: {fileID: 5493445285162975708}
   - component: {fileID: 7988426928615684837}
+  - component: {fileID: 5815305771291698740}
   m_Layer: 0
   m_Name: PushableBlock
   m_TagString: Untagged
@@ -160,6 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8a741ce267eab24ca0135bc5ac0552d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _activateable: {fileID: 0}
   _frontElementAnchor: {fileID: 6670539496455917023}
   _backElementAnchor: {fileID: 1027423094045613822}
   _rightElementAnchor: {fileID: 1034883744060027539}
@@ -168,6 +170,7 @@ MonoBehaviour:
   _backBlockElement: 0
   _rightBlockElement: 0
   _leftBlockElement: 0
+  _batteryHolePrefab: {fileID: 0}
   _maxSpeed: 3
   _speedSharpness: 15
   _groundLayers:
@@ -207,6 +210,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.7, y: 1.2, z: 1.7}
   m_Center: {x: 0, y: 2, z: 0}
+--- !u!136 &5815305771291698740
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1598259560097223975}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.99, z: 0}
 --- !u!1 &4306536799125447459
 GameObject:
   m_ObjectHideFlags: 0

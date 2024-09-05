@@ -80,6 +80,8 @@ public class Sc_CharacterController : MonoBehaviour
     public event DefaultEvent PushEnd;
 
     private Rigidbody _rb;
+    public Rigidbody RB { get { return _rb; } }
+    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || _isPushingBlock) ? false : true; } }
     private Vector3 _moveInputVector;
     private Vector3 _lookInputVector;
     private bool _ignoreInputs = false;
@@ -532,7 +534,7 @@ public class Sc_CharacterController : MonoBehaviour
     {       
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
         Debug.Log(Mathf.Abs(horizontalVelocity.magnitude));
-        if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && IsGrounded && !_isPushingBlock)
+        if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f)
         {
             if (!_runParticles.isPlaying)
             {
