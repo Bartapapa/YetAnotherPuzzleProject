@@ -10,6 +10,8 @@ public class Sc_LevelManager : MonoBehaviour
     [Header("LEVEL")]
     public Sc_Level _currentLevel;
 
+    private int _spawnedPlayers = 0;
+
     private void Awake()
     {
         if (instance == null)
@@ -22,21 +24,42 @@ public class Sc_LevelManager : MonoBehaviour
         }
     }
 
+    #region PLAYERSPAWNING
     public void OnPlayerJoined(PlayerInput playerInput)
     {
         Sc_Player player = Sc_PlayerManager.instance.GetPlayerFromPInput(playerInput);
         if (player != null)
         {
-            player.InitializePlayerCharacter(_currentLevel._spawnPoints[Sc_PlayerManager.instance.CurrentPlayers.Count - 1].position);
+            //If we're in-game, otherwise skip this.
+            Transform spawnPoint = _currentLevel.GetSpawnPoint(_spawnedPlayers);
+            if (spawnPoint != null)
+            {
+                player.InitializePlayerCharacter(spawnPoint.position, spawnPoint.rotation);
+            }
+            else
+            {
+                player.InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
+            }
+            _spawnedPlayers++;
         }
     }
 
     public void OnPlayerLeft(PlayerInput playerInput)
     {
-        //Sc_Player player = Sc_PlayerManager.instance.GetPlayerFromPInput(playerInput);
-        //if (player != null)
-        //{
-        //    CameraManager.UnregisterPOI(player.CurrentCharacter.transform);
-        //}
+        Sc_Player player = Sc_PlayerManager.instance.GetPlayerFromPInput(playerInput);
+        if (player != null)
+        {
+            if (player.PlayerCharacter != null)
+            {
+                Sc_CameraManager.instance.RemoveFocus(Sc_CameraManager.instance._defaultCameraFocus, player.PlayerCharacter.transform);
+            }
+            _spawnedPlayers--;
+        }
     }
+
+    public void ResetSpawnedPlayerCount()
+    {
+        _spawnedPlayers = 0;
+    }
+    #endregion
 }

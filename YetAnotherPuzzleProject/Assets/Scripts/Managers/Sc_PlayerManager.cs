@@ -36,11 +36,11 @@ public class Sc_PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        //if (Sc_LevelManager.instance != null)
-        //{
-        //    PlayerInputManager.instance.playerJoinedEvent.AddListener(Sc_LevelManager.instance.OnPlayerJoined);
-        //    PlayerInputManager.instance.playerLeftEvent.AddListener(Sc_LevelManager.instance.OnPlayerLeft);
-        //}
+        if (Sc_LevelManager.instance != null)
+        {
+            PlayerInputManager.instance.playerJoinedEvent.AddListener(Sc_LevelManager.instance.OnPlayerJoined);
+            PlayerInputManager.instance.playerLeftEvent.AddListener(Sc_LevelManager.instance.OnPlayerLeft);
+        }
 
         PlayerInputManager.instance.JoinPlayer(0, -1, null);
     }

@@ -43,11 +43,13 @@ public class Sc_GameManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        CurrentGameState = _startGameState;
     }
 
     private void Start()
     {
-        CurrentGameState = _startGameState;
+        //CurrentGameState = _startGameState;
     }
 
     #region GAMESTATE

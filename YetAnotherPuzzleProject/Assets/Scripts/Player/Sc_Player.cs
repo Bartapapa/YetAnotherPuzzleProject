@@ -17,6 +17,7 @@ public class Sc_Player : MonoBehaviour
     [Header("OBJECT REFERENCES")]
     [SerializeField] private Sc_Character_Player _characterPrefab;
     [SerializeField] private Sc_Character_Player _playerCharacter;
+    public Sc_Character_Player PlayerCharacter { get { return _playerCharacter; } }
     
     private Vector2 _movement;
 
@@ -35,7 +36,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (Sc_LevelManager.instance == null)
         {
-            InitializePlayerCharacter(Vector3.zero);
+            InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
         }
     }
 
@@ -52,7 +53,7 @@ public class Sc_Player : MonoBehaviour
         }
     }
 
-    public void InitializePlayerCharacter(Vector3 spawnPoint)
+    public void InitializePlayerCharacter(Vector3 spawnPoint, Quaternion rot)
     {
         if (_playerCharacter == null)
         {

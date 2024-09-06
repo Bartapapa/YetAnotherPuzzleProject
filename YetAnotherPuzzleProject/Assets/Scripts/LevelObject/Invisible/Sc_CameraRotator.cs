@@ -5,12 +5,13 @@ using UnityEngine;
 public class Sc_CameraRotator : MonoBehaviour
 {
     public float rotateDegrees = 90f;
+    public float overTime = 4f;
 
-    public void RotateCamera()
+    public void RotateWorld()
     {
-        if (Sc_CameraManager.instance != null)
+        if (Sc_LevelManager.instance != null)
         {
-            Sc_CameraManager.instance.RotateDefaultCamera(rotateDegrees);
+            Sc_LevelManager.instance._currentLevel.RotateWorldSequence(rotateDegrees, overTime);
         }
     }
 }
