@@ -5,10 +5,10 @@ using UnityEngine;
 public class Sc_LevelLoader : MonoBehaviour
 {
     [Header("LEVEL TO LOAD")]
-    public Loader.Scene _levelToLoad = Loader.Scene.SampleScene;
+    public Loader.Scene LevelToLoad = Loader.Scene.SampleScene1;
 
     public void LoadLevel()
     {
-        Sc_GameManager.instance.Load(_levelToLoad);
+        Sc_GameManager.instance.Load(LevelToLoad);
     }
 }

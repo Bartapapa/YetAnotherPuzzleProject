@@ -34,18 +34,15 @@ public class Sc_PlayerManager : MonoBehaviour
         _leaveAction.performed += context => LeaveAction(context);
     }
 
-    private void Start()
-    {
-        //CreatePlayerIfNone();
-        //AssignEventsToLevelManager();
-    }
-
     public void AssignEventsToLevelManager()
     {
-        if (Sc_LevelManager.instance != null)
+        if (Sc_GameManager.instance.CurrentLevel != null)
         {
-            PlayerInputManager.instance.playerJoinedEvent.AddListener(Sc_LevelManager.instance.OnPlayerJoined);
-            PlayerInputManager.instance.playerLeftEvent.AddListener(Sc_LevelManager.instance.OnPlayerLeft);
+            PlayerInputManager.instance.playerJoinedEvent.RemoveListener(Sc_GameManager.instance.CurrentLevel.OnPlayerJoined);
+            PlayerInputManager.instance.playerLeftEvent.RemoveListener(Sc_GameManager.instance.CurrentLevel.OnPlayerLeft);
+
+            PlayerInputManager.instance.playerJoinedEvent.AddListener(Sc_GameManager.instance.CurrentLevel.OnPlayerJoined);
+            PlayerInputManager.instance.playerLeftEvent.AddListener(Sc_GameManager.instance.CurrentLevel.OnPlayerLeft);
         }
     }
 
@@ -60,6 +57,7 @@ public class Sc_PlayerManager : MonoBehaviour
     public void OnPlayerJoined(PlayerInput input)
     {
         _currentPlayers.Add(input);
+        input.transform.parent = Sc_GameManager.instance.transform.parent;
 
         if (PlayerJoinedGame != null)
         {

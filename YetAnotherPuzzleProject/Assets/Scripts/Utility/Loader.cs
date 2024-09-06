@@ -11,31 +11,39 @@ public static class Loader
     public enum Scene
     {
         Loading,
-        MainMenu,
-        SampleScene,
+        Managers,
+        UIScene,
+        PlayerCharacterScene,
+        SampleScene1,
+        SampleScene2,
         //Fill this with the Scene names
     }
 
     private static Action OnLoaderCallBack;
     private static AsyncOperation loadingAsyncOperation;
 
-    public static void Load(Scene scene)
+    public static void Load(Scene scene, bool additive = false)
     {
         OnLoaderCallBack = () => {
             GameObject loadingGameObject = new GameObject("Loading Game Object");
-            loadingGameObject.AddComponent<LoadingMonoBehaviour>().StartCoroutine(LoadSceneAsync(scene));
-            LoadSceneAsync(scene);
+            loadingGameObject.AddComponent<LoadingMonoBehaviour>().StartCoroutine(LoadSceneAsync(scene, additive));
+            LoadSceneAsync(scene, additive);
         };
 
-        SceneManager.LoadScene(Scene.Loading.ToString());
+        SceneManager.LoadScene(Scene.Loading.ToString(), LoadSceneMode.Additive);
         //Sc_GameManager.instance.currentScene = scene;
     }
 
-    private static IEnumerator LoadSceneAsync(Scene scene)
+    public static void Unload(Scene scene)
+    {
+        SceneManager.UnloadSceneAsync(scene.ToString());
+    }
+
+    private static IEnumerator LoadSceneAsync(Scene scene, bool additive)
     {
         yield return null;
 
-        loadingAsyncOperation = SceneManager.LoadSceneAsync(scene.ToString());
+        loadingAsyncOperation = SceneManager.LoadSceneAsync(scene.ToString(), additive ? LoadSceneMode.Additive : LoadSceneMode.Single);
 
         while (!loadingAsyncOperation.isDone)
         {

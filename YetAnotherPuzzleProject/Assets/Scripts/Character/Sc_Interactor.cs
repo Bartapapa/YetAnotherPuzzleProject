@@ -143,6 +143,8 @@ public class Sc_Interactor : MonoBehaviour
         float closestDistance = float.MaxValue;
         foreach (Sc_Interactible interactible in localChosenInteractibles)
         {
+
+
             float distance = Vector3.Distance(interactible.transform.position, this.transform.position);
             if (distance < closestDistance)
             {
@@ -152,6 +154,12 @@ public class Sc_Interactor : MonoBehaviour
         }
 
         return chosenInteractible;
+    }
+
+    public void ClearPotentialInteractibles()
+    {
+        Debug.Log("CLEAR");
+        _potentialInteractibles.Clear();
     }
 
     private void OnTriggerEnter(Collider other)

@@ -6,23 +6,23 @@ public class Sc_DataSaver : MonoBehaviour
 {
     public void OnActivate(bool activate)
     {
-        if (activate)
-        {
-            SaveData();
-        }
-        else
-        {
-            DebugCheckData();
-        }
+        //if (activate)
+        //{
+        //    SaveData();
+        //}
+        //else
+        //{
+        //    DebugCheckData();
+        //}
     }
 
-    public void SaveData()
-    {
-        Sc_GameManager.instance.SaveData();
-    }
+    //public void SaveData()
+    //{
+    //    Sc_GameManager.instance.SaveData();
+    //}
 
-    public void DebugCheckData()
-    {
-        Sc_GameManager.instance.CheckSaveDataDEBUG();
-    }
+    //public void DebugCheckData()
+    //{
+    //    Sc_GameManager.instance.CheckSaveDataDEBUG();
+    //}
 }

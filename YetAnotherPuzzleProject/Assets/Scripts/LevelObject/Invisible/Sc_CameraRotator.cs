@@ -9,9 +9,9 @@ public class Sc_CameraRotator : MonoBehaviour
 
     public void RotateWorld()
     {
-        if (Sc_LevelManager.instance != null)
+        if (Sc_GameManager.instance != null)
         {
-            Sc_LevelManager.instance._currentLevel.RotateWorldSequence(rotateDegrees, overTime);
+            Sc_GameManager.instance.CurrentLevel.RotateWorldSequence(rotateDegrees, overTime);
         }
     }
 }

@@ -57,7 +57,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (_playerCharacter == null)
         {
-            Sc_Character_Player newCharacter = Instantiate<Sc_Character_Player>(_characterPrefab, spawnPoint, Quaternion.identity);
+            Sc_Character_Player newCharacter = Instantiate<Sc_Character_Player>(_characterPrefab, spawnPoint, Quaternion.identity, this.transform);
             _playerCharacter = newCharacter;
 
             if (Sc_CameraManager.instance)
@@ -68,6 +68,7 @@ public class Sc_Player : MonoBehaviour
         else
         {
             _playerCharacter.Controller.RB.Move(spawnPoint, rot);
+            PlayerCharacter.Interactor.ClearPotentialInteractibles();
 
             if (Sc_CameraManager.instance)
             {

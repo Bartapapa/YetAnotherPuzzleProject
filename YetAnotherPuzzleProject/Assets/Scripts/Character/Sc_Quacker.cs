@@ -10,7 +10,7 @@ public class Sc_Quacker : MonoBehaviour
 
     public void Quack()
     {
-        Sc_SoundManager.instance.PlaySFX(_source, _quack);
+        Sc_GameManager.instance.SoundManager.PlaySFX(_source, _quack);
         _duckParticles.Play();
     }
 }

@@ -12,7 +12,7 @@ public class PlayerSaveProfile
 
     public PlayerSaveProfile (PlayerInput player)
     {
-        Sc_Player playerObject = Sc_PlayerManager.instance.GetPlayerFromPInput(player);
+        Sc_Player playerObject = Sc_GameManager.instance.PlayerManager.GetPlayerFromPInput(player);
         if (playerObject.PlayerCharacter == null) return;
 
         Player = player;
