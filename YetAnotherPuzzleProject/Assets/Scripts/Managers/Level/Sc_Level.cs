@@ -119,8 +119,6 @@ public class Sc_Level : MonoBehaviour
                     float randomZ = UnityEngine.Random.Range(_minMaxXZLevelDimensions.z, _minMaxXZLevelDimensions.w);
                     Vector3 randomPosition = new Vector3(randomX, _ceilingHeight, randomZ);
                     ParticleSystem newDust = Instantiate<ParticleSystem>(_fallingDust, randomPosition, Quaternion.identity, Sc_CameraManager.instance._defaultCameraFocus.transform);
-                    //SPAWN DUST
-                    Debug.Log("SPAWN DUST!");
                     spawnedDust++;
                 }
             }

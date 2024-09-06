@@ -32,15 +32,8 @@ public class Sc_LevelManager : MonoBehaviour
         {
             //If we're in-game, otherwise skip this.
             Transform spawnPoint = _currentLevel.GetSpawnPoint(_spawnedPlayers);
-            if (spawnPoint != null)
-            {
-                player.InitializePlayerCharacter(spawnPoint.position, spawnPoint.rotation);
-            }
-            else
-            {
-                player.InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
-            }
-            _spawnedPlayers++;
+
+            SpawnPlayerCharacter(player, spawnPoint);
         }
     }
 
@@ -55,6 +48,29 @@ public class Sc_LevelManager : MonoBehaviour
             }
             _spawnedPlayers--;
         }
+    }
+
+    public void SpawnAllPlayerCharacters()
+    {
+        foreach(PlayerInput playerInput in Sc_PlayerManager.instance.CurrentPlayers)
+        {
+            Sc_Player player = Sc_PlayerManager.instance.GetPlayerFromPInput(playerInput);
+            Transform spawnPoint = _currentLevel.GetSpawnPoint(_spawnedPlayers);
+            SpawnPlayerCharacter(player, spawnPoint);
+        }
+    }
+
+    public void SpawnPlayerCharacter(Sc_Player player, Transform spawnPoint)
+    {
+        if (spawnPoint != null)
+        {
+            player.InitializePlayerCharacter(spawnPoint.position, spawnPoint.rotation);
+        }
+        else
+        {
+            player.InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
+        }
+        _spawnedPlayers++;
     }
 
     public void ResetSpawnedPlayerCount()

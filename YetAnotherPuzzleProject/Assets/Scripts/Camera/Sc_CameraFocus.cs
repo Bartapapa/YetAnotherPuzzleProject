@@ -41,7 +41,7 @@ public class Sc_CameraFocus : MonoBehaviour
 
     private void HandleFocus()
     {
-        transform.position = Vector3.Lerp(transform.position, FindAveragePosition(), _cameraFollowSpeed);
+        transform.position = Vector3.Lerp(transform.position, FindAveragePosition(), _cameraFollowSpeed * Time.deltaTime);
     }
 
     private Vector3 FindAveragePosition()

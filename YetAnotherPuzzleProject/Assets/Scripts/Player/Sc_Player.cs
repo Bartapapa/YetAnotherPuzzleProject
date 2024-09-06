@@ -34,10 +34,10 @@ public class Sc_Player : MonoBehaviour
 
     private void OnEnable()
     {
-        if (Sc_LevelManager.instance == null)
-        {
-            InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
-        }
+        //if (Sc_LevelManager.instance == null)
+        //{
+        //    InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
+        //}
     }
 
     private void OnDisable()
@@ -67,7 +67,7 @@ public class Sc_Player : MonoBehaviour
         }
         else
         {
-            _playerCharacter.Controller.RB.MovePosition(spawnPoint);
+            _playerCharacter.Controller.RB.Move(spawnPoint, rot);
 
             if (Sc_CameraManager.instance)
             {
