@@ -18,6 +18,7 @@ public class Sc_GameManager : MonoBehaviour
     [Header("MANAGER REFS")]
     public Sc_PlayerManager PlayerManagerPrefab;
     public Sc_SoundManager SoundManagerPrefab;
+    public SO_SaveData BlankSaveData;
 
     [Header("GAMESTATE")]
     public GameState _startGameState = GameState.InGame;
@@ -33,6 +34,9 @@ public class Sc_GameManager : MonoBehaviour
             TransitionToGameState(value);
         }
     }
+
+    [Header("SAVEDATA")]
+    [SerializeField] private SO_SaveData _saveData;
 
     private bool _managersChecked = false;
 
@@ -120,6 +124,7 @@ public class Sc_GameManager : MonoBehaviour
                     Sc_UIManager.instance.Transitioner.Reveal();
                 }
                 Sc_LevelManager.instance.SpawnAllPlayerCharacters();
+                LoadData();
 
                 break;
             default:
@@ -193,5 +198,67 @@ public class Sc_GameManager : MonoBehaviour
                 break;
         }
     }
+    #endregion
+
+    #region SAVEDATA
+    public void SaveData()
+    {
+        if (_saveData == null)
+        {
+            SO_SaveData newSaveData = Instantiate<SO_SaveData>(BlankSaveData, this.transform);
+            newSaveData.CreateSaveProfiles(Sc_PlayerManager.instance.CurrentPlayers);
+            _saveData = newSaveData;
+        }
+    }
+
+    public void CheckSaveDataDEBUG()
+    {
+        if (_saveData == null)
+        {
+            Debug.LogWarning("No save data found!");
+            return;
+        }
+        else
+        {
+            foreach(PlayerSaveProfile saveProfile in _saveData.SaveProfiles)
+            {
+                Debug.LogWarning("Here is the data for " + saveProfile.Player + ".");
+                Debug.Log("SkinIndex: " + saveProfile.SkinIndex + ".");
+                Debug.Log("Currently held item ID is: " + saveProfile.CurrentHeldItemID + ".");
+            }
+            Debug.LogWarning("Data verified.");
+        }
+    }
+
+    public void LoadData()
+    {
+        if (_saveData == null)
+        {
+            Debug.LogWarning("No save data found!");
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < Sc_PlayerManager.instance.CurrentPlayers.Count; i++)
+            {
+                Sc_Player player = Sc_PlayerManager.instance.GetPlayerFromPInput(Sc_PlayerManager.instance.CurrentPlayers[i]);
+                if (player.PlayerCharacter != null)
+                {
+                    PlayerSaveProfile correspondingSaveProfile = _saveData.SaveProfiles[i];
+                    player.PlayerCharacter.ChooseSkin(correspondingSaveProfile.SkinIndex);
+                }
+            }
+        }
+    }
+
+    public void ClearSaveData()
+    {
+        if (_saveData != null)
+        {
+            Destroy(_saveData.gameObject);
+            _saveData = null;
+        }
+    }
+
     #endregion
 }
