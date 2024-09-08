@@ -5,15 +5,22 @@ using UnityEngine;
 public class Sc_Lever : MonoBehaviour
 {
     [Header("OBJECT REFS")]
-    public Sc_Activateable _activateable;
+    public List<Sc_Activateable> _activateables;
     public Transform _axlePivot;
+
+    [Header("LEVER PARAMETERS")]
+    public bool _inverseLever = false;
 
     private bool _leverLowered = false;
 
     public void OnInteract()
     {
         ToggleLever();
-        _activateable.ToggleActivation();
+
+        foreach(Sc_Activateable activateable in _activateables)
+        {
+            activateable.ToggleActivation();
+        }      
     }
 
     private void ToggleLever()

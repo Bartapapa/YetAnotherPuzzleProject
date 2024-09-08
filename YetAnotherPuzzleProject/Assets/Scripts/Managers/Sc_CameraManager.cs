@@ -30,6 +30,7 @@ public class Sc_CameraManager : MonoBehaviour
 
     public void AddFocus(Sc_CameraFocus toFocus, Transform focus, int weight = 1)
     {
+        Debug.Log(focus.gameObject.name + " has been added to camera focus.");
         FocusObject newFocusObject = new FocusObject(focus, weight);
         toFocus.FocusObjects.Add(newFocusObject);
     }
@@ -52,8 +53,9 @@ public class Sc_CameraManager : MonoBehaviour
 
         foreach (FocusObject focusObject in cameraFocus.FocusObjects)
         {
-            if (focus = focusObject.Focus)
+            if (focusObject.Focus == focus)
             {
+                Debug.Log(focusObject.Focus.GetInstanceID() + " is the same as " + focus.GetInstanceID() + ". Not adding focus.");
                 hasFocus = true;
                 break;
             }

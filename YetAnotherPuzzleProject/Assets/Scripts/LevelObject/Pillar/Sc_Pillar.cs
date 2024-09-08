@@ -14,7 +14,8 @@ public class Sc_Pillar : MonoBehaviour
     private Vector3 _bottomPos;
     private Vector3 _topPos;
 
-    private void Start()
+
+    private void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         if (_rb == null)
@@ -24,7 +25,7 @@ public class Sc_Pillar : MonoBehaviour
         }
 
         _bottomPos = transform.position;
-        _topPos = _bottomPos + (Vector3.up * _travelDistance);
+        _topPos = _bottomPos + (transform.up * _travelDistance);
     }
 
     public void Move(bool activated)
@@ -32,7 +33,6 @@ public class Sc_Pillar : MonoBehaviour
         if (_movementCo != null)
         {
             StopCoroutine(_movementCo);
-            _movementCo = null;
         }
         _movementCo = StartCoroutine(Movement(activated));
     }
@@ -115,7 +115,7 @@ public class Sc_Pillar : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + (Vector3.up * _travelDistance));
-        Gizmos.DrawSphere(transform.position + (Vector3.up * _travelDistance), .1f);
+        Gizmos.DrawLine(transform.position, transform.position + (transform.up * _travelDistance));
+        Gizmos.DrawSphere(transform.position + (transform.up * _travelDistance), .1f);
     }
 }

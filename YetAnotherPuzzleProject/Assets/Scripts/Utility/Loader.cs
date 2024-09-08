@@ -16,6 +16,11 @@ public static class Loader
         PlayerCharacterScene,
         SampleScene1,
         SampleScene2,
+        Level_0_1,
+        Level_0_2,
+        Level_0_3,
+        Level_0_4,
+        Level_1_1,
         //Fill this with the Scene names
     }
 

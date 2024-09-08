@@ -59,10 +59,25 @@ public class Sc_SoundManager : MonoBehaviour
 
     public void PlaySFX(AudioSource sfxSource, AudioClip clip)
     {
+        sfxSource.pitch = 1f;
         if (clip == null)
         {
             Debug.Log("Clip that needed to be played is nonexistent!");
         }
+        sfxSource.PlayOneShot(clip);
+    }
+
+    public void PlaySFX(AudioSource sfxSource, AudioClip clip, Vector2 randomMinMaxPitch)
+    {
+        sfxSource.pitch = 1f;
+        if (clip == null)
+        {
+            Debug.Log("Clip that needed to be played is nonexistent!");
+        }
+
+        float randomPitch = UnityEngine.Random.Range(randomMinMaxPitch.x, randomMinMaxPitch.y);
+        sfxSource.pitch = randomPitch;
+
         sfxSource.PlayOneShot(clip);
     }
 
@@ -77,6 +92,19 @@ public class Sc_SoundManager : MonoBehaviour
         AudioClip chosenClip = clips[randomIndex];
 
         PlaySFX(sfxSource, chosenClip);
+    }
+
+    public void PlayRandomSFX(AudioSource sfxSource, List<AudioClip> clips, Vector2 randomMinMaxPitch)
+    {
+        if (clips.Count <= 0)
+        {
+            Debug.Log("No clips in clip list sent!");
+        }
+
+        int randomIndex = Random.Range(0, clips.Count);
+        AudioClip chosenClip = clips[randomIndex];
+
+        PlaySFX(sfxSource, chosenClip, randomMinMaxPitch);
     }
 
     public void PlayMusic(AudioClip music)

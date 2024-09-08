@@ -6,7 +6,7 @@ public class Sc_Character_Player : Sc_Character
 {
     [Header("PLAYER CHARACTER OBJECT REFS")]
     public Sc_Inventory Inventory;
-    public Sc_Quacker Quacker;
+    public Sc_SoundHandler_PlayerCharacter SoundHandler;
 
     [Header("PLAYER CHARACTER SKINS")]
     public List<GameObject> Skins = new List<GameObject>();

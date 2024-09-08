@@ -59,6 +59,7 @@ public class Sc_Player : MonoBehaviour
         {
             Sc_Character_Player newCharacter = Instantiate<Sc_Character_Player>(_characterPrefab, spawnPoint, Quaternion.identity, this.transform);
             _playerCharacter = newCharacter;
+            newCharacter.name = "PlayerCharacter" + Sc_GameManager.instance.PlayerManager.CurrentPlayers.Count;
 
             if (Sc_CameraManager.instance)
             {
@@ -67,14 +68,18 @@ public class Sc_Player : MonoBehaviour
         }
         else
         {
+            ResetPlayerCharacter();
             _playerCharacter.Controller.RB.Move(spawnPoint, rot);
-            PlayerCharacter.Interactor.ClearPotentialInteractibles();
 
             if (Sc_CameraManager.instance)
             {
                 if (!Sc_CameraManager.instance.DoesCameraFocusHaveFocus(Sc_CameraManager.instance._defaultCameraFocus, _playerCharacter.transform))
                 {
                     Sc_CameraManager.instance.AddFocus(Sc_CameraManager.instance._defaultCameraFocus, _playerCharacter.transform);
+                }
+                else
+                {
+                    Debug.LogWarning(_playerCharacter.gameObject.transform + " is already a focus of the camera manager. Not adding.");
                 }
             }
         }
@@ -83,6 +88,16 @@ public class Sc_Player : MonoBehaviour
         //{
         //    Sc_LevelManager.instance.CameraManager.RegisterPOI(_currentCharacter.transform);
         //}
+    }
+
+    public void ResetPlayerCharacter()
+    {
+        if (PlayerCharacter == null) return;
+
+        PlayerCharacter.Interactor.ClearPotentialInteractibles();
+        PlayerCharacter.Controller.StopAnchoringSequence();
+        PlayerCharacter.Controller.ResetAnchor();
+        PlayerCharacter.Controller.StopClimbing();
     }
 
     #endregion
@@ -96,6 +111,11 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
+            if (_playerCharacter.Controller.IsAnchoredToValve)
+            {
+                _playerCharacter.Controller.CurrentValve.EndUsing();
+            }
+
             if (_playerCharacter.Controller.IsClimbing)
             {
                 _playerCharacter.Controller.StopClimbing();
@@ -112,7 +132,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            _playerCharacter.Quacker.Quack();
+            _playerCharacter.SoundHandler.Quack();
         }
     }
 

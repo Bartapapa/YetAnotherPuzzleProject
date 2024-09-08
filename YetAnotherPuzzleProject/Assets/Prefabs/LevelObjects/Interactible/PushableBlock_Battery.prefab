@@ -457,7 +457,7 @@ GameObject:
   - component: {fileID: 7109498619842076266}
   - component: {fileID: 3158950867249815273}
   - component: {fileID: 239925580081401669}
-  - component: {fileID: 2363078905782989912}
+  - component: {fileID: 9021106798358883316}
   - component: {fileID: 253775003874132503}
   - component: {fileID: 6502130381306768576}
   - component: {fileID: 2053105722028253018}
@@ -533,7 +533,7 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
---- !u!114 &2363078905782989912
+--- !u!114 &9021106798358883316
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -542,10 +542,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 3874516146704767000}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8a741ce267eab24ca0135bc5ac0552d, type: 3}
+  m_Script: {fileID: 11500000, guid: b8fedb3bc26525d47acfdb5497af1675, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _activateable: {fileID: 6502130381306768576}
+  _maxSpeed: 4
+  _speedSharpness: 15
+  _gravity: {x: 0, y: -30, z: 0}
+  _groundLayers:
+    serializedVersion: 2
+    m_Bits: 1
   _frontElementAnchor: {fileID: 8266444288400645407}
   _backElementAnchor: {fileID: 6483015878625638162}
   _rightElementAnchor: {fileID: 7671026213011178953}
@@ -553,15 +559,9 @@ MonoBehaviour:
   _frontBlockElement: 0
   _backBlockElement: 0
   _rightBlockElement: 0
-  _leftBlockElement: 1
+  _leftBlockElement: 0
   _batteryHolePrefab: {fileID: 217489669567972189, guid: cfcabd263cfd58d4c996e0f80117d1d7,
     type: 3}
-  _maxSpeed: 4
-  _speedSharpness: 15
-  _gravity: {x: 0, y: -30, z: 0}
-  _groundLayers:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!114 &253775003874132503
 MonoBehaviour:
   m_ObjectHideFlags: 0

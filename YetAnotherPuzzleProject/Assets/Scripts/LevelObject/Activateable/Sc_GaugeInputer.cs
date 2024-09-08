@@ -12,7 +12,7 @@ public class Sc_GaugeInputer : MonoBehaviour
     public float _inputRate = 1f;
     public bool _continuous = false;
 
-    public void ApplyInput()
+    protected virtual void ApplyInput()
     {
         float adjustedInput = _continuous ? _inputRate * Time.deltaTime : _inputRate;
 

@@ -6,11 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene2.unity
-    guid: 879596765e9016b4c952bfbfa39fd920
+    path: Assets/Scenes/Level_0_1.unity
+    guid: a41e25b21ce227d44a3ced89878e1fca
   - enabled: 1
-    path: Assets/Scenes/SampleScene1.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Level_0_2.unity
+    guid: de603d2957b1b1642b2dbf2d63ede313
+  - enabled: 1
+    path: Assets/Scenes/Level_0_3.unity
+    guid: e488271cabc785043a62c12d9ae980e5
+  - enabled: 1
+    path: Assets/Scenes/Level_0_4.unity
+    guid: 6102686b5c88a10488ff04d16d34a424
+  - enabled: 1
+    path: Assets/Scenes/Level_1_1.unity
+    guid: 7b566dc735ab65c4184d061b2e06834f
   - enabled: 1
     path: Assets/Scenes/Loading.unity
     guid: 23b3103b3c9c1fb45bf1f51624295909
@@ -20,4 +29,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/UIScene.unity
     guid: 741ac163526402246921955f40e2f07b
+  - enabled: 1
+    path: Assets/Scenes/SampleScene2.unity
+    guid: 879596765e9016b4c952bfbfa39fd920
+  - enabled: 1
+    path: Assets/Scenes/SampleScene1.unity
+    guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}

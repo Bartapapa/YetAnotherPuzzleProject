@@ -94,7 +94,6 @@ GameObject:
   - component: {fileID: 6534061949838735522}
   - component: {fileID: 8415516666275151921}
   - component: {fileID: 2421305132859180297}
-  - component: {fileID: 1693222693661252603}
   - component: {fileID: 1227609153868722186}
   m_Layer: 0
   m_Name: Lever
@@ -171,33 +170,8 @@ MonoBehaviour:
   _debugUnselectedMat: {fileID: 2100000, guid: f59c6e9ce19ff3249860e0e99d100f77, type: 2}
   _mesh: {fileID: 7566556629002711936}
   _priority: 0
---- !u!114 &1693222693661252603
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1396806918474834897}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 138a129f93d55c347963449c2c04fb2a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  OnForceActivate:
-    m_PersistentCalls:
-      m_Calls: []
-  _debugDeactivatedMat: {fileID: 2100000, guid: f59c6e9ce19ff3249860e0e99d100f77,
-    type: 2}
-  _debugActivatedMat: {fileID: 2100000, guid: b8e401aca5335fd4f836659a254444b5, type: 2}
-  _activationMeshes:
-  - {fileID: 9152230526785124691}
-  _startActivated: 0
-  _conditions: []
-  _periodicActivation: 0
-  _activationDuration: 5
+  _usesKey: 0
+  _keyIDs: 
 --- !u!114 &1227609153868722186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,8 +184,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196589698149a8a46adb62a1329389e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activateable: {fileID: 1693222693661252603}
+  _activateables:
+  - {fileID: 0}
   _axlePivot: {fileID: 8580888243922677994}
+  _inverseLever: 0
 --- !u!1 &3155400170045620924
 GameObject:
   m_ObjectHideFlags: 0

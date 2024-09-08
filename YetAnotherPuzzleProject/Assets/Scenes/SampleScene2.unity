@@ -5772,6 +5772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1675738397}
   - component: {fileID: 1675738398}
+  - component: {fileID: 1675738399}
   m_Layer: 0
   m_Name: LevelLoader
   m_TagString: Untagged
@@ -5807,6 +5808,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LevelToLoad: 4
+--- !u!114 &1675738399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1675738396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 138a129f93d55c347963449c2c04fb2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnActivate:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1675738398}
+        m_TargetAssemblyTypeName: Sc_LevelLoader, Assembly-CSharp
+        m_MethodName: LoadLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnForceActivate:
+    m_PersistentCalls:
+      m_Calls: []
+  _debugDeactivatedMat: {fileID: 0}
+  _debugActivatedMat: {fileID: 0}
+  _activationMeshes: []
+  _startActivated: 0
+  _conditions: []
+  _periodicActivation: 0
+  _activationDuration: 5
 --- !u!1 &1678595859
 GameObject:
   m_ObjectHideFlags: 0
@@ -9381,6 +9419,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1262159507}
     m_Modifications:
+    - target: {fileID: 1227609153868722186, guid: 0c1cafc17dcf4904c883c3ffcb0d9dcf,
+        type: 3}
+      propertyPath: _activateables.Array.data[0]
+      value: 
+      objectReference: {fileID: 1675738399}
     - target: {fileID: 1396806918474834897, guid: 0c1cafc17dcf4904c883c3ffcb0d9dcf,
         type: 3}
       propertyPath: m_Name

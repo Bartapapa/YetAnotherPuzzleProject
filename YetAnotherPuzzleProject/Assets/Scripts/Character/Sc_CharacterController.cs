@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using static UnityEngine.ProBuilder.AutoUnwrapSettings;
 
 public enum CharacterState
 {
     None,
     Default,
+    Anchored,
     Length,
 }
 public class Sc_CharacterController : MonoBehaviour
@@ -36,7 +38,7 @@ public class Sc_CharacterController : MonoBehaviour
     public Transform _groundCheckEmissionPoint;
     public LayerMask _groundLayers;
     public float _maxVerticalBalancingForce = 10f;
-    private float _groundCheckDistance = 1f;
+    public float _groundCheckDistance = 1f;
     private bool _isGrounded = false;
     public bool IsGrounded { get { return _isGrounded; } }
     private RaycastHit _groundHit;
@@ -51,6 +53,7 @@ public class Sc_CharacterController : MonoBehaviour
     private Quaternion _anchorToRot;
     private Coroutine _anchorCo;
     private Action _anchorEndAction;
+    private Transform _anchor;
 
     [Header("PUSHING")]
     public float _pushCheckDistance = 1f;
@@ -63,6 +66,7 @@ public class Sc_CharacterController : MonoBehaviour
     private bool _pushRequested = false;
     private Sc_Pushable _currentPushable;
     private bool _isPushingBlock = false;
+    public bool IsPushingBlock { get { return _isPushingBlock; } }
     private Vector3 _pushDirection;
 
     [Header("CLIMBING")]
@@ -75,19 +79,28 @@ public class Sc_CharacterController : MonoBehaviour
     private Vector3 _topOfLadder;
     private Vector3 _bottomOfLadder;
 
-    public delegate void DefaultEvent();
-    public event DefaultEvent PushStart;
-    public event DefaultEvent PushEnd;
+    [Header("VALVE")]
+    private Sc_Valve_Floor _currentValve;
+    public Sc_Valve_Floor CurrentValve { get { return _currentValve; } }
+    public bool IsAnchoredToValve { get { return _currentValve != null ? true : false; } }
 
     private Rigidbody _rb;
     public Rigidbody RB { get { return _rb; } }
-    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || _isPushingBlock) ? false : true; } }
+    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || IsPushingBlock) ? false : true; } }
     private Vector3 _moveInputVector;
     private Vector3 _lookInputVector;
     private bool _ignoreInputs = false;
     public bool IgnoreInputs{
         get { return _ignoreInputs; }
         set { _ignoreInputs = value; if (value == true) ResetInputs(); } }
+
+    public delegate void DefaultEvent();
+    public event DefaultEvent PushStart;
+    public event DefaultEvent PushEnd;
+    public delegate void RBEvent(Rigidbody rb);
+    public event RBEvent OnGroundedMovement;
+    public event RBEvent OnAerialMovement;
+    public event RBEvent OnLanded;
 
     private void Start()
     {
@@ -108,7 +121,6 @@ public class Sc_CharacterController : MonoBehaviour
             Debug.LogWarning(this.name + " doesn't have a groundCheckEmissionPoint!");
             return;
         }
-        _groundCheckDistance = _groundCheckEmissionPoint.transform.localPosition.y * 2f;
 
         CurrentState = _defaultState;
     }
@@ -146,6 +158,11 @@ public class Sc_CharacterController : MonoBehaviour
         _moveInputVector = controlRotation * moveInputVector;
         _lookInputVector = _moveInputVector.normalized;
         _climbInputVector = climbInputVector;
+
+        if (CurrentValve != null)
+        {
+            CurrentValve.SetInput(_moveInputVector);
+        }
     }
 
     #region TIMERS
@@ -231,6 +248,10 @@ public class Sc_CharacterController : MonoBehaviour
 
                 break;
 
+            case CharacterState.Anchored:
+                _rb.rotation = _anchor.rotation;
+                break;
+
         }
 
     }
@@ -253,6 +274,8 @@ public class Sc_CharacterController : MonoBehaviour
 
                         Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
                         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_groundedMovementSharpness * Time.fixedDeltaTime));
+
+                        OnGroundedMovement?.Invoke(_rb);
                     }
                     else
                     {
@@ -279,6 +302,8 @@ public class Sc_CharacterController : MonoBehaviour
                         _rb.velocity += _gravity * Time.fixedDeltaTime;
 
                         _rb.velocity *= (1f / (1f + (_airDrag * Time.fixedDeltaTime)));
+
+                        OnAerialMovement?.Invoke(_rb);
                     }
                 }
                 else
@@ -296,12 +321,16 @@ public class Sc_CharacterController : MonoBehaviour
                     }
                 }
                 break;
+
+            case CharacterState.Anchored:
+                _rb.MovePosition(_anchor.position);
+                break;
         }    
     }
 
     private bool GroundCheck()
     {
-        bool localIsGrounded = Physics.Raycast(_groundCheckEmissionPoint.transform.position, Vector3.down, out _groundHit, _groundCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
+        bool localIsGrounded = Physics.SphereCast(_groundCheckEmissionPoint.transform.position, .1f, Vector3.down, out _groundHit, _groundCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
         //If add physics based floors
         //if (localIsGrounded)
         //{
@@ -319,6 +348,8 @@ public class Sc_CharacterController : MonoBehaviour
         if (localIsGrounded && !_isGrounded)
         {
             OnLand(_rb.velocity.y);
+
+            OnLanded?.Invoke(_rb);
         }
 
         return localIsGrounded;
@@ -329,7 +360,7 @@ public class Sc_CharacterController : MonoBehaviour
 
     public void AnchorTo(Vector3 toAnchorPoint, Quaternion toAnchorRot, float overTime = 1f, Action onAnchorEnd = null)
     {
-        StopAnchor();
+        StopAnchoringSequence();
 
         _anchorEndAction = onAnchorEnd;
 
@@ -369,12 +400,24 @@ public class Sc_CharacterController : MonoBehaviour
         }
     }
 
-    public void StopAnchor()
+    public void StopAnchoringSequence()
     {
         if (_anchorCo != null)
         {
             StopCoroutine(_anchorCo);
         }
+    }
+
+    public void SetAnchor(Transform anchor)
+    {
+        _anchor = anchor;
+        CurrentState = CharacterState.Anchored;
+    }
+
+    public void ResetAnchor(CharacterState goToState = CharacterState.Default)
+    {
+        CurrentState = goToState;
+        _anchor = null;
     }
 
     #endregion
@@ -505,6 +548,27 @@ public class Sc_CharacterController : MonoBehaviour
 
     #endregion
 
+    #region VALVES
+
+    public void ConnectToValve(Sc_Valve_Floor valve)
+    {
+        if (valve == null) return;
+        _currentValve = valve;
+
+        AnchorTo(valve._anchor.position, valve._anchor.rotation, .5f,
+            () => SetAnchor(valve._anchor));
+    }
+
+    public void DisconnectFromCurrentValve()
+    {
+        if (_currentValve == null) return;
+
+        _currentValve = null;
+        ResetAnchor();
+    }
+
+    #endregion
+
     #region UTILITY
     private void TransitionToState(CharacterState toState)
     {
@@ -522,6 +586,9 @@ public class Sc_CharacterController : MonoBehaviour
                 break;
             case CharacterState.Default:
                 break;
+            case CharacterState.Anchored:
+                _rb.isKinematic = false;
+                break;
         }
     }
 
@@ -532,6 +599,15 @@ public class Sc_CharacterController : MonoBehaviour
             case CharacterState.None:
                 break;
             case CharacterState.Default:
+                break;
+            case CharacterState.Anchored:
+                if (_anchor == null)
+                {
+                    Debug.LogWarning(gameObject.name + " doesn't have an anchor, returning to default character state!");
+                    CurrentState = CharacterState.Default;
+                    return;
+                }
+                _rb.isKinematic = true;
                 break;
         }
     }

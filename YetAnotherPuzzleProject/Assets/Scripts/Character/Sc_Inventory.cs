@@ -13,6 +13,12 @@ public class Sc_Inventory : MonoBehaviour
 
     public void PickUpItem(Sc_Item item)
     {
+        //Check if item already held.
+        if (_currentlyHeldItem != null)
+        {
+            Store(_currentlyHeldItem);
+        }
+
         item._interactible.CanBeInteractedWith = false;
 
         _items.Add(item);

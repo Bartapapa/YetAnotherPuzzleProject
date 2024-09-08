@@ -51,24 +51,4 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
         Move(false);
     }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
-
-        if (pushable)
-        {
-            pushable.IsOnRotatingPlatform = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
-
-        if (pushable)
-        {
-            pushable.IsOnRotatingPlatform = false;
-        }
-    }
 }

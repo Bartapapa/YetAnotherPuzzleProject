@@ -14,7 +14,7 @@ public class Sc_Interactor : MonoBehaviour
 
     private Sc_Interactible _currentSelectedInteractible;
     private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
-    public bool CanInteract { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || !Character.Controller.IsGrounded ? false : true; } }
+    public bool CanInteract { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded ? false : true; } }
     public Sc_Interactible CurrentSelectedInteractible { get { return _currentSelectedInteractible; } }
 
     private void Start()
@@ -158,7 +158,6 @@ public class Sc_Interactor : MonoBehaviour
 
     public void ClearPotentialInteractibles()
     {
-        Debug.Log("CLEAR");
         _potentialInteractibles.Clear();
     }
 

@@ -19,7 +19,7 @@ public class Sc_Activateable : MonoBehaviour
     [Header("PARAMETERS")]
     public bool _startActivated = false;
     private bool _isActivated = false;
-    public bool IsActivated { get { return _isActivated; } }
+    public bool IsActivated { get { return _isActivated; } set { _isActivated = value; } }
 
     [Header("CONDITIONAL ACTIVATORS")]
     public List<Sc_Activateable> _conditions = new List<Sc_Activateable>();
@@ -41,7 +41,8 @@ public class Sc_Activateable : MonoBehaviour
             }
         }
 
-        ForceActivate(_startActivated);
+        //ForceActivate(_startActivated);
+        Activate(_startActivated);
     }
 
     private void Update()
@@ -67,7 +68,6 @@ public class Sc_Activateable : MonoBehaviour
 
     public void Activate(bool toggleOn)
     {
-
         if (toggleOn == _isActivated) return;
         if (toggleOn && !HasFilledConditionsForActivation())
         {

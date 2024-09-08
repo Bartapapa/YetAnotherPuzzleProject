@@ -38,6 +38,8 @@ public class Sc_GameManager : MonoBehaviour
         }
     }
 
+    private bool _isLoading = false;
+
     public delegate void GameStateEvent(GameState enteredGameState);
     public event GameStateEvent GameStateChanged;
 
@@ -88,77 +90,16 @@ public class Sc_GameManager : MonoBehaviour
         //Can switch from scene ID to scene ID, such as main menu and whatever. Use this to check that a level has been unloaded.
     }
 
-    //public void CheckManagers()
-    //{
-    //    if (_managersChecked)
-    //    {
-    //        Debug.Log("Managers already checked!");
-    //        return;
-    //    }
-
-    //    if (Sc_PlayerManager.instance == null)
-    //    {
-    //        Sc_PlayerManager playerManager = Instantiate<Sc_PlayerManager>(PlayerManagerPrefab, this.transform.parent);
-    //        playerManager.CreatePlayerIfNone();
-    //    }
-
-    //    if (Sc_SoundManager.instance == null)
-    //    {
-    //        Sc_SoundManager soundManager = Instantiate<Sc_SoundManager>(SoundManagerPrefab, this.transform.parent);
-    //        soundManager.InitializePresets();
-    //    }
-    //    else
-    //    {
-    //        Sc_SoundManager.instance.InitializePresets();
-    //    }
-
-    //    switch (_currentGameState)
-    //    {
-    //        case GameState.None:
-    //            break;
-    //        case GameState.MainMenu:
-    //            break;
-    //        case GameState.Loading:
-    //            break;
-    //        case GameState.InGame:
-    //            if (Sc_LevelManager.instance != null)
-    //            {
-    //                Sc_PlayerManager.instance.AssignEventsToLevelManager();
-    //            }
-    //            else
-    //            {
-    //                Debug.LogWarning("This level doesn't have a LevelManager!");
-    //                return;
-    //            }
-    //            if (Sc_CameraManager.instance == null)
-    //            {
-    //                Debug.LogWarning("This level doesn't have a CameraManager!");
-    //                return;
-    //            }
-    //            if (Sc_UIManager.instance == null)
-    //            {
-    //                Debug.LogWarning("This level doesn't have a UIManager!");
-    //            }
-    //            else
-    //            {
-    //                Sc_UIManager.instance.Transitioner.Reveal();
-    //            }
-    //            Sc_LevelManager.instance.SpawnAllPlayerCharacters();
-
-    //            break;
-    //        default:
-    //            break;
-    //    }
-
-    //    _managersChecked = true;
-    //}
-
     public void Load(Loader.Scene scene)
     {
+        if (_isLoading) return;
+
         if (Sc_UIManager.instance != null)
         {
+            _isLoading = true;
+
             Sc_UIManager.instance.Transitioner.Mask(
-                () => TwinUnloadLoad(CurrentLevel.CurrentScene,scene));
+                () => ClearScene(CurrentLevel.CurrentScene,scene));
         }
         else
         {
@@ -170,6 +111,16 @@ public class Sc_GameManager : MonoBehaviour
     {
         SceneManager.UnloadSceneAsync(unloadScene.ToString());
         SceneManager.LoadSceneAsync(loadScene.ToString(), LoadSceneMode.Additive);
+    }
+
+    private void ClearScene(Loader.Scene unloadScene, Loader.Scene loadScene)
+    {
+        foreach(Sc_Player player in PlayerManager.GetPlayersFromPInputs())
+        {
+            player.ResetPlayerCharacter();
+        }
+
+        TwinUnloadLoad(unloadScene, loadScene);
     }
 
     #region GAMESTATE
