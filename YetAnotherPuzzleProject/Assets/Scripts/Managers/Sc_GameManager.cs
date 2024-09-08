@@ -121,6 +121,7 @@ public class Sc_GameManager : MonoBehaviour
         }
 
         TwinUnloadLoad(unloadScene, loadScene);
+        _isLoading = false;
     }
 
     #region GAMESTATE

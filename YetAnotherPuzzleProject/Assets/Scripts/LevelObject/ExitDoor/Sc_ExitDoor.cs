@@ -10,6 +10,10 @@ public class Sc_ExitDoor : MonoBehaviour
     [Header("TO LEVEL")]
     public Loader.Scene _toLevel = Loader.Scene.SampleScene1;
 
+    [Header("SOUND REFS")]
+    public AudioClip _doorSound;
+    public AudioSource _source;
+
     private BoxCollider _trigger;
 
     private void Awake()
@@ -26,6 +30,7 @@ public class Sc_ExitDoor : MonoBehaviour
     public void OnActivate(bool activate)
     {
         _trigger.enabled = activate;
+        Sc_GameManager.instance.SoundManager.PlaySFX(_source, _doorSound);
     }
 
     public void LoadLevel()

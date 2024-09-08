@@ -16,6 +16,12 @@ public class Sc_Button : MonoBehaviour
     private float _activationTimer = 0f;
     private bool _buttonPushed = false;
 
+    [Header("SOUND REFERENCES")]
+    public AudioSource _source;
+    public AudioClip _buttonPress;
+    public AudioClip _buttonLift;
+
+
     private void Update()
     {
         if (_buttonPushed)
@@ -40,6 +46,8 @@ public class Sc_Button : MonoBehaviour
         _activateable.ToggleActivation();
 
         _buttonPivot.localPosition = new Vector3(0f, 0f, -.1f);
+
+        Sc_GameManager.instance.SoundManager.PlaySFX(_source, _buttonPress, new Vector2(.95f, 1.05f));
     }
 
     private void LiftButton()
@@ -52,5 +60,7 @@ public class Sc_Button : MonoBehaviour
         }      
 
         _buttonPivot.localPosition = new Vector3(0f, 0f, 0f);
+
+        Sc_GameManager.instance.SoundManager.PlaySFX(_source, _buttonLift, new Vector2(.95f, 1.05f));
     }
 }
