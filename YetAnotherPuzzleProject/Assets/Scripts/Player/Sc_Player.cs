@@ -98,6 +98,7 @@ public class Sc_Player : MonoBehaviour
         PlayerCharacter.Controller.StopAnchoringSequence();
         PlayerCharacter.Controller.ResetAnchor();
         PlayerCharacter.Controller.StopClimbing();
+        PlayerCharacter.Controller.ParentToObject(this.transform);
     }
 
     #endregion

@@ -634,5 +634,11 @@ public class Sc_CharacterController : MonoBehaviour
         }
     }
 
+    public void ParentToObject(Transform parent)
+    {
+        if (this.transform.parent == parent) return;
+        this.transform.parent = parent;
+    }
+
     #endregion
 }

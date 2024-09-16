@@ -4,18 +4,22 @@ using UnityEngine;
 
 public class Sc_Pillar : MonoBehaviour
 {
+    [Header("OBJECT REFS")]
+    public Transform _headParent;
+
     [Header("PARAMETERS")]
     public float _travelDistance = 2f;
     public float _overTime = 1f;
     public AnimationCurve _movementCurve;
+
+    protected List<Rigidbody> _parentedRBs = new List<Rigidbody>();
 
     protected Rigidbody _rb;
     private Coroutine _movementCo;
     private Vector3 _bottomPos;
     private Vector3 _topPos;
 
-
-    private void Awake()
+    protected virtual void Awake()
     {
         _rb = GetComponent<Rigidbody>();
         if (_rb == null)
@@ -37,6 +41,18 @@ public class Sc_Pillar : MonoBehaviour
         _movementCo = StartCoroutine(Movement(activated));
     }
 
+    private void TransmitPosition(Vector3 toPos)
+    {
+        foreach(Rigidbody rb in _parentedRBs)
+        {
+            Vector3 offset = toPos - _rb.position;
+            //Debug.Log(offset);
+            offset = new Vector3(offset.x, 0f, offset.z);
+            rb.MovePosition(rb.position + (offset*.22f));
+            //WHY .22F???? DUNNO LMAO
+        }
+    }
+
     public void GaugeMove(float gauge)
     {
         if (gauge > 1f) gauge = 1f;
@@ -44,6 +60,7 @@ public class Sc_Pillar : MonoBehaviour
         float alpha = _movementCurve.Evaluate(gauge / 1f);
         Vector3 newPos = Vector3.Lerp(_bottomPos, _topPos, alpha);
         _rb.Move(newPos, _rb.rotation);
+        TransmitPosition(newPos);
 
         if (gauge >= 1f)
         {
@@ -86,10 +103,12 @@ public class Sc_Pillar : MonoBehaviour
             Vector3 newPos = Vector3.Lerp(fromPos, toPos, alpha);
             //transform.position = newPos;
             _rb.Move(newPos, _rb.rotation);
+            TransmitPosition(newPos);
             time += Time.deltaTime;
             yield return null;
         }
         _rb.Move(toPos, _rb.rotation);
+        TransmitPosition(toPos);
         //transform.position = toPos;
         if (up)
         {
@@ -110,6 +129,28 @@ public class Sc_Pillar : MonoBehaviour
     protected virtual void OnReachedBottom()
     {
 
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        if (character)
+        {
+            //character.ParentToObject(_headParent);
+            _parentedRBs.Add(character.RB);
+            Debug.Log("???");
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        if (character)
+        {
+            //character.ParentToObject(null);
+            _parentedRBs.Remove(character.RB);
+            Debug.Log("!!!");
+        }
     }
 
     private void OnDrawGizmos()
