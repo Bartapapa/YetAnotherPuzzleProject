@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Sc_Pillar_Rotate : Sc_Pillar
 {
@@ -35,8 +36,12 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
             Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
             toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
-            Debug.Log(toPoint);
-            rb.MovePosition(toPoint);
+
+            Vector3 euler = rb.rotation.eulerAngles;
+            euler = new Vector3(euler.x, euler.y -angle, euler.z);
+            Quaternion newRot = Quaternion.Euler(euler);
+
+            rb.Move(toPoint, newRot);
         }
     }
 
@@ -61,11 +66,11 @@ public class Sc_Pillar_Rotate : Sc_Pillar
     {
         //base.OnReachedBottom();
     }
+
     public void GaugeRotate(float gauge)
     {
         //if (gauge > 1f) gauge = 1f;
 
-        float alpha = _movementCurve.Evaluate(gauge / 1f);
         Vector3 euler = new Vector3(0f, _rotateAngle * gauge, 0f);     
         Quaternion newRot = Quaternion.Euler(euler);
         float angle = Quaternion.Angle(_rb.rotation, newRot);
