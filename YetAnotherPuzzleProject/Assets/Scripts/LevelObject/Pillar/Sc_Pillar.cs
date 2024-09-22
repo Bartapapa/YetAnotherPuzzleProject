@@ -137,9 +137,28 @@ public class Sc_Pillar : MonoBehaviour
         if (character)
         {
             //character.ParentToObject(_headParent);
+            if (_parentedRBs.Contains(character.RB))
+            {
+                return;
+            }
             _parentedRBs.Add(character.RB);
-            Debug.Log("???");
+            Debug.Log("Added RB to platform: " + character.name);
+            return;
         }
+
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+        if (pushable)
+        {
+            if (_parentedRBs.Contains(pushable.RB))
+            {
+                return;
+            }
+            _parentedRBs.Add(pushable.RB);
+            Debug.Log("Added RB to platform: " + pushable.name);
+            return;
+        }
+
+
     }
 
     private void OnTriggerExit(Collider other)
@@ -149,7 +168,15 @@ public class Sc_Pillar : MonoBehaviour
         {
             //character.ParentToObject(null);
             _parentedRBs.Remove(character.RB);
-            Debug.Log("!!!");
+            Debug.Log("Removed RB from platform: " + character.name);
+        }
+
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+        if (pushable)
+        {
+            _parentedRBs.Remove(pushable.RB);
+            Debug.Log("Removed RB from platform: " + pushable.name);
+            return;
         }
     }
 
