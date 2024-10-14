@@ -68,6 +68,8 @@ public class Sc_Vase : MonoBehaviour
                 int randomItem = UnityEngine.Random.Range(0, foundReward.itemRewards.Count);
                 Sc_Item foundItem = foundReward.itemRewards[randomItem];
                 Sc_Item newItem = Instantiate<Sc_Item>(foundItem, _itemSpawn.position, _itemSpawn.rotation, _itemSpawn);
+
+                //Get interactor, and equip item if possible.
                 break;
             default:
                 NoTreasure();
