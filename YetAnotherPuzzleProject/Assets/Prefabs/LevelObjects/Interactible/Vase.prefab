@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 146066412005179237}
   - component: {fileID: 3634043169883823082}
   - component: {fileID: 8798502394608370558}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7704607150052456942}
   - component: {fileID: 6116571392430671872}
   - component: {fileID: 5285603145328618498}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SmokePuff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4980,7 +4980,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6043355400776724954}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5014,7 +5014,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8560354599755948229}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5049,7 +5049,7 @@ GameObject:
   - component: {fileID: 4680237193393916349}
   - component: {fileID: 8671566454973242065}
   - component: {fileID: 7937526855749104582}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5133,7 +5133,7 @@ GameObject:
   - component: {fileID: 1796937144374333248}
   - component: {fileID: 293584554542140524}
   - component: {fileID: 6154199108644456345}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Vase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5242,7 +5242,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8970448517552199204}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ItemSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}

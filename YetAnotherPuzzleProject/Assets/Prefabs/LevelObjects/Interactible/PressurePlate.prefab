@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6364262234819548143}
   - component: {fileID: 4100724172935723058}
   - component: {fileID: 7683051812509441405}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PressurePlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 3341697755690047824}
   - component: {fileID: 5979239233480562712}
   - component: {fileID: 7223089945765571911}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8203619230658521163}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8620255354164614958}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}

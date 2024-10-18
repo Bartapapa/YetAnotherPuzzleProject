@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6483015878625638162}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4228180088281101870}
   - component: {fileID: 5193966716338585208}
   - component: {fileID: 8714472232372494820}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 3538818425635459424}
   - component: {fileID: 8103672406891053082}
   - component: {fileID: 2768208185758348241}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 5618182867442277782}
   - component: {fileID: 2539912153304140603}
   - component: {fileID: 665420421610096965}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 1630126290476976609}
   - component: {fileID: 4418290338265727045}
   - component: {fileID: 2473734246891521370}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -374,7 +374,7 @@ GameObject:
   - component: {fileID: 7283372019214021400}
   - component: {fileID: 1234025377792359967}
   - component: {fileID: 551748251773717058}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -462,7 +462,8 @@ GameObject:
   - component: {fileID: 6502130381306768576}
   - component: {fileID: 2053105722028253018}
   - component: {fileID: 7470539738603941545}
-  m_Layer: 0
+  - component: {fileID: -4223716306523065968}
+  m_Layer: 8
   m_Name: PushableBlock_Battery
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,7 +552,7 @@ MonoBehaviour:
   _gravity: {x: 0, y: -30, z: 0}
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   _frontElementAnchor: {fileID: 8266444288400645407}
   _backElementAnchor: {fileID: 6483015878625638162}
   _rightElementAnchor: {fileID: 7671026213011178953}
@@ -660,6 +661,22 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!208 &-4223716306523065968
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3874516146704767000}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.9, y: 0.9, z: 0.9}
+  m_MoveThreshold: 0.3
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 1, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &3984980723771086968
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +688,7 @@ GameObject:
   - component: {fileID: 3146054640137773573}
   - component: {fileID: 686427159673372877}
   - component: {fileID: 831438475136874013}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -752,7 +769,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8266444288400645407}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -785,7 +802,7 @@ GameObject:
   - component: {fileID: 3576332189990600485}
   - component: {fileID: 7406173752846792747}
   - component: {fileID: 6855951607213715839}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -866,7 +883,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6599354301603665327}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -899,7 +916,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7671026213011178953}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -932,7 +949,7 @@ GameObject:
   - component: {fileID: 8991738397062949587}
   - component: {fileID: 746011582463941241}
   - component: {fileID: 6879599274790202841}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1015,7 +1032,7 @@ GameObject:
   - component: {fileID: 8031546035606227696}
   - component: {fileID: 7771871821227164736}
   - component: {fileID: 5327024513621602645}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1096,7 +1113,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7214700939847286854}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1142,7 +1159,7 @@ GameObject:
   - component: {fileID: 7872344982758173839}
   - component: {fileID: 6349173886392636568}
   - component: {fileID: 5706650884849045635}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1223,7 +1240,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7514302068106395278}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Anchors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1260,7 +1277,7 @@ GameObject:
   - component: {fileID: 6497243443967335931}
   - component: {fileID: 4852908556661312366}
   - component: {fileID: 6603834836617449729}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1343,7 +1360,7 @@ GameObject:
   - component: {fileID: 3785914340738590421}
   - component: {fileID: 4685148837125105891}
   - component: {fileID: 4209040993797946541}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1426,7 +1443,7 @@ GameObject:
   - component: {fileID: 7429538320892636520}
   - component: {fileID: 752103586188145030}
   - component: {fileID: 3315609164137995826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1507,7 +1524,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6791650891747577612}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}

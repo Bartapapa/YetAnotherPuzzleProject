@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class Sc_Pillar : MonoBehaviour
@@ -62,6 +63,8 @@ public class Sc_Pillar : MonoBehaviour
         _rb.Move(newPos, _rb.rotation);
         TransmitPosition(newPos);
 
+        RebuildNavMesh();
+
         if (gauge >= 1f)
         {
             OnReachedTop();
@@ -105,10 +108,15 @@ public class Sc_Pillar : MonoBehaviour
             _rb.Move(newPos, _rb.rotation);
             TransmitPosition(newPos);
             time += Time.deltaTime;
+
+            RebuildNavMesh();
+
             yield return null;
         }
         _rb.Move(toPos, _rb.rotation);
         TransmitPosition(toPos);
+
+        RebuildNavMesh();
         //transform.position = toPos;
         if (up)
         {
@@ -129,6 +137,14 @@ public class Sc_Pillar : MonoBehaviour
     protected virtual void OnReachedBottom()
     {
 
+    }
+
+    protected void RebuildNavMesh()
+    {
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.CurrentLevel.RequestRebuildNavmesh();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

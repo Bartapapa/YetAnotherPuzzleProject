@@ -5966,7 +5966,7 @@ MonoBehaviour:
   _groundCheckEmissionPoint: {fileID: 8898206127385556764}
   _groundLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 257
   _maxVerticalBalancingForce: 200
   _groundCheckDistance: 0.8
   _pushCheckDistance: 1
@@ -5975,7 +5975,7 @@ MonoBehaviour:
   _pushRequestTime: 0.5
   _pushableObjectLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 256
   _maxClimbSpeed: 4
   _climbMovementSharpness: 15
 --- !u!136 &2613430712200823566

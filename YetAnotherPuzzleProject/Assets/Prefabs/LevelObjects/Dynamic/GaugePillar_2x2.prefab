@@ -244,6 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b531f10f7f9253647ab086454417ebe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _headParent: {fileID: 0}
   _travelDistance: 2
   _overTime: 2
   _movementCurve:
@@ -319,6 +320,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   _completion: 0
+  _interpolateCompletion: 1
   _completionRate: 5
   _depletionRate: 0.2
   _maxCompletion: 1.2
+  _looping: 0

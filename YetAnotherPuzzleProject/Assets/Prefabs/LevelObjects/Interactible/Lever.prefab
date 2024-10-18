@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9152230526785124691}
   - component: {fileID: 1637157417011712496}
   - component: {fileID: 5696560609172627170}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 2421305132859180297}
   - component: {fileID: 1227609153868722186}
   - component: {fileID: 5103654544350634459}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Lever
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -298,7 +298,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7173494511126249653}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -332,7 +332,7 @@ GameObject:
   - component: {fileID: 7566556629002711936}
   - component: {fileID: 2245762672135081909}
   - component: {fileID: 1544284209892302352}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1369104463621342012}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8580888243922677994}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: AxlePivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

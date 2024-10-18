@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +10,9 @@ public class Sc_Level : MonoBehaviour
 
     [Header("CURRENT SCENE")]
     public Loader.Scene CurrentScene = Loader.Scene.SampleScene1;
+
+    [Header("NAVMESH")]
+    public NavMeshSurface NMSurface;
 
     [Header("LEVEL PARAMETERS")]
     public Vector4 _minMaxXZLevelDimensions = new Vector4(-10, 10, -10, 10);
@@ -22,6 +26,8 @@ public class Sc_Level : MonoBehaviour
     private Coroutine _spawnFallingDustCO;
 
     private int _spawnedPlayers = 0;
+
+    private bool _buildNavmeshRequested = false;
 
     private void Awake()
     {
@@ -46,6 +52,11 @@ public class Sc_Level : MonoBehaviour
 
             SpawnAllPlayerCharacters();
         }
+    }
+
+    private void Update()
+    {
+        if (_buildNavmeshRequested) BuildNavmesh();
     }
 
     #region PLAYERSPAWNING
@@ -124,6 +135,22 @@ public class Sc_Level : MonoBehaviour
     #endregion
 
     #region UNIVERSALLEVELFUNCTIONS
+
+    public void RequestRebuildNavmesh()
+    {
+        if (NMSurface == null) return;
+        _buildNavmeshRequested = true;
+    }
+
+    private void BuildNavmesh()
+    {
+        if (NMSurface != null)
+        {
+            NMSurface.BuildNavMesh();
+        }
+
+        _buildNavmeshRequested = false; 
+    }
     public void RotateWorldSequence(float degrees, float overTime)
     {
         if (_rotateWorldCO != null)

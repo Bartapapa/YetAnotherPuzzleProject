@@ -128,7 +128,10 @@ public class Sc_CharacterController : MonoBehaviour
     public void Update()
     {
         HandlePushRequestTimer();
-        HandleParticles();
+        if (_runParticles != null)
+        {
+            HandleParticles();
+        }      
     }
 
     private void FixedUpdate()
@@ -163,6 +166,18 @@ public class Sc_CharacterController : MonoBehaviour
         {
             CurrentValve.SetInput(_moveInputVector);
         }
+    }
+
+    public void SetAIInputs(ref AIInput input)
+    {
+        Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(input.moveX, 0f, input.moveY), 1f);
+        if (_ignoreInputs) moveInputVector = Vector3.zero;
+        Vector2 climbInputVector = Vector2.ClampMagnitude(new Vector2(input.moveX, input.moveY), 1f);
+        if (_ignoreInputs) climbInputVector = Vector3.zero;
+
+        _moveInputVector = moveInputVector;
+        _lookInputVector = _moveInputVector.normalized;
+        _climbInputVector = climbInputVector;
     }
 
     #region TIMERS

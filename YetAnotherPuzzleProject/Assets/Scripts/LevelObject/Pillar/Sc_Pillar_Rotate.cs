@@ -95,6 +95,8 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             TransmitRotation(angle, difference);
         }
 
+        RebuildNavMesh();
+
         _cachedGauge = gauge;
         //transform.rotation = Quaternion.Euler(new Vector3(0f, _rotateAngle * gauge, 0f));
         //transform.Rotate(new Vector3(0f, _rotateAngle * gauge, 0f));
@@ -143,6 +145,9 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             }
             //transform.rotation = toRot;
             time += Time.deltaTime;
+
+            RebuildNavMesh();
+
             yield return null;
         }
         //_rb.Move(_rb.position, destRot);
@@ -158,6 +163,9 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         {
             TransmitRotation(angle, difference);
         }
+
+        RebuildNavMesh();
+
         _rotateCo = null;
 
         Move(false);
