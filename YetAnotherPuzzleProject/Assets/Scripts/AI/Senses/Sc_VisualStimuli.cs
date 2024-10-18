@@ -8,5 +8,5 @@ public class Sc_VisualStimuli : MonoBehaviour
     public Sc_Character_Player Player;
 
     [Header("PARAMETERS")]
-    [ReadOnly] public bool IsInLight = false;
+    public bool IsInLight = false;
 }

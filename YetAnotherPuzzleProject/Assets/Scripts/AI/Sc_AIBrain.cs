@@ -17,10 +17,13 @@ public class Sc_AIBrain : MonoBehaviour
     [Header("OBJECT REFERENCES")]
     public NavMeshAgent Agent;
     public Sc_CharacterController Controller;
+    public SC_AISense Sight;
+    public SC_AISense Hearing;
 
     [Header("STATE")]
     public Sc_State StartingState;
     [ReadOnly][SerializeField] private Sc_State _currentState;
+    [ReadOnly][SerializeField] private int _alertness = -1;
 
     [Header("NAVIGATION")]
     [SerializeField] private float _destinationReachedThreshold = .5f;
@@ -29,8 +32,34 @@ public class Sc_AIBrain : MonoBehaviour
     [Header("INPUTS")]
     private Vector2 _movement = Vector2.zero;
 
-    [Header("DEBUG")]
-    public Transform TARGET;
+
+    private void OnEnable()
+    {
+        if (Sight)
+        {
+            Sight.OnSeeSomething -= OnSeeStimuli;
+            Sight.OnSeeSomething += OnSeeStimuli;
+        }
+
+        if (Hearing)
+        {
+            Hearing.OnHearSomething -= OnHearStimuli;
+            Hearing.OnHearSomething += OnHearStimuli;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (Sight)
+        {
+            Sight.OnSeeSomething -= OnSeeStimuli;
+        }
+
+        if (Hearing)
+        {
+            Hearing.OnHearSomething -= OnHearStimuli;
+        }
+    }
 
     private void Start()
     {
@@ -57,9 +86,6 @@ public class Sc_AIBrain : MonoBehaviour
         HandleAgent();
         HandleState();
 
-        //Actions
-        if (TARGET) MoveTo(TARGET.position);
-
         //End
         ApplyInputs();
     }
@@ -84,6 +110,17 @@ public class Sc_AIBrain : MonoBehaviour
         aiInputs.moveY = _movement.y;
 
         Controller.SetAIInputs(ref aiInputs);
+    }
+    #endregion
+    #region SenseEvents
+    private void OnSeeStimuli(Sc_VisualStimuli vstimuli)
+    {
+
+    }
+
+    private void OnHearStimuli(Sc_SoundStimuli sstimuli)
+    {
+
     }
     #endregion
     #region StateMachine
