@@ -5,11 +5,11 @@ using UnityEngine;
 public class Sc_SoundStimuli : MonoBehaviour
 {
     public Sc_Lifespan Lifespan;
-
     public SphereCollider _soundCollider;
 
     public delegate void SoundStimuliEvent(Sc_SoundStimuli stimuli);
     public event SoundStimuliEvent OnSoundEnded;
+
 
     private void OnEnable()
     {

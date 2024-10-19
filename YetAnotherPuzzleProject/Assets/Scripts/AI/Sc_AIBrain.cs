@@ -25,6 +25,21 @@ public class Sc_AIBrain : MonoBehaviour
     [ReadOnly][SerializeField] private Sc_State _currentState;
     [ReadOnly][SerializeField] private int _alertness = -1;
 
+    [Header("MOVEMENT")]
+    public float UnalertedMoveSpeed = 2f;
+    public float AlertedMoveSpeed = 4f;
+    public float PursueMoveSpeed = 6f;
+    public float CurrentDefaultMoveSpeed { get { return IsAlerted ? AlertedMoveSpeed : UnalertedMoveSpeed; } }
+
+    [Header("ALERTED")]
+    public float AwarenessThreshold = 1f;
+    [ReadOnly][SerializeField] private float _currentAwareness = 0f;
+    public float AwarenessDecay = .5f;
+    public Vector2 MinMaxAwarenessGenerationDistance = new Vector2(6f, 1f);
+    private Coroutine _awarenessDecayGraceCo = null;
+    public bool CanAwarenessDecay { get { return (_awarenessDecayGraceCo != null || _currentAwareness >= AwarenessThreshold || _currentAwareness <= 0f) ? false : true; } }
+    public bool IsAlerted { get { return _currentAwareness >= AwarenessThreshold; } }
+
     [Header("NAVIGATION")]
     [SerializeField] private float _destinationReachedThreshold = .5f;
     private NavMeshPath _path;
@@ -76,7 +91,7 @@ public class Sc_AIBrain : MonoBehaviour
         if (StartingState != null)
         {
             _currentState = StartingState;
-            _currentState.OnStateEntered();
+            _currentState.OnStateEntered(this);
         }
     }
 
@@ -85,10 +100,13 @@ public class Sc_AIBrain : MonoBehaviour
         //Before
         HandleAgent();
         HandleState();
+        HandleAwareness();
 
         //End
         ApplyInputs();
     }
+
+
 
     #region OnTick
     private void HandleAgent()
@@ -100,6 +118,14 @@ public class Sc_AIBrain : MonoBehaviour
         else
         {
             Agent.nextPosition = transform.position;
+        }
+    }
+
+    private void HandleAwareness()
+    {
+        if (CanAwarenessDecay)
+        {
+            _currentAwareness -= Time.deltaTime * AwarenessDecay;
         }
     }
 
@@ -131,13 +157,13 @@ public class Sc_AIBrain : MonoBehaviour
         Sc_State newState = _currentState.Tick(this);
         if (newState != _currentState)
         {
-            _currentState.OnStateExited();
+            _currentState.OnStateExited(this);
             _currentState = newState;
-            _currentState.OnStateEntered();
+            _currentState.OnStateEntered(this);
         }
     }
     #endregion
-    #region AI actions
+    #region AI Controller actions
     public bool MoveTo(Vector3 destinationPoint, bool useNavMesh = true)
     {
         bool reached = false;
@@ -182,6 +208,12 @@ public class Sc_AIBrain : MonoBehaviour
         }
 
         return reached;
+    }
+    #endregion
+    #region Awareness
+    public void GenerateAwareness(Vector3 pointOfInterest)
+    {
+        float distance = Vector3.Distance(pointOfInterest, transform.position);
     }
     #endregion
 }

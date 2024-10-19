@@ -11,12 +11,13 @@ public class Sc_InvestigateState : Sc_State
     public Sc_IdleState IdleState;
     public Sc_PursueState PursueState;
 
-    public override void OnStateEntered()
+    public override void OnStateEntered(Sc_AIBrain brain)
     {
         //NoticedSomething();
+        brain.Controller._maxGroundedMoveSpeed = brain.CurrentDefaultMoveSpeed;
     }
 
-    public override void OnStateExited()
+    public override void OnStateExited(Sc_AIBrain brain)
     {
         
     }

@@ -6281,7 +6281,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 332216593892983843}
-  IsInLight: 1
+  _lightSources: []
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 257
+  _isInLight: 0
 --- !u!1 &4748321182727310683
 GameObject:
   m_ObjectHideFlags: 0

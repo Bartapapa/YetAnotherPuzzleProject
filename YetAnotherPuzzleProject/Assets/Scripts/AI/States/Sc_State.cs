@@ -4,12 +4,12 @@ using UnityEngine;
 
 public abstract class Sc_State : MonoBehaviour
 {
-    public virtual void OnStateEntered()
+    public virtual void OnStateEntered(Sc_AIBrain brain)
     {
 
     }
 
-    public virtual void OnStateExited()
+    public virtual void OnStateExited(Sc_AIBrain brain)
     {
 
     }
