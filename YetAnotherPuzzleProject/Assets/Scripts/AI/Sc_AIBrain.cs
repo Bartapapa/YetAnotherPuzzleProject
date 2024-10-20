@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.ExceptionServices;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.XR;
 
 public struct AIInput
@@ -36,8 +37,8 @@ public class Sc_AIBrain : MonoBehaviour
     [ReadOnly][SerializeField] private float _currentAwareness = 0f;
     public float AwarenessDecay = .5f;
     public Vector2 MinMaxAwarenessGenerationDistance = new Vector2(6f, 1f);
-    private Coroutine _awarenessDecayGraceCo = null;
-    public bool CanAwarenessDecay { get { return (_awarenessDecayGraceCo != null || _currentAwareness >= AwarenessThreshold || _currentAwareness <= 0f) ? false : true; } }
+    private Coroutine _awarenessDecayGraceCO = null;
+    public bool CanAwarenessDecay { get { return (_awarenessDecayGraceCO != null || _currentAwareness >= AwarenessThreshold || _currentAwareness <= 0f) ? false : true; } }
     public bool IsAlerted { get { return _currentAwareness >= AwarenessThreshold; } }
 
     [Header("NAVIGATION")]
@@ -82,6 +83,8 @@ public class Sc_AIBrain : MonoBehaviour
         Agent.updateRotation = false;
 
         _path = new NavMeshPath();
+
+
 
         InitializeBrain();
     }
@@ -141,12 +144,12 @@ public class Sc_AIBrain : MonoBehaviour
     #region SenseEvents
     private void OnSeeStimuli(Sc_VisualStimuli vstimuli)
     {
-
+        _currentState.OnSawSomething(this, vstimuli);
     }
 
     private void OnHearStimuli(Sc_SoundStimuli sstimuli)
     {
-
+        _currentState.OnHearSomething(this, sstimuli);
     }
     #endregion
     #region StateMachine
@@ -155,10 +158,15 @@ public class Sc_AIBrain : MonoBehaviour
         if (_currentState == null) return;
 
         Sc_State newState = _currentState.Tick(this);
-        if (newState != _currentState)
+        GoToState(newState);
+    }
+
+    public void GoToState(Sc_State toState)
+    {
+        if (toState != _currentState)
         {
             _currentState.OnStateExited(this);
-            _currentState = newState;
+            _currentState = toState;
             _currentState.OnStateEntered(this);
         }
     }
@@ -211,9 +219,19 @@ public class Sc_AIBrain : MonoBehaviour
     }
     #endregion
     #region Awareness
-    public void GenerateAwareness(Vector3 pointOfInterest)
+
+    public void InvestigateSomething()
     {
-        float distance = Vector3.Distance(pointOfInterest, transform.position);
+        //Stop movement.
+        //Look around for x seconds.
+        //Can notice new things during this period.
     }
+
+    public void GeneratePlayerAwareness(Sc_Character_Player playerCharacter)
+    {
+        //float distance = Vector3.Distance(pointOfInterest, transform.position);
+    }
+
+
     #endregion
 }

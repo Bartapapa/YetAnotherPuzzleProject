@@ -11,6 +11,27 @@ public class Sc_SoundStimuli : MonoBehaviour
     public event SoundStimuliEvent OnSoundEnded;
 
 
+    public void InitSoundStimuli(float range = .5f, float duration = 1f)
+    {
+        if (duration > 0)
+        {
+            Lifespan.Duration = duration;
+        }
+        else
+        {
+            Lifespan.Duration = -1f;
+        }
+
+        if (range > .1f)
+        {
+            _soundCollider.radius = range;
+        }
+        else
+        {
+            _soundCollider.radius = .1f;
+        }
+    }
+
     private void OnEnable()
     {
         if (Lifespan)
@@ -47,7 +68,7 @@ public class Sc_SoundStimuli : MonoBehaviour
             {
                 if (hearing[i].Sense == AISenseType.Hearing)
                 {
-                    hearing[i].HearStimuli(this);
+                    //hearing[i].HearStimuli(this);
                 }
             }
         }

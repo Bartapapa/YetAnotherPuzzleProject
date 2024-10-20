@@ -27,6 +27,11 @@ public class Sc_CharacterController : MonoBehaviour
     public float _airMovementSharpness = 15f;
     public float _airDrag = 0f;
     public Vector3 _gravity = new Vector3(0f, -30f, 0f);
+    private bool _canMove = true;
+    private bool _canRotate = true;
+    public bool CanMove { get { return _canMove; } set { _canMove = value; } }
+    public bool CanRotate { get { return _canRotate; } set { _canRotate = value; } }
+    private Vector3 _forcedLookAtDir = Vector3.zero;
 
     [Header("PARTICLES")]
     public ParticleSystem _runParticles;
@@ -151,15 +156,23 @@ public class Sc_CharacterController : MonoBehaviour
     public void SetInputs(ref CharacterInput input)
     {
         Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(input.moveX, 0f, input.moveY), 1f);
-        if (_ignoreInputs) moveInputVector = Vector3.zero;
+        if (_ignoreInputs || !_canMove) moveInputVector = Vector3.zero;
         Vector2 climbInputVector = Vector2.ClampMagnitude(new Vector2(input.moveX, input.moveY), 1f);
-        if (_ignoreInputs) climbInputVector = Vector3.zero;
+        if (_ignoreInputs || !_canMove) climbInputVector = Vector3.zero;
 
         float cameraRotation = input.cameraRef.transform.eulerAngles.y;
         Quaternion controlRotation = Quaternion.Euler(0, cameraRotation, 0);
 
         _moveInputVector = controlRotation * moveInputVector;
-        _lookInputVector = _moveInputVector.normalized;
+        if (_forcedLookAtDir != Vector3.zero)
+        {
+            _lookInputVector = _forcedLookAtDir;
+        }
+        else
+        {
+            _lookInputVector = _moveInputVector.normalized;
+        }
+        
         _climbInputVector = climbInputVector;
 
         if (CurrentValve != null)
@@ -168,17 +181,28 @@ public class Sc_CharacterController : MonoBehaviour
         }
     }
 
+    #region AI
     public void SetAIInputs(ref AIInput input)
     {
         Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(input.moveX, 0f, input.moveY), 1f);
-        if (_ignoreInputs) moveInputVector = Vector3.zero;
+        if (_ignoreInputs || !_canMove) moveInputVector = Vector3.zero;
         Vector2 climbInputVector = Vector2.ClampMagnitude(new Vector2(input.moveX, input.moveY), 1f);
-        if (_ignoreInputs) climbInputVector = Vector3.zero;
+        if (_ignoreInputs || !_canMove) climbInputVector = Vector3.zero;
 
         _moveInputVector = moveInputVector;
-        _lookInputVector = _moveInputVector.normalized;
+
+        if (_forcedLookAtDir != Vector3.zero)
+        {
+            _lookInputVector = _forcedLookAtDir;
+        }
+        else
+        {
+            _lookInputVector = _moveInputVector.normalized;
+        }
+
         _climbInputVector = climbInputVector;
     }
+    #endregion
 
     #region TIMERS
     private void HandlePushRequestTimer()
@@ -248,6 +272,8 @@ public class Sc_CharacterController : MonoBehaviour
                         {
                             smoothedLookInputDirection = Vector3.Slerp(transform.forward, _pushDirection, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
                         }
+
+                        if (!_canRotate) break;
                         transform.forward = smoothedLookInputDirection;
                     }
                 }
@@ -257,6 +283,7 @@ public class Sc_CharacterController : MonoBehaviour
                     {
                         Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, transform.forward, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
 
+                        if (!_canRotate) break;
                         transform.forward = smoothedLookInputDirection;
                     }
                 }
@@ -264,6 +291,7 @@ public class Sc_CharacterController : MonoBehaviour
                 break;
 
             case CharacterState.Anchored:
+                if (!_canRotate) break;
                 _rb.rotation = _anchor.rotation;
                 break;
 
@@ -629,6 +657,26 @@ public class Sc_CharacterController : MonoBehaviour
     public void ResetInputs()
     {
         _moveInputVector = Vector3.zero;
+    }
+
+    public void LookAt(Vector3 point)
+    {
+        //Doesn't take into account Y values.
+        Vector3 selfIgnoreY = new Vector3(transform.position.x, 0f, transform.position.z);
+        Vector3 targetIgnoreY = new Vector3(point.x, 0f, point.z);
+        Vector3 direction = (targetIgnoreY - selfIgnoreY).normalized;
+        LookInDirection(direction);
+    }
+
+    public void LookInDirection(Vector3 direction)
+    {
+        Vector3 toDir = direction.normalized;
+        _forcedLookAtDir = toDir;
+    }
+
+    public void StopLookAt()
+    {
+        _forcedLookAtDir = Vector3.zero;
     }
     #endregion
 

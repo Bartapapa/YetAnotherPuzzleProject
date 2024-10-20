@@ -16,7 +16,10 @@ public class Sc_Lifespan : MonoBehaviour
 
     private void Start()
     {
-        SetLifespan(Duration);
+        if (Duration > 0)
+        {
+            SetLifespan(Duration);
+        }
     }
 
     private void Update()

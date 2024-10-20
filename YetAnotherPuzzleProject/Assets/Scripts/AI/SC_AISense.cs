@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public enum AISenseType
 {
@@ -21,81 +22,58 @@ public class SC_AISense : MonoBehaviour
     [Range(0, 360)]
     [SerializeField] private float _angle = 60f;
     [SerializeField] private bool _darkVision = false;
-    [SerializeField] private Vector2 _offset = Vector2.zero;
     [SerializeField] private LayerMask _obstacleLayer;
-    [SerializeField] private LayerMask _targetLayer;
+    public SphereCollider Collider;
 
     private List<Sc_VisualStimuli> _sensedSight = new List<Sc_VisualStimuli>();
     public List<Sc_VisualStimuli> SensedSight { get { return _sensedSight; } }
     private List<Sc_SoundStimuli> _sensedSound = new List<Sc_SoundStimuli>();
     public List<Sc_SoundStimuli> SensedSound { get { return _sensedSound; } }
+    private List<Sc_Character_Player> _sensedPlayer = new List<Sc_Character_Player>();
+    public List<Sc_Character_Player> SensedPlayer { get { return _sensedPlayer; } }
+    public bool SeesPlayers { get { return _sensedPlayer.Count > 0; } }
 
     public delegate void VisualStimuliEvent(Sc_VisualStimuli stimuli);
     public delegate void SoundStimuliEvent(Sc_SoundStimuli stimuli);
+    public delegate void PlayerCharacterSenseEvent(Sc_Character_Player player);
     public event VisualStimuliEvent OnSeeSomething;
     public event SoundStimuliEvent OnHearSomething;
+    public event PlayerCharacterSenseEvent OnNoticedPlayer;
 
-    private void Update()
+    private void Start()
     {
-        SeeStimuli();
+        Collider.isTrigger = true;
+        Collider.radius = _range;
     }
 
-    private List<Sc_VisualStimuli> SeeStimuli()
+    private void AddVisualStimuli(Sc_VisualStimuli vstimuli)
     {
-        _sensedSight.Clear();
-        Vector3 sightOrigin = transform.position + (transform.forward * _offset.x) + (transform.right * _offset.y);
-        Collider[] collidersInSightRadius = Physics.OverlapSphere(sightOrigin, _range, _targetLayer);
-        for (int i = 0; i < collidersInSightRadius.Length; i++)
+        if (!_sensedSight.Contains(vstimuli))
         {
-            Sc_VisualStimuli vstimuli = collidersInSightRadius[i].GetComponent<Sc_VisualStimuli>();
-            if (vstimuli != null)
+            _sensedSight.Add(vstimuli);
+            OnSeeSomething?.Invoke(vstimuli);
+
+            if (vstimuli.Player != null)
             {
-                Vector3 targetPosition = vstimuli.transform.position;
-                Vector3 directionToTarget = (targetPosition - sightOrigin).normalized;
-                if (Vector3.Angle(transform.forward, directionToTarget) < _angle / 2)
+                if (!_sensedPlayer.Contains(vstimuli.Player))
                 {
-                    float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
-                    if (!Physics.Raycast(transform.position + Vector3.up, directionToTarget, distanceToTarget, _obstacleLayer))
-                    {
-                        if (vstimuli.IsInLight)
-                        {
-                            _sensedSight.Add(vstimuli);
-                            OnSeeSomething?.Invoke(vstimuli);
-                        }
-                        else
-                        {
-                            if (_darkVision)
-                            {
-                                _sensedSight.Add(vstimuli);
-                                OnSeeSomething?.Invoke(vstimuli);
-                            }
-                        }
-                    }
+                    _sensedPlayer.Add(vstimuli.Player);
                 }
             }
         }
-        return _sensedSight;
     }
 
-    public List<Sc_Character_Player> SeesPlayers()
+    private void RemoveVisualStimuli(Sc_VisualStimuli vstimuli)
     {
-        List<Sc_Character_Player> players = new List<Sc_Character_Player>();
+        _sensedSight.Remove(vstimuli);
 
-        foreach(Sc_VisualStimuli vstimuli in _sensedSight)
+        if (vstimuli.Player != null)
         {
-            if(vstimuli.Player != null)
-            {
-                if (!players.Contains(vstimuli.Player))
-                {
-                    players.Add(vstimuli.Player);
-                }
-            }
+            _sensedPlayer.Remove(vstimuli.Player);
         }
-
-        return players;
     }
 
-    public void HearStimuli(Sc_SoundStimuli sstimuli)
+    private void AddSoundStimuli(Sc_SoundStimuli sstimuli)
     {
         if (!_sensedSound.Contains(sstimuli))
         {
@@ -122,6 +100,78 @@ public class SC_AISense : MonoBehaviour
         return angles;
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        switch (Sense)
+        {
+            case AISenseType.Sight:
+                Sc_VisualStimuli vstimuli = other.GetComponent<Sc_VisualStimuli>();
+                if (vstimuli)
+                {
+                    Vector3 targetPosition = vstimuli.transform.position;
+                    Vector3 directionToTarget = (targetPosition - transform.position).normalized;
+                    if (Vector3.Angle(transform.forward, directionToTarget) < _angle / 2)
+                    {
+                        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+                        if (!Physics.Raycast(transform.position + Vector3.up, directionToTarget, distanceToTarget, _obstacleLayer, QueryTriggerInteraction.Ignore))
+                        {
+                            if (vstimuli.Active)
+                            {
+                                if (vstimuli.IsInLight || (!vstimuli.IsInLight && _darkVision))
+                                {
+                                    AddVisualStimuli(vstimuli);
+                                }
+                                else
+                                {
+                                    RemoveVisualStimuli(vstimuli);
+                                }
+                            }
+                            else
+                            {
+                                RemoveVisualStimuli(vstimuli);
+                            }
+                        }
+                        else
+                        {
+                            RemoveVisualStimuli(vstimuli);
+                        }
+                    }
+                    else
+                    {
+                        RemoveVisualStimuli(vstimuli);
+                    }
+                }
+                break;
+            case AISenseType.Hearing:
+                Sc_SoundStimuli sstimuli = other.GetComponent<Sc_SoundStimuli>();
+                if (sstimuli)
+                {
+                    AddSoundStimuli(sstimuli);
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        switch (Sense)
+        {
+            case AISenseType.Sight:
+                Sc_VisualStimuli vstimuli = other.GetComponent<Sc_VisualStimuli>();
+                if (vstimuli)
+                {
+                    RemoveVisualStimuli(vstimuli);
+                }
+                break;
+            case AISenseType.Hearing:
+                break;
+            default:
+                break;
+        }
+    }
+
     void OnDrawGizmosSelected()
     {
         switch (Sense)
@@ -129,8 +179,7 @@ public class SC_AISense : MonoBehaviour
             case AISenseType.Sight:
                 Gizmos.color = Color.red;
                 float angles = GetAngleFromDirection(transform.position, transform.forward);
-                Vector3 sightOrigin = transform.position + (transform.forward * _offset.x) + (transform.right * _offset.y);
-                Vector3 initialPos = sightOrigin;
+                Vector3 initialPos = transform.position;
                 Vector3 posA = initialPos;
                 float angleSteps = _angle / 20f;
                 float angle = angles - _angle / 2;
@@ -144,6 +193,10 @@ public class SC_AISense : MonoBehaviour
                     posA = posB;
                 }
                 Gizmos.DrawLine(posA, initialPos);
+                break;
+            case AISenseType.Hearing:
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, _range);
                 break;
             default:
                 break;

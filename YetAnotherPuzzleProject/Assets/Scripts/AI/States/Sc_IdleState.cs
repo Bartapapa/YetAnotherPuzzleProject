@@ -36,15 +36,24 @@ public class Sc_IdleState : Sc_State
         //If does, then err.
 
         //If sees or hears something, go to investigate state.
-
-
-        if (brain.Sight.SeesPlayers().Count >= 1)
-        {
-            Debug.Log("I see player!");
-        }
         return base.Tick(brain);
     }
 
+    public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
+    {
+        Debug.Log("I heard something!");
+        InvestigateState.NoticedSomething(brain, sstimuli.transform.position);
+        brain.GoToState(InvestigateState);
+    }
+
+    public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
+    {
+        Debug.Log("I saw something!");
+        InvestigateState.NoticedSomething(brain, vstimuli.transform.position);
+        brain.GoToState(InvestigateState);
+    }
+
+    #region Patrol
     private void Patrol(Sc_AIBrain brain)
     {
         if (brain.MoveTo(Waypoints[_currentPatrolPoint].position))
@@ -106,4 +115,5 @@ public class Sc_IdleState : Sc_State
             }
         }
     }
+    #endregion
 }

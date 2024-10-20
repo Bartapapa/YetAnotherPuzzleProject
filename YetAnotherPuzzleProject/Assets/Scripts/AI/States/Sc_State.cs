@@ -14,6 +14,16 @@ public abstract class Sc_State : MonoBehaviour
 
     }
 
+    public virtual void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
+    {
+
+    }
+
+    public virtual void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
+    {
+
+    }
+
     public virtual Sc_State Tick(Sc_AIBrain brain)
     {
         return this;

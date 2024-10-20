@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static Unity.VisualScripting.Member;
 
-public class Sc_SoundHandler_PlayerCharacter : MonoBehaviour
+public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
 {
     [Header("OBJECT REFS")]
     public AudioSource MouthSource;
@@ -58,6 +58,8 @@ public class Sc_SoundHandler_PlayerCharacter : MonoBehaviour
     {
         Sc_GameManager.instance.SoundManager.PlaySFX(MouthSource, _quack, _minMaxQuackPitch);
         _duckParticles.Play();
+
+        GenerateSoundObject(transform.position, 1f, 1f);
     }
 
     public void StartFootsteps()

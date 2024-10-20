@@ -10,13 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2111547068726531940}
   - component: {fileID: 5392798639311923044}
-  m_Layer: 7
+  - component: {fileID: 5825114348766658591}
+  m_Layer: 0
   m_Name: Hearing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2111547068726531940
 Transform:
   m_ObjectHideFlags: 0
@@ -45,16 +46,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Sense: 2
-  _range: 5
+  _range: 3
   _angle: 60
   _darkVision: 0
-  _offset: {x: 0, y: 0}
   _obstacleLayer:
     serializedVersion: 2
     m_Bits: 0
-  _targetLayer:
+  Collider: {fileID: 5825114348766658591}
+--- !u!135 &5825114348766658591
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 768896880469003882}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &806220966638310151
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,7 +315,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6430891779002102302}
   - component: {fileID: 7826292424711696341}
-  m_Layer: 7
+  - component: {fileID: 873080605268101109}
+  m_Layer: 0
   m_Name: Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -312,7 +332,7 @@ Transform:
   m_GameObject: {fileID: 1894694046600021831}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -334,13 +354,31 @@ MonoBehaviour:
   _range: 8
   _angle: 40
   _darkVision: 0
-  _offset: {x: -1.5, y: 0}
   _obstacleLayer:
     serializedVersion: 2
-    m_Bits: 1
-  _targetLayer:
+    m_Bits: 257
+  Collider: {fileID: 873080605268101109}
+--- !u!135 &873080605268101109
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1894694046600021831}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2158514049341600597
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,7 +607,7 @@ MonoBehaviour:
   _groundLayers:
     serializedVersion: 2
     m_Bits: 257
-  _maxVerticalBalancingForce: 200
+  _maxVerticalBalancingForce: 50
   _groundCheckDistance: 1.1
   _pushCheckDistance: 1
   _characterHeight: 1.4
@@ -612,6 +650,13 @@ MonoBehaviour:
   StartingState: {fileID: 4141666563257315592}
   _currentState: {fileID: 0}
   _alertness: -1
+  UnalertedMoveSpeed: 2
+  AlertedMoveSpeed: 4
+  PursueMoveSpeed: 6
+  AwarenessThreshold: 1
+  _currentAwareness: 0
+  AwarenessDecay: 0.5
+  MinMaxAwarenessGenerationDistance: {x: 6, y: 1}
   _destinationReachedThreshold: 0.5
 --- !u!136 &620520911888510126
 CapsuleCollider:
@@ -917,7 +962,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2878779283100388322}
-  m_Layer: 7
+  m_Layer: 0
   m_Name: Senses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
