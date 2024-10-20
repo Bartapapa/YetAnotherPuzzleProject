@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Sc_SoundStimuli : MonoBehaviour
 {
+    [Header("OBJECT REFS")]
     public Sc_Lifespan Lifespan;
     public SphereCollider _soundCollider;
+
+    [Header("PARAMETERS")]
+    public int Priority = 10;
 
     public delegate void SoundStimuliEvent(Sc_SoundStimuli stimuli);
     public event SoundStimuliEvent OnSoundEnded;

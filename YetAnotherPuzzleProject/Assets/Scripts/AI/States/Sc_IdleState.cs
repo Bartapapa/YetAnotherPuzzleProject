@@ -42,14 +42,16 @@ public class Sc_IdleState : Sc_State
     public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
         Debug.Log("I heard something!");
-        InvestigateState.NoticedSomething(brain, sstimuli.transform.position);
+        InvestigateState.InvestigationPriority = sstimuli.Priority;
+        InvestigateState.NoticedSound(brain, sstimuli.transform.position);
         brain.GoToState(InvestigateState);
     }
 
     public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
         Debug.Log("I saw something!");
-        InvestigateState.NoticedSomething(brain, vstimuli.transform.position);
+        InvestigateState.InvestigationPriority = vstimuli.Priority;
+        InvestigateState.NoticedSight(brain, vstimuli);
         brain.GoToState(InvestigateState);
     }
 

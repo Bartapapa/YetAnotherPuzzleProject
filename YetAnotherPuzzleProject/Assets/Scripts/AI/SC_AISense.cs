@@ -100,6 +100,31 @@ public class SC_AISense : MonoBehaviour
         return angles;
     }
 
+    public bool CanSee(Sc_VisualStimuli vstimuli)
+    {
+        bool canSee = false;
+        Vector3 targetPosition = vstimuli.transform.position;
+        Vector3 directionToTarget = (targetPosition - transform.position).normalized;
+        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+        if (distanceToTarget <= _range)
+        {
+            if (Vector3.Angle(transform.forward, directionToTarget) < _angle / 2)
+            {
+                if (!Physics.Raycast(transform.position + Vector3.up, directionToTarget, distanceToTarget, _obstacleLayer, QueryTriggerInteraction.Ignore))
+                {
+                    if (vstimuli.Active)
+                    {
+                        if (vstimuli.IsInLight || (!vstimuli.IsInLight && _darkVision))
+                        {
+                            canSee = true;
+                        }
+                    }
+                }
+            }
+        }
+        return canSee;
+    }
+
     private void OnTriggerStay(Collider other)
     {
         switch (Sense)

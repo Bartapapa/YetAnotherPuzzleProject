@@ -7,6 +7,10 @@ public class Sc_InvestigateState : Sc_State
 {
     [Header("INVESTIGATE POINT")]
     [ReadOnly] public Vector3 InvestigationPoint;
+    [ReadOnly] public Sc_VisualStimuli InvestigationVisual;
+    [ReadOnly][SerializeField] private int _investigationPriority = -1;
+    public int InvestigationPriority { get { return _investigationPriority; } set { _investigationPriority = value; } }
+    private Vector3 _cachedTransformPos = Vector3.zero;
 
     [Header("NOTICING/INVESTIGATING PARAMETERS")]
     public float NoticingDuration = 1f;
@@ -32,7 +36,7 @@ public class Sc_InvestigateState : Sc_State
 
     public override void OnStateExited(Sc_AIBrain brain)
     {
-        
+        _investigationPriority = -1;
     }
 
     public override Sc_State Tick(Sc_AIBrain brain)
@@ -44,7 +48,7 @@ public class Sc_InvestigateState : Sc_State
             //Constantly check against the current level's "Memory" to see if an object has been displaced or activated. If this happens, set new memory to current state.
         //If see/hear player, enter pursue state.
 
-        if (brain.MoveTo(InvestigationPoint) && !IsInvestigating)
+        if (brain.MoveTo(InvestigationPoint) && !IsInvestigating && !IsNoticing)
         {
             InvestigateSomething(brain, InvestigationPoint);
         }
@@ -55,27 +59,59 @@ public class Sc_InvestigateState : Sc_State
     public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
         Debug.Log("I heard something!");
-        NoticedSomething(brain, sstimuli.transform.position);
-        //change InvestigationPoint
+        if (CheckPriority(sstimuli.Priority))
+        {
+            _investigationPriority = sstimuli.Priority;
+            NoticedSound(brain, sstimuli.transform.position);
+        }
     }
 
     public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
         Debug.Log("I saw something!");
-        NoticedSomething(brain, vstimuli.transform.position);
-        //change InvestigationPoint
+        if (CheckPriority(vstimuli.Priority))
+        {
+            _investigationPriority = vstimuli.Priority;
+            NoticedSight(brain, vstimuli);
+        }
+    }
+
+    private bool CheckPriority(int stimuliPriority)
+    {
+        bool higherPrio = false;
+        if (stimuliPriority > _investigationPriority) higherPrio = true;
+
+        return higherPrio;
     }
 
     #region Noticing
-    private IEnumerator NoticedSomethingCoroutine(Sc_AIBrain brain)
+    private IEnumerator NoticedSomethingCoroutine(Sc_AIBrain brain, bool useTransform = false)
     {
         float timer = 0f;
         while (timer < NoticingDuration)
         {
-            brain.Controller.LookAt(InvestigationPoint);
+            if (useTransform && InvestigationVisual != null && CanSeeVisualStimuli(brain, InvestigationVisual))
+            {
+                InvestigationPoint = InvestigationVisual.transform.position;
+                brain.Controller.LookAt(InvestigationPoint);
+                if (InvestigationVisual.transform.position != _cachedTransformPos)
+                {
+                    timer -= Time.deltaTime;
+                }
+            }
+            else
+            {
+                brain.Controller.LookAt(InvestigationPoint);
+            }
+            
             timer += Time.deltaTime;
+            if (useTransform && InvestigationVisual != null)
+            {
+                _cachedTransformPos = InvestigationVisual.transform.position;
+            }
             yield return null;
         }
+        _investigationPriority = -1;
         StopNoticingSomething(brain);
     }
 
@@ -91,7 +127,23 @@ public class Sc_InvestigateState : Sc_State
         }
     }
 
-    public void NoticedSomething(Sc_AIBrain brain, Vector3 stimuliPoint)
+    public void NoticedSight(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
+    {
+        StopInvestigatingSomething(brain);
+
+        brain.Controller.CanMove = false;
+        NoticedSmthGO.SetActive(true);
+        InvestigationVisual = vstimuli;
+        _cachedTransformPos = vstimuli.transform.position;
+        InvestigationPoint = vstimuli.transform.position;
+        if (_noticedSomethingCO != null)
+        {
+            StopCoroutine(_noticedSomethingCO);
+        }
+        _noticedSomethingCO = StartCoroutine(NoticedSomethingCoroutine(brain, true));
+    }
+
+    public void NoticedSound(Sc_AIBrain brain, Vector3 stimuliPoint)
     {
         StopInvestigatingSomething(brain);
 
@@ -103,6 +155,11 @@ public class Sc_InvestigateState : Sc_State
             StopCoroutine(_noticedSomethingCO);
         }
         _noticedSomethingCO = StartCoroutine(NoticedSomethingCoroutine(brain));
+    }
+
+    private bool CanSeeVisualStimuli(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
+    {
+        return brain.Sight.CanSee(vstimuli);
     }
 
     #endregion

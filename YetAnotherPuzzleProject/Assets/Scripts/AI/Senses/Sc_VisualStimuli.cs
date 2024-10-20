@@ -11,6 +11,7 @@ public class Sc_VisualStimuli : MonoBehaviour
     [ReadOnly][SerializeField] private List<Sc_LightSource> _lightSources = new List<Sc_LightSource>();
 
     [Header("PARAMETERS")]
+    public int Priority = 10;
     public bool Active = true;
     [SerializeField] private LayerMask _obstacleLayers;
     [ReadOnly][SerializeField] private bool _isInLight = false;

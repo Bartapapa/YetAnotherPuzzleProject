@@ -9981,7 +9981,7 @@ PrefabInstance:
     - target: {fileID: 768896880469003882, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1849160676149811556, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}
@@ -10001,7 +10001,7 @@ PrefabInstance:
     - target: {fileID: 1894694046600021831, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3304976529445817751, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}
@@ -10033,6 +10033,11 @@ PrefabInstance:
       propertyPath: Waypoints.Array.data[3]
       value: 
       objectReference: {fileID: 1887178032}
+    - target: {fileID: 5628941674509585216, guid: e83ffed012e3df24a8f556ca9b35f8c3,
+        type: 3}
+      propertyPath: _rotationSharpness
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6804879098777067333, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10082,6 +10087,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369730623642605114, guid: e83ffed012e3df24a8f556ca9b35f8c3,
+        type: 3}
+      propertyPath: _minMaxRepelForce.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369730623642605114, guid: e83ffed012e3df24a8f556ca9b35f8c3,
+        type: 3}
+      propertyPath: _minMaxRepelForce.y
+      value: 500
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
