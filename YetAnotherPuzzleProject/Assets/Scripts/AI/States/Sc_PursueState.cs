@@ -11,7 +11,11 @@ public class Sc_PursueState : Sc_State
 
     [Header("PURSUE REFS")]
     public Sc_Character_Player CurrentPlayerTarget;
-    [ReadOnly] [SerializeField] private Vector3 _targetLastKnownLocation = Vector3.zero;
+    [ReadOnly] public Vector3 TargetLastKnownLocation = Vector3.zero;
+    public float HearTargetSoundTrackingDuration = 1f;
+    public float ChangeTargetDuration = 1.5f;
+    private Coroutine _changeTargetCo;
+    public bool ChangingTarget { get { return _changeTargetCo != null; } }
 
     [Header("STATE REFS")]
     public Sc_IdleState IdleState;
@@ -21,8 +25,8 @@ public class Sc_PursueState : Sc_State
     public GameObject PursuitLight;
     public GameObject VisionLight;
 
-    private bool HeardTargetProduceSoundRecently { get { return _hearTargetSoundGrace != null; } }
-    private Coroutine _hearTargetSoundGrace = null;
+    private bool HeardTargetProduceSoundRecently { get { return _hearTargetSoundTrackingCo != null; } }
+    private Coroutine _hearTargetSoundTrackingCo = null;
 
     public override void OnStateEntered(Sc_AIBrain brain)
     {
@@ -34,7 +38,7 @@ public class Sc_PursueState : Sc_State
     public override void OnStateExited(Sc_AIBrain brain)
     {
         CurrentPlayerTarget = null;
-        _targetLastKnownLocation = Vector3.zero;
+        TargetLastKnownLocation = Vector3.zero;
 
         brain.CurrentAwareness = brain.AwarenessResetValue;
 
@@ -51,12 +55,12 @@ public class Sc_PursueState : Sc_State
 
         if (CanLocateTarget(brain))
         {
-            _targetLastKnownLocation = CurrentPlayerTarget.transform.position;
+            TargetLastKnownLocation = CurrentPlayerTarget.transform.position;
         }
 
-        if (brain.MoveTo(_targetLastKnownLocation))
+        if (brain.MoveTo(TargetLastKnownLocation))
         {
-            InvestigateState.InvestigationPoint = _targetLastKnownLocation;
+            InvestigateState.InvestigationPoint = TargetLastKnownLocation;
             return InvestigateState;
         }
 
@@ -70,8 +74,13 @@ public class Sc_PursueState : Sc_State
         {
             if (sstimuli.Player == CurrentPlayerTarget)
             {
-                _targetLastKnownLocation = sstimuli.Player.transform.position;
+                TargetLastKnownLocation = sstimuli.Player.transform.position;
                 //Produce sound recently coroutine.
+                if (_hearTargetSoundTrackingCo != null)
+                {
+                    StopCoroutine(_hearTargetSoundTrackingCo);
+                }
+                _hearTargetSoundTrackingCo = StartCoroutine(HearTargetSoundTrackingCoroutine(sstimuli));
             }
         }
     }
@@ -83,7 +92,7 @@ public class Sc_PursueState : Sc_State
         {
             if (vstimuli.Player == CurrentPlayerTarget)
             {
-                _targetLastKnownLocation = vstimuli.Player.transform.position;
+                ChangeTarget(brain, vstimuli.Player);
             }
         }
     }
@@ -113,18 +122,73 @@ public class Sc_PursueState : Sc_State
         return canLocateTarget;
     }
 
+    private IEnumerator HearTargetSoundTrackingCoroutine(Sc_SoundStimuli sstimuli)
+    {
+        float timer = 0f;
+        while (timer < HearTargetSoundTrackingDuration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _hearTargetSoundTrackingCo = null;
+    }
+
     public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
     {
+        if (!CanLocateTarget(brain) && !ChangingTarget)
+        {
+            CurrentPlayerTarget = breachingPlayer;
+            TargetLastKnownLocation = breachingPlayer.transform.position;
+        }
         //Only change target if target isn't 'seen'.
     }
+
+    #region Change targets
+
+    public void ChangeTarget(Sc_AIBrain brain, Sc_Character_Player toPlayer)
+    {
+        brain.Controller.CanMove = false;
+        TargetLastKnownLocation = toPlayer.transform.position;
+
+        if (_changeTargetCo != null)
+        {
+            StopCoroutine(_changeTargetCo);
+        }
+        _changeTargetCo = StartCoroutine(ChangeTargetCoroutine(brain));
+    }
+
+    private IEnumerator ChangeTargetCoroutine(Sc_AIBrain brain)
+    {
+        float timer = 0f;
+        while (timer < ChangeTargetDuration)
+        {
+            brain.Controller.LookAt(TargetLastKnownLocation);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        StopInvestigatingSomething(brain);
+    }
+
+    public void StopInvestigatingSomething(Sc_AIBrain brain)
+    {
+        brain.Controller.CanMove = true;
+        brain.Controller.StopLookAt();
+        if (_changeTargetCo != null)
+        {
+            StopCoroutine(_changeTargetCo);
+            _changeTargetCo = null;
+        }
+    }
+
+    #endregion
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
 
-        if (_targetLastKnownLocation != Vector3.zero)
+        if (TargetLastKnownLocation != Vector3.zero)
         {
-            Gizmos.DrawWireSphere(_targetLastKnownLocation + Vector3.up, .4f);
+            Gizmos.DrawWireSphere(TargetLastKnownLocation + Vector3.up, .4f);
         }
     }
 }

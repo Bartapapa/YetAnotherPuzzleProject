@@ -19,7 +19,7 @@ public class PlayerSaveProfile
         SkinIndex = playerObject.PlayerCharacter.SkinIndex;
         Sc_Inventory inventory = playerObject.PlayerCharacter.Inventory;
 
-        for (int i = 0; i < inventory._items.Count; i++)
+        for (int i = 0; i < inventory._items.Length; i++)
         {
             InventoryItemIDs.Add(inventory._items[i]._itemData.ID);
         }

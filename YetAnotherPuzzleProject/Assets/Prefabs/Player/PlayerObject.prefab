@@ -155,6 +155,78 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 38d57d76-110c-43d6-89b9-a2dc76d386f9
     m_ActionName: Player/Quack[/Keyboard/g,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 02448a71-89d3-4c0c-96eb-64b2ea473648
+    m_ActionName: Player/Throw[/XInputControllerWindows/leftShoulder,/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 87f41881-1295-4fcb-810b-94c975e9f29a
+    m_ActionName: Player/Use[/XInputControllerWindows/rightShoulder,/Keyboard/r]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 777417243090285201}
+        m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
+        m_MethodName: OnItem1
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9fae4284-d2eb-4a8c-8e74-683c07506b57
+    m_ActionName: Player/Item1[/Keyboard/1,/XInputControllerWindows/dpad/up]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 777417243090285201}
+        m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
+        m_MethodName: OnItem2
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 175dc5f2-4a6f-4fe4-a8b5-17b5308ef638
+    m_ActionName: Player/Item2[/Keyboard/2,/XInputControllerWindows/dpad/left]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 777417243090285201}
+        m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
+        m_MethodName: OnItem3
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 1b9c7155-82d9-4ebd-8894-ca5f18f50542
+    m_ActionName: Player/Item3[/Keyboard/3,/XInputControllerWindows/dpad/right]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 777417243090285201}
+        m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
+        m_MethodName: OnDropItem
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 9ec68290-f746-4d73-a189-0fb91211bd6c
+    m_ActionName: Player/DropItem[/Keyboard/tab,/XInputControllerWindows/dpad/down]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

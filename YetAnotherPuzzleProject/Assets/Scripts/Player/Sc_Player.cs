@@ -137,6 +137,54 @@ public class Sc_Player : MonoBehaviour
         }
     }
 
+    public void OnThrow(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            
+        }
+    }
+
+    public void OnUse(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+        }
+    }
+
+    public void OnItem1(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+        }
+    }
+
+    public void OnItem2(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+        }
+    }
+
+    public void OnItem3(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+
+        }
+    }
+
+    public void OnDropItem(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            _playerCharacter.Inventory.DropCurrentItem();
+        }
+    }
+
     private void HandlePlayerInputs()
     {
         CharacterInput playerInput = new CharacterInput();

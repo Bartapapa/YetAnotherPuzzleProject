@@ -67,8 +67,10 @@ public class Sc_InvestigateState : Sc_State
 
     public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
-        //Debug.Log("I heard something!");
         if (InvestigationVisual != null) return;
+
+        Debug.Log(brain.name + " heard " + sstimuli.Source + "!");
+
         if (CheckPriority(sstimuli.Priority) || _cachedSoundSource == sstimuli.Source)
         {
             _investigationPriority = sstimuli.Priority;
@@ -89,6 +91,7 @@ public class Sc_InvestigateState : Sc_State
     public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
     {
         PursueState.CurrentPlayerTarget = breachingPlayer;
+        PursueState.TargetLastKnownLocation = breachingPlayer.transform.position;
         brain.GoToState(PursueState);
     }
 
@@ -222,6 +225,7 @@ public class Sc_InvestigateState : Sc_State
     public void InvestigateSomething(Sc_AIBrain brain, Vector3 investigatePoint)
     {
         brain.Controller.CanMove = false;
+        brain.Controller.CanRotate = false;
         InvestigatingGO.SetActive(true);
         InvestigationPoint = investigatePoint;
 
@@ -252,6 +256,7 @@ public class Sc_InvestigateState : Sc_State
     public void StopInvestigatingSomething(Sc_AIBrain brain)
     {
         brain.Controller.CanMove = true;
+        brain.Controller.CanRotate = true;
         brain.Controller.StopLookAt();
         InvestigatingGO.SetActive(false);
         if (_investigationCO != null)

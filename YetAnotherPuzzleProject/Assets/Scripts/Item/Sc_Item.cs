@@ -16,7 +16,15 @@ public class Sc_Item : MonoBehaviour
         Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
         if (player)
         {
-            player.Inventory.PickUpItemAndEquip(this);
+            if (player.Inventory._currentlyHeldItem != null)
+            {
+                player.Inventory.PickUpItem(this);
+            }
+            else
+            {
+                player.Inventory.PickUpItemAndEquip(this);
+            }
+            
         }
     }
 

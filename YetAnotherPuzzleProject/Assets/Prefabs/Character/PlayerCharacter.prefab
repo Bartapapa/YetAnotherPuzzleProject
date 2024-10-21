@@ -5707,7 +5707,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _itemHoldAnchor: {fileID: 446782840580250549}
-  _items: []
+  _items:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   _currentlyHeldItem: {fileID: 0}
 --- !u!1 &4311574871291369035
 GameObject:
@@ -6054,11 +6057,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6f575a9ec047b64ca89a5ec52454791, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SoundObject: {fileID: 3801610225097278618, guid: 8afb37dd66175ab43adeb259e9066ff7,
+    type: 3}
   MouthSource: {fileID: 4996591085980717630}
   FootstepSource: {fileID: 565604149710831749}
   PlayerCharacter: {fileID: 332216593892983843}
-  SoundObject: {fileID: 3801610225097278618, guid: 8afb37dd66175ab43adeb259e9066ff7,
-    type: 3}
   _grunts:
   - {fileID: 8300000, guid: e3a12ea940acad24ca615690a743f303, type: 3}
   - {fileID: 8300000, guid: 8ce2712b35a4766429aac9265a5ac5cc, type: 3}
@@ -6284,6 +6287,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Player: {fileID: 332216593892983843}
   _lightSources: []
+  Priority: 10
   Active: 1
   _obstacleLayers:
     serializedVersion: 2

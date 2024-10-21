@@ -8,21 +8,21 @@ public class Sc_Inventory : MonoBehaviour
     public Transform _itemHoldAnchor;
 
     [Header("ITEMS")]
-    [ReadOnly] public List<Sc_Item> _items = new List<Sc_Item>();
+    public Sc_Item[] _items = new Sc_Item[2];
     [ReadOnly] public Sc_Item _currentlyHeldItem;
+    private int _maximumItemCount = 3;
+    public int MaximumItemCount { get { return _maximumItemCount; } }
 
     public void PickUpItem(Sc_Item item)
     {
-        //Check if item already held.
-        if (_currentlyHeldItem != null)
+        if (Store(item))
         {
-            Store(_currentlyHeldItem);
+
         }
-
-        item._interactible.CanBeInteractedWith = false;
-
-        _items.Add(item);
-        item._inInventory = this;
+        else
+        {
+            //Can't pick up item.
+        }
     }
 
     public void PickUpItemAndEquip(Sc_Item item)
@@ -39,13 +39,41 @@ public class Sc_Inventory : MonoBehaviour
             return;
         }
 
+        item.gameObject.SetActive(true);
         item._interactible.CanBeInteractedWith = true;
         item.transform.parent = null;
         item.transform.position = this.transform.position;
         item.transform.rotation = this.transform.rotation;
 
-        _items.Remove(item);
+        _items[GetIndexFromItem(item)] = null;
         item._inInventory = null;
+    }
+
+    private int GetIndexFromItem(Sc_Item item)
+    {
+        int index = -1;
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] == item)
+            {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    private int GetNextItemIndex()
+    {
+        int index = -1;
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] == null)
+            {
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 
     public void DropCurrentItem()
@@ -53,16 +81,39 @@ public class Sc_Inventory : MonoBehaviour
         if (_currentlyHeldItem == null) return;
         else
         {
+            Sc_Item itemToDrop = _currentlyHeldItem;
             _currentlyHeldItem = null;
 
-            DropItem(_currentlyHeldItem);
+            DropItem(itemToDrop);
         }
     }
-    public void Store(Sc_Item item)
+    public bool Store(Sc_Item item)
     {
-        _currentlyHeldItem = null;
+        bool canStore = false;
+        if (IsCurrentlyStoredItem(item))
+        {
+            canStore = true;
+        }
+        else
+        {
+            canStore = _items.Length + 1 > _maximumItemCount;
+        }
 
-        item.gameObject.SetActive(false);
+        if (canStore)
+        {
+            item._interactible.CanBeInteractedWith = false;
+
+            _items[GetNextItemIndex()] = item;
+            item._inInventory = this;
+            item.gameObject.SetActive(false);
+        }
+        
+        return canStore;
+    }
+
+    private bool IsCurrentlyStoredItem(Sc_Item item)
+    {
+        return GetIndexFromItem(item) != -1;
     }
 
     public void Equip(Sc_Item item)
@@ -73,6 +124,18 @@ public class Sc_Inventory : MonoBehaviour
         item.transform.parent = _itemHoldAnchor;
         item.transform.position = _itemHoldAnchor.position;
         item.transform.rotation = _itemHoldAnchor.rotation;
+    }
+
+    public void EquipFromInventory(int index)
+    {
+        if (index < 0 || index > _items.Length)
+        {
+            return;
+        }
+        else
+        {
+
+        }
     }
 
 }

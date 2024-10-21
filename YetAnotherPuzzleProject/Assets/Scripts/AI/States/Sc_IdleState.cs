@@ -5,6 +5,8 @@ using UnityEngine;
 public class Sc_IdleState : Sc_State
 {
     [Header("IDLE PARAMETERS AND REFS")]
+    public bool Erring = false;
+    public float MaxErringDistance = 2f;
     public List<Transform> Waypoints = new List<Transform>();
     public bool PatrolLoop = false;
     [ReadOnly][SerializeField] private int _currentPatrolPoint = 0;
@@ -42,7 +44,7 @@ public class Sc_IdleState : Sc_State
 
     public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
-        Debug.Log("I heard something!");
+        Debug.Log(brain.name + " heard " + sstimuli.Source + "!");
         InvestigateState.InvestigationPriority = sstimuli.Priority;
         brain.GoToState(InvestigateState);
         InvestigateState.NoticedSound(brain, sstimuli);
@@ -50,7 +52,7 @@ public class Sc_IdleState : Sc_State
 
     public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
-        Debug.Log("I saw something!");
+        Debug.Log(brain.name + " heard " + vstimuli.name + "!");
         InvestigateState.InvestigationPriority = vstimuli.Priority;
         brain.GoToState(InvestigateState);
         InvestigateState.NoticedSight(brain, vstimuli);
@@ -59,6 +61,7 @@ public class Sc_IdleState : Sc_State
     public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
     {
         PursueState.CurrentPlayerTarget = breachingPlayer;
+        PursueState.TargetLastKnownLocation = breachingPlayer.transform.position;
         brain.GoToState(PursueState);
     }
 
