@@ -59,7 +59,7 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
         Sc_GameManager.instance.SoundManager.PlaySFX(MouthSource, _quack, _minMaxQuackPitch);
         _duckParticles.Play();
 
-        GenerateSoundObject(transform.position, 1f, 1f);
+        GenerateSoundObject(PlayerCharacter.gameObject, transform.position, 1f, 1f, PlayerCharacter);
     }
 
     public void StartFootsteps()
@@ -85,6 +85,9 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
             if (time >= _footstepDelay)
             {
                 Sc_GameManager.instance.SoundManager.PlayRandomSFX(FootstepSource, _footsteps, _minMaxFootstepPitch);
+
+                GenerateSoundObject(PlayerCharacter.gameObject, transform.position, 1f, .3f, PlayerCharacter);
+
                 time = 0f;
             }
             yield return null;

@@ -37,6 +37,7 @@ public class SC_AISense : MonoBehaviour
     public delegate void SoundStimuliEvent(Sc_SoundStimuli stimuli);
     public delegate void PlayerCharacterSenseEvent(Sc_Character_Player player);
     public event VisualStimuliEvent OnSeeSomething;
+    public event VisualStimuliEvent OnUnseeSomething;
     public event SoundStimuliEvent OnHearSomething;
     public event PlayerCharacterSenseEvent OnNoticedPlayer;
 
@@ -66,6 +67,7 @@ public class SC_AISense : MonoBehaviour
     private void RemoveVisualStimuli(Sc_VisualStimuli vstimuli)
     {
         _sensedSight.Remove(vstimuli);
+        OnUnseeSomething?.Invoke(vstimuli);
 
         if (vstimuli.Player != null)
         {

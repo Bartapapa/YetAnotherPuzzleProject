@@ -14,10 +14,11 @@ public class Sc_IdleState : Sc_State
 
     [Header("STATE REFS")]
     public Sc_InvestigateState InvestigateState;
+    public Sc_PursueState PursueState;
 
     public override void OnStateEntered(Sc_AIBrain brain)
     {
-        brain.Controller._maxGroundedMoveSpeed = brain.CurrentDefaultMoveSpeed;
+        brain.Controller._maxGroundedMoveSpeed = brain.IdleMoveSpeed;
     }
 
     public override void OnStateExited(Sc_AIBrain brain)
@@ -43,16 +44,22 @@ public class Sc_IdleState : Sc_State
     {
         Debug.Log("I heard something!");
         InvestigateState.InvestigationPriority = sstimuli.Priority;
-        InvestigateState.NoticedSound(brain, sstimuli.transform.position);
         brain.GoToState(InvestigateState);
+        InvestigateState.NoticedSound(brain, sstimuli);
     }
 
     public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
         Debug.Log("I saw something!");
         InvestigateState.InvestigationPriority = vstimuli.Priority;
-        InvestigateState.NoticedSight(brain, vstimuli);
         brain.GoToState(InvestigateState);
+        InvestigateState.NoticedSight(brain, vstimuli);
+    }
+
+    public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
+    {
+        PursueState.CurrentPlayerTarget = breachingPlayer;
+        brain.GoToState(PursueState);
     }
 
     #region Patrol
@@ -94,10 +101,12 @@ public class Sc_IdleState : Sc_State
             }
         }
     }
+    #endregion
 
+    #region GIZMOS
     private void OnDrawGizmosSelected()
     {
-        if(Waypoints.Count > 0)
+        if (Waypoints.Count > 0)
         {
             Gizmos.color = Color.yellow;
             for (int i = 0; i < Waypoints.Count; i++)
@@ -111,7 +120,7 @@ public class Sc_IdleState : Sc_State
                 {
                     if (PatrolLoop)
                     {
-                        Gizmos.DrawLine(Waypoints[i].position + Vector3.up, Waypoints[Waypoints.Count-1].position + Vector3.up);
+                        Gizmos.DrawLine(Waypoints[i].position + Vector3.up, Waypoints[Waypoints.Count - 1].position + Vector3.up);
                     }
                 }
             }

@@ -6,7 +6,9 @@ public class Sc_SoundStimuli : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Sc_Lifespan Lifespan;
-    public SphereCollider _soundCollider;
+    public SphereCollider SoundCollider;
+    public GameObject Source;
+    public Sc_Character_Player Player;
 
     [Header("PARAMETERS")]
     public int Priority = 10;
@@ -15,8 +17,10 @@ public class Sc_SoundStimuli : MonoBehaviour
     public event SoundStimuliEvent OnSoundEnded;
 
 
-    public void InitSoundStimuli(float range = .5f, float duration = 1f)
+    public void InitSoundStimuli(GameObject source, float range = .5f, float duration = 1f, Sc_Character_Player player = null)
     {
+        Source = source;
+
         if (duration > 0)
         {
             Lifespan.Duration = duration;
@@ -28,12 +32,14 @@ public class Sc_SoundStimuli : MonoBehaviour
 
         if (range > .1f)
         {
-            _soundCollider.radius = range;
+            SoundCollider.radius = range;
         }
         else
         {
-            _soundCollider.radius = .1f;
+            SoundCollider.radius = .1f;
         }
+
+        Player = player;
     }
 
     private void OnEnable()

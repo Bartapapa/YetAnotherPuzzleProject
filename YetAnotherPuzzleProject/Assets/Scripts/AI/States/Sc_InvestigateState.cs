@@ -8,7 +8,9 @@ public class Sc_InvestigateState : Sc_State
     [Header("INVESTIGATE POINT")]
     [ReadOnly] public Vector3 InvestigationPoint;
     [ReadOnly] public Sc_VisualStimuli InvestigationVisual;
+    [ReadOnly] public Sc_SoundStimuli InvestigationSound;
     [ReadOnly][SerializeField] private int _investigationPriority = -1;
+    [ReadOnly][SerializeField] private GameObject _cachedSoundSource = null;
     public int InvestigationPriority { get { return _investigationPriority; } set { _investigationPriority = value; } }
     private Vector3 _cachedTransformPos = Vector3.zero;
 
@@ -31,12 +33,19 @@ public class Sc_InvestigateState : Sc_State
     public override void OnStateEntered(Sc_AIBrain brain)
     {
         //NoticedSomething();
-        brain.Controller._maxGroundedMoveSpeed = brain.CurrentDefaultMoveSpeed;
+        brain.Controller._maxGroundedMoveSpeed = brain.InvestigateMoveSpeed;
+        NoticedSmthGO.SetActive(false);
+        InvestigatingGO.SetActive(false);
     }
 
     public override void OnStateExited(Sc_AIBrain brain)
     {
         _investigationPriority = -1;
+        NoticedSmthGO.SetActive(false);
+        InvestigatingGO.SetActive(false);
+
+        StopNoticingSomething(brain);
+        StopInvestigatingSomething(brain);
     }
 
     public override Sc_State Tick(Sc_AIBrain brain)
@@ -58,22 +67,29 @@ public class Sc_InvestigateState : Sc_State
 
     public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
-        Debug.Log("I heard something!");
-        if (CheckPriority(sstimuli.Priority))
+        //Debug.Log("I heard something!");
+        if (InvestigationVisual != null) return;
+        if (CheckPriority(sstimuli.Priority) || _cachedSoundSource == sstimuli.Source)
         {
             _investigationPriority = sstimuli.Priority;
-            NoticedSound(brain, sstimuli.transform.position);
+            NoticedSound(brain, sstimuli);
         }
     }
 
     public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
-        Debug.Log("I saw something!");
+        //Debug.Log("I saw something!");
         if (CheckPriority(vstimuli.Priority))
         {
             _investigationPriority = vstimuli.Priority;
             NoticedSight(brain, vstimuli);
         }
+    }
+
+    public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
+    {
+        PursueState.CurrentPlayerTarget = breachingPlayer;
+        brain.GoToState(PursueState);
     }
 
     private bool CheckPriority(int stimuliPriority)
@@ -90,13 +106,21 @@ public class Sc_InvestigateState : Sc_State
         float timer = 0f;
         while (timer < NoticingDuration)
         {
-            if (useTransform && InvestigationVisual != null && CanSeeVisualStimuli(brain, InvestigationVisual))
+            if (useTransform)
             {
-                InvestigationPoint = InvestigationVisual.transform.position;
-                brain.Controller.LookAt(InvestigationPoint);
-                if (InvestigationVisual.transform.position != _cachedTransformPos)
+                if(InvestigationVisual != null && CanSeeVisualStimuli(brain, InvestigationVisual))
                 {
-                    timer -= Time.deltaTime;
+                    InvestigationPoint = InvestigationVisual.transform.position;
+                    brain.Controller.LookAt(InvestigationPoint);
+                    if (InvestigationVisual.transform.position != _cachedTransformPos)
+                    {
+                        timer -= Time.deltaTime;
+                    }
+                }
+                else if(_cachedSoundSource != null)
+                {
+                    InvestigationPoint = _cachedSoundSource.transform.position;
+                    brain.Controller.LookAt(InvestigationPoint);
                 }
             }
             else
@@ -120,6 +144,11 @@ public class Sc_InvestigateState : Sc_State
         brain.Controller.CanMove = true;
         brain.Controller.StopLookAt();
         NoticedSmthGO.SetActive(false);
+
+        InvestigationVisual = null;
+        InvestigationSound = null;
+        _cachedSoundSource = null;
+
         if (_noticedSomethingCO != null)
         {
             StopCoroutine(_noticedSomethingCO);
@@ -143,22 +172,48 @@ public class Sc_InvestigateState : Sc_State
         _noticedSomethingCO = StartCoroutine(NoticedSomethingCoroutine(brain, true));
     }
 
-    public void NoticedSound(Sc_AIBrain brain, Vector3 stimuliPoint)
+    public void NoticedSound(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
         StopInvestigatingSomething(brain);
 
         brain.Controller.CanMove = false;
         NoticedSmthGO.SetActive(true);
-        InvestigationPoint = stimuliPoint;
-        if (_noticedSomethingCO != null)
+        InvestigationPoint = sstimuli.transform.position;
+
+        if (_cachedSoundSource == null)
         {
-            StopCoroutine(_noticedSomethingCO);
+            InvestigationSound = sstimuli;
+            _cachedSoundSource = sstimuli.Source;
+
+            if (_noticedSomethingCO != null)
+            {
+                StopCoroutine(_noticedSomethingCO);
+            }
+            _noticedSomethingCO = StartCoroutine(NoticedSomethingCoroutine(brain, true));
         }
-        _noticedSomethingCO = StartCoroutine(NoticedSomethingCoroutine(brain));
+        else
+        {
+            if (sstimuli.Source == _cachedSoundSource)
+            {
+
+            }
+            else
+            {
+                InvestigationSound = sstimuli;
+                _cachedSoundSource = sstimuli.Source;
+
+                if (_noticedSomethingCO != null)
+                {
+                    StopCoroutine(_noticedSomethingCO);
+                }
+                _noticedSomethingCO = StartCoroutine(NoticedSomethingCoroutine(brain));
+            }
+        }
     }
 
     private bool CanSeeVisualStimuli(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
+        if (vstimuli == null) return false;
         return brain.Sight.CanSee(vstimuli);
     }
 
@@ -169,6 +224,11 @@ public class Sc_InvestigateState : Sc_State
         brain.Controller.CanMove = false;
         InvestigatingGO.SetActive(true);
         InvestigationPoint = investigatePoint;
+
+        InvestigationVisual = null;
+        InvestigationSound = null;
+        _cachedSoundSource = null;
+
         if (_investigationCO != null)
         {
             StopCoroutine(_investigationCO);

@@ -47,7 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Lifespan: {fileID: 1418431692731361295}
-  _soundCollider: {fileID: 6614916391637608158}
+  SoundCollider: {fileID: 6614916391637608158}
+  Source: {fileID: 0}
+  Priority: 10
 --- !u!114 &1418431692731361295
 MonoBehaviour:
   m_ObjectHideFlags: 0

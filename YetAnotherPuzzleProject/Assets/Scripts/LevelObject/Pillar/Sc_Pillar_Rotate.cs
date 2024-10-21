@@ -36,7 +36,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
             Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
             toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
-            Debug.Log(toPoint);
 
             //Vector3 euler = rb.rotation.eulerAngles;
             //euler = new Vector3(euler.x, euler.y -angle, euler.z);

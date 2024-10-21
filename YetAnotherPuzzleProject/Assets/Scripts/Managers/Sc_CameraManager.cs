@@ -39,7 +39,7 @@ public class Sc_CameraManager : MonoBehaviour
     {
         foreach(FocusObject focusObject in fromFocus.FocusObjects)
         {
-            if (focus = focusObject.Focus)
+            if (focus == focusObject.Focus)
             {
                 fromFocus.FocusObjects.Remove(focusObject);
                 break;

@@ -20,26 +20,40 @@ public class Sc_AIBrain : MonoBehaviour
     public Sc_CharacterController Controller;
     public SC_AISense Sight;
     public SC_AISense Hearing;
+    public AISenseType MainSense = AISenseType.Sight;
 
     [Header("STATE")]
     public Sc_State StartingState;
     [ReadOnly][SerializeField] private Sc_State _currentState;
-    [ReadOnly][SerializeField] private int _alertness = -1;
+    [ReadOnly][SerializeField] private bool _canNoticePlayers = false;
 
     [Header("MOVEMENT")]
-    public float UnalertedMoveSpeed = 2f;
-    public float AlertedMoveSpeed = 4f;
+    public float IdleMoveSpeed = 2f;
+    public float InvestigateMoveSpeed = 4f;
     public float PursueMoveSpeed = 6f;
-    public float CurrentDefaultMoveSpeed { get { return IsAlerted ? AlertedMoveSpeed : UnalertedMoveSpeed; } }
 
     [Header("ALERTED")]
+    public float PlayerAwarenessGracePeriod = .2f;
     public float AwarenessThreshold = 1f;
     [ReadOnly][SerializeField] private float _currentAwareness = 0f;
-    public float AwarenessDecay = .5f;
+    public float CurrentAwareness { get { return _currentAwareness; } set { _currentAwareness = value; } }
+    public float AwarenessResetValue = .8f;
+    public float AwarenessDecayRate = .5f;
+    public float AwarenessDecayGracePeriod = 1f;
+    public AnimationCurve MinMaxGenerateRateCurve;
     public Vector2 MinMaxAwarenessGenerationDistance = new Vector2(6f, 1f);
+    public Vector2 MinMaxVisualAwarenessGenerationRate = new Vector2(.2f, 5f);
+    public Vector2 MinMaxSoundAwarenessGenerationRate = new Vector2(.1f, 1f);
     private Coroutine _awarenessDecayGraceCO = null;
-    public bool CanAwarenessDecay { get { return (_awarenessDecayGraceCO != null || _currentAwareness >= AwarenessThreshold || _currentAwareness <= 0f) ? false : true; } }
+    private List<Sc_Character_Player> _seenCharacters = new List<Sc_Character_Player>();
+    public List<Sc_Character_Player> SeenCharacters { get { return _seenCharacters; } }
+    public bool SeesCharacter { get { return _seenCharacters.Count > 0; } }
+    public bool CanAwarenessDecay { get { return (_awarenessDecayGraceCO != null || _currentAwareness >= AwarenessThreshold || _currentAwareness <= 0f || HasBeenAlerted) ? false : true; } }
     public bool IsAlerted { get { return _currentAwareness >= AwarenessThreshold; } }
+    public bool HasBeenAlerted = false;
+    private List<Sc_VisualStimuli> _seenPlayerStimuli = new List<Sc_VisualStimuli>();
+    private Coroutine _seenPlayerStimuliGraceCo = null;
+
 
     [Header("NAVIGATION")]
     [SerializeField] private float _destinationReachedThreshold = .5f;
@@ -55,6 +69,8 @@ public class Sc_AIBrain : MonoBehaviour
         {
             Sight.OnSeeSomething -= OnSeeStimuli;
             Sight.OnSeeSomething += OnSeeStimuli;
+            Sight.OnUnseeSomething -= OnUnseeStimuli;
+            Sight.OnUnseeSomething += OnUnseeStimuli;
         }
 
         if (Hearing)
@@ -69,6 +85,7 @@ public class Sc_AIBrain : MonoBehaviour
         if (Sight)
         {
             Sight.OnSeeSomething -= OnSeeStimuli;
+            Sight.OnUnseeSomething -= OnUnseeStimuli;
         }
 
         if (Hearing)
@@ -128,7 +145,12 @@ public class Sc_AIBrain : MonoBehaviour
     {
         if (CanAwarenessDecay)
         {
-            _currentAwareness -= Time.deltaTime * AwarenessDecay;
+            _currentAwareness -= Time.deltaTime * AwarenessDecayRate;
+        }
+
+        if (SeesCharacter && _canNoticePlayers)
+        {
+            GeneratePlayerAwareness(true, GetClosestSeenPlayer());
         }
     }
 
@@ -144,12 +166,78 @@ public class Sc_AIBrain : MonoBehaviour
     #region SenseEvents
     private void OnSeeStimuli(Sc_VisualStimuli vstimuli)
     {
+        //When first seeing a player stimuli, add a grace period. If UnseeStimuli hasn't been called for the same stimuli within the grace period, then do all of this.
+        //_currentState.OnSawSomething(this, vstimuli);
+
+        if (vstimuli.Player != null)
+        {
+            if (!_seenCharacters.Contains(vstimuli.Player))
+            {
+                _seenCharacters.Add(vstimuli.Player);
+            }
+            if (!_seenPlayerStimuli.Contains(vstimuli))
+            {
+                _seenPlayerStimuli.Add(vstimuli);
+            }
+
+            if (!_canNoticePlayers)
+            {
+                if (_seenPlayerStimuliGraceCo == null)
+                {
+                    _seenPlayerStimuliGraceCo = StartCoroutine(SeePlayerStimuliGraceCo(vstimuli));
+                }               
+            }
+            else
+            {
+                _currentState.OnSawSomething(this, vstimuli);
+            }
+        }
+        else
+        {
+            _currentState.OnSawSomething(this, vstimuli);
+        }
+    }
+
+    private IEnumerator SeePlayerStimuliGraceCo(Sc_VisualStimuli vstimuli)
+    {
+        float timer = 0f;
+        while (timer < PlayerAwarenessGracePeriod)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _canNoticePlayers = true;
+        _seenPlayerStimuliGraceCo = null;
         _currentState.OnSawSomething(this, vstimuli);
+    }
+
+    private void OnUnseeStimuli(Sc_VisualStimuli vstimuli)
+    {
+        if (vstimuli.Player != null)
+        {
+            _seenCharacters.Remove(vstimuli.Player);
+            _seenPlayerStimuli.Remove(vstimuli);
+
+            if (_canNoticePlayers && _seenPlayerStimuli.Count == 0)
+            {
+                _canNoticePlayers = false;
+
+                if (_seenPlayerStimuliGraceCo != null)
+                {
+                    StopCoroutine(_seenPlayerStimuliGraceCo);
+                }
+            }
+        }
     }
 
     private void OnHearStimuli(Sc_SoundStimuli sstimuli)
     {
         _currentState.OnHearSomething(this, sstimuli);
+
+        if (sstimuli.Player != null)
+        {
+            GeneratePlayerAwareness(false, sstimuli.Player);
+        }
     }
     #endregion
     #region StateMachine
@@ -219,17 +307,89 @@ public class Sc_AIBrain : MonoBehaviour
     }
     #endregion
     #region Awareness
-
-    public void InvestigateSomething()
+    private float GetPlayerAwarenessGenerationDistanceAlpha(Transform playerCharacter)
     {
-        //Stop movement.
-        //Look around for x seconds.
-        //Can notice new things during this period.
+        float distance = Vector3.Distance(transform.position, playerCharacter.transform.position);
+        float alpha = (distance - MinMaxAwarenessGenerationDistance.x) / (MinMaxAwarenessGenerationDistance.y - MinMaxAwarenessGenerationDistance.x);
+        alpha = MinMaxGenerateRateCurve.Evaluate(alpha);
+        return alpha;
     }
 
-    public void GeneratePlayerAwareness(Sc_Character_Player playerCharacter)
+    private float GeneratePlayerAwarenessVision(Transform playerCharacter)
     {
-        //float distance = Vector3.Distance(pointOfInterest, transform.position);
+        float generationRate = Mathf.Lerp(MinMaxVisualAwarenessGenerationRate.x, MinMaxVisualAwarenessGenerationRate.y, GetPlayerAwarenessGenerationDistanceAlpha(playerCharacter));
+        generationRate = generationRate * Time.deltaTime;
+
+        return generationRate;
+    }
+
+    private float GeneratePlayerAwarenessSound(Transform playerCharacter)
+    {
+        float generationRate = Mathf.Lerp(MinMaxSoundAwarenessGenerationRate.x, MinMaxSoundAwarenessGenerationRate.y, GetPlayerAwarenessGenerationDistanceAlpha(playerCharacter));
+
+        return generationRate;
+    }
+
+    public void GeneratePlayerAwareness(bool visual, Sc_Character_Player playerCharacter)
+    {
+        float generatedAwareness = 0f;
+        if (visual)
+        {
+            generatedAwareness = GeneratePlayerAwarenessVision(playerCharacter.transform);
+        }
+        else
+        {
+            generatedAwareness = GeneratePlayerAwarenessSound(playerCharacter.transform);
+        }
+
+        _currentAwareness += generatedAwareness;
+        if (_currentAwareness < AwarenessThreshold)
+        {
+            if (_awarenessDecayGraceCO != null)
+            {
+                StopCoroutine(_awarenessDecayGraceCO);
+            }
+            _awarenessDecayGraceCO = StartCoroutine(AwarenessDecayGraceCoroutine());
+        }
+        else
+        {
+            OnCrossAwarenessThreshold(playerCharacter);
+        }
+    }
+
+    private void OnCrossAwarenessThreshold(Sc_Character_Player playerCharacter)
+    {
+        //Set to pursue target state, and set playerCharacter as target.
+        _currentState.OnAwarenessThresholdReached(this, playerCharacter);
+
+        HasBeenAlerted = true;
+    }
+
+    private IEnumerator AwarenessDecayGraceCoroutine()
+    {
+        float timer = 0f;
+        while (timer < AwarenessDecayGracePeriod)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _awarenessDecayGraceCO = null;
+    }
+
+    private Sc_Character_Player GetClosestSeenPlayer()
+    {
+        Sc_Character_Player closestPlayer = null;
+        float closestDistance = float.MaxValue;
+        foreach(Sc_Character_Player player in _seenCharacters)
+        {
+            float distance = Vector3.Distance(transform.position, player.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestPlayer = player;
+            }
+        }
+        return closestPlayer;
     }
 
 

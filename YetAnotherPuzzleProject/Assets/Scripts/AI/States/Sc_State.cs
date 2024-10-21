@@ -24,6 +24,11 @@ public abstract class Sc_State : MonoBehaviour
 
     }
 
+    public virtual void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
+    {
+
+    }
+
     public virtual Sc_State Tick(Sc_AIBrain brain)
     {
         return this;
