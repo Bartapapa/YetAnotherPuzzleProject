@@ -141,7 +141,8 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            
+            //Should have aiming stance first, then on release have the throw. Draw a trajectory line during this period.
+            _playerCharacter.Inventory.ThrowCurrentItem();
         }
     }
 
@@ -149,7 +150,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-
+            _playerCharacter.Inventory.UseCurrentItem();
         }
     }
 
@@ -157,7 +158,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-
+            _playerCharacter.Inventory.EquipFromInventory(0);
         }
     }
 
@@ -165,7 +166,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-
+            _playerCharacter.Inventory.EquipFromInventory(1);
         }
     }
 
@@ -173,7 +174,7 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-
+            _playerCharacter.Inventory.EquipFromInventory(2);
         }
     }
 

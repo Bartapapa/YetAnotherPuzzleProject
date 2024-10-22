@@ -12,8 +12,8 @@ public class Sc_Interactor : MonoBehaviour
     public float _interactionRange = 1.5f;
     private SphereCollider _interactionSphere;
 
-    private Sc_Interactible _currentSelectedInteractible;
-    private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
+    [ReadOnly][SerializeField] private Sc_Interactible _currentSelectedInteractible;
+    [ReadOnly][SerializeField] private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
     public bool CanInteract { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded ? false : true; } }
     public Sc_Interactible CurrentSelectedInteractible { get { return _currentSelectedInteractible; } }
 
@@ -161,12 +161,26 @@ public class Sc_Interactor : MonoBehaviour
         _potentialInteractibles.Clear();
     }
 
+    public void AddPotentialInteractible(Sc_Interactible interactible)
+    {
+
+    }
+
+    public void RemovePotentialInteractible(Sc_Interactible interactible)
+    {
+
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         Sc_Interactible interactible = other.GetComponent<Sc_Interactible>();
         if (interactible)
         {
-            _potentialInteractibles.Add(interactible);
+            if (!_potentialInteractibles.Contains(interactible))
+            {
+                _potentialInteractibles.Add(interactible);
+            }
+            
         }
     }
 
@@ -175,7 +189,6 @@ public class Sc_Interactor : MonoBehaviour
         Sc_Interactible interactible = other.GetComponent<Sc_Interactible>();
         if (interactible)
         {
-            if (!_potentialInteractibles.Contains(interactible)) return;
             _potentialInteractibles.Remove(interactible);
         }
     }

@@ -6,6 +6,7 @@ public class Sc_Inventory : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Transform _itemHoldAnchor;
+    public Transform _itemThrowPoint;
 
     [Header("ITEMS")]
     public Sc_Item[] _items = new Sc_Item[2];
@@ -41,7 +42,14 @@ public class Sc_Inventory : MonoBehaviour
 
         item.gameObject.SetActive(true);
         item._interactible.CanBeInteractedWith = true;
-        item.transform.parent = null;
+        if (Sc_Level.instance != null)
+        {
+            item.transform.parent = Sc_Level.instance.transform;
+        }
+        else
+        {
+            item.transform.parent = null;
+        }      
         item.transform.position = this.transform.position;
         item.transform.rotation = this.transform.rotation;
 
@@ -60,6 +68,19 @@ public class Sc_Inventory : MonoBehaviour
             }
         }
         return index;
+    }
+
+    private Sc_Item GetItemFromIndex(int index)
+    {
+        Sc_Item item = null;
+        if (index < 0 || index > _items.Length)
+        {
+            return null;
+        }
+        else
+        {
+            return _items[index];
+        }
     }
 
     private int GetNextItemIndex()
@@ -93,21 +114,27 @@ public class Sc_Inventory : MonoBehaviour
         if (IsCurrentlyStoredItem(item))
         {
             canStore = true;
+            item._interactible.CanBeInteractedWith = false;
+
+            item.gameObject.SetActive(false);
         }
         else
         {
             canStore = _items.Length + 1 > _maximumItemCount;
-        }
 
-        if (canStore)
-        {
-            item._interactible.CanBeInteractedWith = false;
+            if (canStore)
+            {
+                item._interactible.CanBeInteractedWith = false;
 
-            _items[GetNextItemIndex()] = item;
-            item._inInventory = this;
-            item.gameObject.SetActive(false);
+                _items[GetNextItemIndex()] = item;
+                item._inInventory = this;
+                item.transform.parent = _itemHoldAnchor;
+                item.transform.position = _itemHoldAnchor.position;
+                item.transform.rotation = _itemHoldAnchor.rotation;
+                item.gameObject.SetActive(false);
+            }
         }
-        
+      
         return canStore;
     }
 
@@ -128,14 +155,64 @@ public class Sc_Inventory : MonoBehaviour
 
     public void EquipFromInventory(int index)
     {
-        if (index < 0 || index > _items.Length)
+        Sc_Item itemToEquip = GetItemFromIndex(index);
+        if (_currentlyHeldItem != null)
         {
-            return;
+            if (itemToEquip == _currentlyHeldItem)
+            {
+                return;
+            }
+            else
+            {
+                Store(_currentlyHeldItem);
+            }
+        }
+
+        if (itemToEquip != null)
+        {
+            Equip(itemToEquip);
+        }
+    }
+
+    public void UseCurrentItem()
+    {
+        if (_currentlyHeldItem == null) return;
+
+        _currentlyHeldItem.UseItem();
+    }
+
+    public void ThrowItem(Sc_Item item)
+    {
+        if (GetIndexFromItem(item) >= 0)
+        {
+            SetForThrow(item);
+            item.ThrowItem();
+        }
+    }
+
+    private void SetForThrow(Sc_Item item)
+    {
+        item.gameObject.SetActive(true);
+        item._interactible.CanBeInteractedWith = false;
+        if (Sc_Level.instance != null)
+        {
+            item.transform.parent = Sc_Level.instance.transform;
         }
         else
         {
-
+            item.transform.parent = null;
         }
+        item.transform.position = _itemThrowPoint.position;
+        item.transform.rotation = _itemThrowPoint.rotation;
+
+        _items[GetIndexFromItem(item)] = null;
+        item._inInventory = null;
+    }
+
+    public void ThrowCurrentItem()
+    {
+        if (_currentlyHeldItem == null) return;
+        ThrowItem(_currentlyHeldItem);
     }
 
 }

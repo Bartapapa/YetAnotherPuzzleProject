@@ -156,7 +156,19 @@ MonoBehaviour:
     m_ActionId: 38d57d76-110c-43d6-89b9-a2dc76d386f9
     m_ActionName: Player/Quack[/Keyboard/g,/XInputControllerWindows/buttonSouth]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 777417243090285201}
+        m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
+        m_MethodName: OnThrow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 02448a71-89d3-4c0c-96eb-64b2ea473648
     m_ActionName: Player/Throw[/XInputControllerWindows/leftShoulder,/Keyboard/f]
   - m_PersistentCalls:
