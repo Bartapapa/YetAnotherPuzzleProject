@@ -1,25 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
 public class Sc_Item : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Sc_Interactible _interactible;
+    public ParticleSystem ItemDestroyParticles;
+    public Transform MeshCenterPoint;
     [ReadOnly] public Sc_Inventory _inInventory;
     private Rigidbody _rb;
     private Collider _coll;
+    private Renderer[] _renderers;
 
     [Header("ITEM DATA")]
     public SO_ItemData _itemData;
 
-    public bool IsBeingThrown { get { return _thrownCo != null; } }
-    private Coroutine _thrownCo;
+    [Header("THROW PARAMETERS")]
+    public float ThrowForce = 1f;
+    public Vector3 SpinForce = new Vector3(0f, 0f, 0.2f);
+    public float OnContactAffectRange = .6f;
+    public bool InteractsOnThrow = false;
+    public bool StunsOnThrow = false;
+    [ReadOnly] public bool IsBeingThrown = false;
+
+    private float _destroyItemDuration = .25f;
+    private float _destroyItemFlashIntensity = 2f;
 
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
         _coll = GetComponent<Collider>();
+        _renderers = GetComponentsInChildren<Renderer>();
     }
 
     public virtual void OnInteractedWith(Sc_Character interactor)
@@ -51,18 +64,101 @@ public class Sc_Item : MonoBehaviour
     {
         _interactible.CanBeInteractedWith = false;
         _rb.isKinematic = false;
+        _rb.useGravity = true;
         _coll.isTrigger = false;
+        _rb.AddTorque(SpinForce, ForceMode.Impulse);
+
+        Vector3 throwDir = transform.forward * ThrowForce;
+
+        _rb.AddForce(throwDir, ForceMode.Impulse);
+
+        IsBeingThrown = true;
+
         //Take rigidbody, make is not kinematic no more.
         //Start throwing coroutine, wherein the object's velocity is set by an animation curve. It flies in a straight direction before starting to fall.
         //During this coroutine, it constantly checks in the direction of its trajectory with a spheretrace. If it hits anything, it breaks.
         //After a definite amount of time, it is self-destroyed anyhow to prevent it from actually going waaaay away.
     }
 
+    private IEnumerator ThrowCoroutine()
+    {
+        yield return null;
+    }
+
+    public void DestroyItem()
+    {
+        StartCoroutine(DestroyItemCo());
+    }
+
+    private IEnumerator DestroyItemCo()
+    {
+        float timer = 0f;
+        while (timer < _destroyItemDuration)
+        {
+            timer += Time.deltaTime;
+
+            foreach(Renderer rend in _renderers)
+            {
+                foreach (Material mat in rend.materials)
+                {
+                    //mat.EnableKeyword("_EMISSION");
+                    mat.color = Color.white * ((timer / _destroyItemDuration) * _destroyItemFlashIntensity);
+                }
+            }
+            yield return null;
+        }
+
+        if (ItemDestroyParticles)
+        {
+            ParticleSystem particles = Instantiate<ParticleSystem>(ItemDestroyParticles, MeshCenterPoint.position, Quaternion.identity);
+        }
+
+        Destroy(this.gameObject);
+    }
+
+    private void SpreadContact()
+    {
+        Vector3 positionAtContact = transform.position;
+        Collider[] coll = Physics.OverlapSphere(positionAtContact, OnContactAffectRange);
+        if (InteractsOnThrow)
+        {
+            List<Sc_Interactible> interactibles = new List<Sc_Interactible>();
+            foreach (Collider collider in coll)
+            {
+                Sc_Interactible interact = collider.GetComponent<Sc_Interactible>();
+                if (interact)
+                {
+                    if (!interactibles.Contains(interact))
+                    {
+                        interactibles.Add(interact);
+                    }
+                }
+            }
+            foreach(Sc_Interactible interactible in interactibles)
+            {
+                interactible.InteractWithThrow();
+            }
+        }
+
+        //If any interactibles in range of spread, interact with them.
+        //If any enemies in range of spread, stun them.
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (IsBeingThrown)
         {
-            Destroy(this.gameObject);
+            Vector3 impactNormal = collision.GetContact(0).normal;
+            _rb.velocity = Vector3.zero;
+            _rb.angularVelocity = Vector3.zero;
+            _rb.AddTorque(-SpinForce, ForceMode.Impulse);
+            _rb.AddForce(impactNormal * 5f, ForceMode.Impulse);
+
+            IsBeingThrown = false;
+
+            SpreadContact();
+
+            DestroyItem();
         }
     }
 

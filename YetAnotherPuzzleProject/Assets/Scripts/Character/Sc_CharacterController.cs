@@ -156,9 +156,9 @@ public class Sc_CharacterController : MonoBehaviour
     public void SetInputs(ref CharacterInput input)
     {
         Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(input.moveX, 0f, input.moveY), 1f);
-        if (_ignoreInputs || !_canMove) moveInputVector = Vector3.zero;
+        if (_ignoreInputs) moveInputVector = Vector3.zero;
         Vector2 climbInputVector = Vector2.ClampMagnitude(new Vector2(input.moveX, input.moveY), 1f);
-        if (_ignoreInputs || !_canMove) climbInputVector = Vector3.zero;
+        if (_ignoreInputs) climbInputVector = Vector3.zero;
 
         float cameraRotation = input.cameraRef.transform.eulerAngles.y;
         Quaternion controlRotation = Quaternion.Euler(0, cameraRotation, 0);
@@ -185,9 +185,9 @@ public class Sc_CharacterController : MonoBehaviour
     public void SetAIInputs(ref AIInput input)
     {
         Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(input.moveX, 0f, input.moveY), 1f);
-        if (_ignoreInputs || !_canMove) moveInputVector = Vector3.zero;
+        if (_ignoreInputs) moveInputVector = Vector3.zero;
         Vector2 climbInputVector = Vector2.ClampMagnitude(new Vector2(input.moveX, input.moveY), 1f);
-        if (_ignoreInputs || !_canMove) climbInputVector = Vector3.zero;
+        if (_ignoreInputs) climbInputVector = Vector3.zero;
 
         _moveInputVector = moveInputVector;
 
@@ -316,6 +316,7 @@ public class Sc_CharacterController : MonoBehaviour
                         Vector3 reorientedInput = Vector3.Cross(groundNormal, inputRight).normalized * _moveInputVector.magnitude;
 
                         Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
+                        if (!_canMove) targetMovementVelocity = Vector3.zero;
                         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_groundedMovementSharpness * Time.fixedDeltaTime));
 
                         OnGroundedMovement?.Invoke(_rb);
@@ -338,10 +339,9 @@ public class Sc_CharacterController : MonoBehaviour
                                     addedVelocity = Vector3.ProjectOnPlane(addedVelocity, currentVelocityOnInputsPlane.normalized);
                                 }
                             }
-
+                            if (!_canMove) addedVelocity = Vector3.zero;
                             _rb.velocity += addedVelocity;
                         }
-
                         _rb.velocity += _gravity * Time.fixedDeltaTime;
 
                         _rb.velocity *= (1f / (1f + (_airDrag * Time.fixedDeltaTime)));
@@ -352,6 +352,7 @@ public class Sc_CharacterController : MonoBehaviour
                 else
                 {
                     Vector3 targetClimbVelocity = new Vector3(0f, _maxClimbSpeed * _climbInputVector.y, 0f);
+                    if (!_canMove) targetClimbVelocity = Vector3.zero;
                     _rb.velocity = Vector3.Lerp(_rb.velocity, targetClimbVelocity, 1f - Mathf.Exp(-_climbMovementSharpness * Time.fixedDeltaTime));
 
                     if (transform.position.y >= _topOfLadder.y)

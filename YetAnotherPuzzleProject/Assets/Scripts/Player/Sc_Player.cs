@@ -142,6 +142,18 @@ public class Sc_Player : MonoBehaviour
         if (context.performed)
         {
             //Should have aiming stance first, then on release have the throw. Draw a trajectory line during this period.
+            
+        }
+
+        if (context.performed)
+        {
+            if (!_playerCharacter.Inventory.CanAim) return;
+            _playerCharacter.Inventory.AimThrow();
+        }
+        if (context.canceled)
+        {
+            if (!_playerCharacter.Inventory.IsAiming) return;
+            _playerCharacter.Inventory.StopAiming();
             _playerCharacter.Inventory.ThrowCurrentItem();
         }
     }

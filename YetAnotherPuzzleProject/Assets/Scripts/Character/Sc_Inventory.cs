@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class Sc_Inventory : MonoBehaviour
 {
     [Header("OBJECT REFS")]
+    public Sc_Character Character;
     public Transform _itemHoldAnchor;
     public Transform _itemThrowPoint;
 
@@ -13,6 +15,61 @@ public class Sc_Inventory : MonoBehaviour
     [ReadOnly] public Sc_Item _currentlyHeldItem;
     private int _maximumItemCount = 3;
     public int MaximumItemCount { get { return _maximumItemCount; } }
+
+    [Header("THROWING")]
+    public LayerMask ThrownObjectCollisionLayers;
+    public LineRenderer TrajectoryLine;
+    public GameObject ImpactSphere;
+    public bool CanAim { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || _currentlyHeldItem == null? false : true; } }
+    [ReadOnly] public bool IsAiming = false;
+
+    private void Update()
+    {
+        HandleAiming();
+    }
+
+    private void HandleAiming()
+    {
+        if (!IsAiming) return;
+
+        DrawAimingTrajectory(_itemThrowPoint.position, _itemThrowPoint.forward * _currentlyHeldItem.ThrowForce);
+    }
+
+    private void DrawAimingTrajectory(Vector3 initialPos, Vector3 initialVel)
+    {
+        Vector3 pos = initialPos;
+        Vector3 vel = initialVel;
+        Vector3 gravity = Physics.gravity;
+
+        for (int i = 0; i < TrajectoryLine.positionCount; i++)
+        {
+            TrajectoryLine.SetPosition(i, pos);
+
+            if (MakesContact(pos))
+            {
+                ImpactSphere.SetActive(true);
+                ImpactSphere.transform.position = pos;
+
+                for (int j = i; j < TrajectoryLine.positionCount; j++)
+                {
+                    TrajectoryLine.SetPosition(j, pos);
+                }
+                break;
+            }
+            else
+            {
+                ImpactSphere.SetActive(false);
+            }
+
+            vel = vel + gravity * Time.fixedDeltaTime;
+            pos = pos + vel * Time.fixedDeltaTime;
+        }
+    }
+
+    private bool MakesContact(Vector3 position)
+    {
+        return Physics.OverlapSphere(position, .3f, ThrownObjectCollisionLayers, QueryTriggerInteraction.Ignore).Length > 0;
+    }
 
     public void PickUpItem(Sc_Item item)
     {
@@ -185,6 +242,7 @@ public class Sc_Inventory : MonoBehaviour
     {
         if (GetIndexFromItem(item) >= 0)
         {
+            _currentlyHeldItem = null;
             SetForThrow(item);
             item.ThrowItem();
         }
@@ -213,6 +271,22 @@ public class Sc_Inventory : MonoBehaviour
     {
         if (_currentlyHeldItem == null) return;
         ThrowItem(_currentlyHeldItem);
+    }
+
+    public void AimThrow()
+    {
+        if (!CanAim) return;
+        IsAiming = true;
+        TrajectoryLine.enabled = true;
+        Character.Controller.CanMove = false;
+    }
+
+    public void StopAiming()
+    {
+        IsAiming = false;
+        TrajectoryLine.enabled = false;
+        ImpactSphere.SetActive(false);
+        Character.Controller.CanMove = true;
     }
 
 }

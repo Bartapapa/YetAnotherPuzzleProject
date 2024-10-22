@@ -7,6 +7,7 @@ public class Sc_Interactible : MonoBehaviour
 {
     [Header("UNITY EVENTS")]
     public UnityEvent<Sc_Character> OnInteractedWith;
+    public UnityEvent OnThrownInteraction;
 
     [Header("OBJECT REFS")]
     public Material _debugSelectedMat;
@@ -63,6 +64,14 @@ public class Sc_Interactible : MonoBehaviour
             {
                 OnInteractedWith?.Invoke(interactor);
             }
+        }
+    }
+
+    public void InteractWithThrow()
+    {
+        if (_canBeInteractedWith)
+        {
+            OnThrownInteraction?.Invoke();
         }
     }
 
