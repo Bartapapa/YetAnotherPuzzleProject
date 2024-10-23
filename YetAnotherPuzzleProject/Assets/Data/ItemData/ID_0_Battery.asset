@@ -13,3 +13,8 @@ MonoBehaviour:
   m_Name: ID_0_Battery
   m_EditorClassIdentifier: 
   _id: 0
+  ThrowForce: 10
+  SpinForce: {x: 0, y: 0, z: 0.2}
+  OnContactAffectRange: 0.6
+  InteractsOnThrow: 1
+  StunsOnThrow: 1

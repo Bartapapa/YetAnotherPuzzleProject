@@ -5,6 +5,7 @@ using UnityEngine;
 public class Sc_Character_Player : Sc_Character
 {
     [Header("PLAYER CHARACTER OBJECT REFS")]
+    public Sc_Interactor Interactor;
     public Sc_Inventory Inventory;
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
 
@@ -16,6 +17,7 @@ public class Sc_Character_Player : Sc_Character
     private void Start()
     {
         ChooseRandomSkin();
+        Skins.Clear();
     }
 
     public void ChooseRandomSkin()

@@ -32,7 +32,7 @@ public class Sc_Inventory : MonoBehaviour
     {
         if (!IsAiming) return;
 
-        DrawAimingTrajectory(_itemThrowPoint.position, _itemThrowPoint.forward * _currentlyHeldItem.ThrowForce);
+        DrawAimingTrajectory(_itemThrowPoint.position, _itemThrowPoint.forward * _currentlyHeldItem._itemData.ThrowForce);
     }
 
     private void DrawAimingTrajectory(Vector3 initialPos, Vector3 initialVel)
@@ -244,7 +244,7 @@ public class Sc_Inventory : MonoBehaviour
         {
             _currentlyHeldItem = null;
             SetForThrow(item);
-            item.ThrowItem();
+            item.ThrowItem(Character);
         }
     }
 

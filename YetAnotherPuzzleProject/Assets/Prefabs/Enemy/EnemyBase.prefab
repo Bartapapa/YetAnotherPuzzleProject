@@ -118,6 +118,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33b23843e01b99e4a94dfdee0d517103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Erring: 0
+  MaxErringDistance: 2
   Waypoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -127,6 +129,7 @@ MonoBehaviour:
   _currentPatrolPoint: 0
   _headingBack: 0
   InvestigateState: {fileID: 0}
+  PursueState: {fileID: 0}
 --- !u!1 &1141956317923244227
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,8 +257,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba54e4c89661a4647860f55f1a6fe2c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InvestigationPoint: {x: 0, y: 0, z: 0}
+  InvestigationVisual: {fileID: 0}
+  InvestigationSound: {fileID: 0}
+  _investigationPriority: -1
+  _cachedSoundSource: {fileID: 0}
+  NoticingDuration: 1
+  InvestigationDuration: 2
   IdleState: {fileID: 0}
   PursueState: {fileID: 0}
+  NoticedSmthGO: {fileID: 0}
+  InvestigatingGO: {fileID: 0}
 --- !u!1 &1667689804540820041
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,8 +553,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 241d3e0dd02763e408d0171c6d164c62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentPlayerTarget: {fileID: 0}
+  TargetLastKnownLocation: {x: 0, y: 0, z: 0}
+  HearTargetSoundTrackingDuration: 1
+  ChangeTargetDuration: 1.5
   IdleState: {fileID: 0}
   InvestigateState: {fileID: 0}
+  PursuitLight: {fileID: 0}
+  VisionLight: {fileID: 0}
 --- !u!1 &3304976529445817751
 GameObject:
   m_ObjectHideFlags: 0
@@ -552,6 +570,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6804879098777067333}
+  - component: {fileID: 339890325132921310}
   - component: {fileID: 5628941674509585216}
   - component: {fileID: 760337872344439079}
   - component: {fileID: 637514717042794833}
@@ -581,6 +600,22 @@ Transform:
   - {fileID: 6072568841345716169}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &339890325132921310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3304976529445817751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1df9cb1810c6830498dc6f5cc4ecb4af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Controller: {fileID: 5628941674509585216}
+  CanBeHurt: 1
+  HurtDuration: 2
+  Brain: {fileID: 637514717042794833}
 --- !u!114 &5628941674509585216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,16 +682,29 @@ MonoBehaviour:
   Controller: {fileID: 5628941674509585216}
   Sight: {fileID: 7826292424711696341}
   Hearing: {fileID: 5392798639311923044}
+  MainSense: 1
   StartingState: {fileID: 4141666563257315592}
   _currentState: {fileID: 0}
-  _alertness: -1
-  UnalertedMoveSpeed: 2
-  AlertedMoveSpeed: 4
+  _canNoticePlayers: 0
+  IdleMoveSpeed: 2
+  InvestigateMoveSpeed: 4
   PursueMoveSpeed: 6
+  PlayerAwarenessGracePeriod: 0.2
   AwarenessThreshold: 1
   _currentAwareness: 0
-  AwarenessDecay: 0.5
+  AwarenessResetValue: 0.8
+  AwarenessDecayRate: 0.5
+  AwarenessDecayGracePeriod: 1
+  MinMaxGenerateRateCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   MinMaxAwarenessGenerationDistance: {x: 6, y: 1}
+  MinMaxVisualAwarenessGenerationRate: {x: 0.2, y: 5}
+  MinMaxSoundAwarenessGenerationRate: {x: 0.1, y: 1}
+  HasBeenAlerted: 0
   _destinationReachedThreshold: 0.5
 --- !u!136 &620520911888510126
 CapsuleCollider:
