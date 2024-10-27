@@ -9,6 +9,8 @@ public class Sc_Character : MonoBehaviour
 
     [Header("CHARACTER PARAMETERS")]
     public bool CanBeHurt = true;
+    public ParticleSystem HurtFX;
+    public Transform HeadPoint;
     public float HurtDuration = 2f;
     public bool IsHurting { get { return _hurtCo != null; } }
     private Coroutine _hurtCo = null;
@@ -26,8 +28,12 @@ public class Sc_Character : MonoBehaviour
         StopHurting();
     }
 
-    public virtual void Hurt(Sc_Character attacker, Vector3 directionOfAttack)
+    public virtual void Hurt(Sc_Character attacker, Vector3 directionOfAttack, Vector3 pointOfContact)
     {
+        if (HurtFX)
+        {
+            ParticleSystem hurtFX = Instantiate<ParticleSystem>(HurtFX, HeadPoint.position, Quaternion.identity);
+        }
         _hurtCo = StartCoroutine(HurtCoroutine());
     }
 

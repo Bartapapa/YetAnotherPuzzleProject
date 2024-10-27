@@ -614,6 +614,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 5628941674509585216}
   CanBeHurt: 1
+  HurtFX: {fileID: 7005478335282851330, guid: a11d910b504d9a0429a07cce0e8d1941, type: 3}
+  HeadPoint: {fileID: 7298687967432902573}
   HurtDuration: 2
   Brain: {fileID: 637514717042794833}
 --- !u!114 &5628941674509585216
@@ -999,6 +1001,7 @@ Transform:
   m_Children:
   - {fileID: 3219223395419774663}
   - {fileID: 2025536674111966709}
+  - {fileID: 7298687967432902573}
   m_Father: {fileID: 6072568841345716169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7242555041230469686
@@ -1033,6 +1036,37 @@ Transform:
   - {fileID: 6430891779002102302}
   - {fileID: 2111547068726531940}
   m_Father: {fileID: 6072568841345716169}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7931451161468913074
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7298687967432902573}
+  m_Layer: 7
+  m_Name: HeadPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7298687967432902573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7931451161468913074}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5692315501541314267}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8715835172619799302
 GameObject:

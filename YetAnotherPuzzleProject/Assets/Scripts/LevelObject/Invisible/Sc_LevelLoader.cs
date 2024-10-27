@@ -11,4 +11,9 @@ public class Sc_LevelLoader : MonoBehaviour
     {
         Sc_GameManager.instance.Load(LevelToLoad);
     }
+
+    public void ReloadLevel()
+    {
+        Sc_GameManager.instance.ReloadCurrentLevel();
+    }
 }

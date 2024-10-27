@@ -117,7 +117,7 @@ public class Sc_InvestigateState : Sc_State
                     brain.Controller.LookAt(InvestigationPoint);
                     if (InvestigationVisual.transform.position != _cachedTransformPos)
                     {
-                        timer -= Time.deltaTime;
+                        timer = 0f;
                     }
                 }
                 else if(_cachedSoundSource != null)

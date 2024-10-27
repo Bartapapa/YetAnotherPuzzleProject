@@ -54,9 +54,18 @@ public class Sc_AIBrain : MonoBehaviour
     private List<Sc_VisualStimuli> _seenPlayerStimuli = new List<Sc_VisualStimuli>();
     private Coroutine _seenPlayerStimuliGraceCo = null;
 
+    [Header("ATTACK")]
+    public float WindUpTime = 1f;
+    public float BaseRotationRate = 10f;
+    public float WindUpRotationRate = 7f;
+    private Coroutine _windUpCo = null;
+    private Vector3 _attackingPoint = Vector3.zero;
+    public Vector3 AttackingPoint { get { return _attackingPoint; } set { _attackingPoint = value; } }
+
+    public bool IsWindingUp { get { return _windUpCo != null; } }
+
 
     [Header("NAVIGATION")]
-    [SerializeField] private float _destinationReachedThreshold = .5f;
     private NavMeshPath _path;
 
     [Header("INPUTS")]
@@ -260,11 +269,11 @@ public class Sc_AIBrain : MonoBehaviour
     }
     #endregion
     #region AI Controller actions
-    public bool MoveTo(Vector3 destinationPoint, bool useNavMesh = true)
+    public bool MoveTo(Vector3 destinationPoint, float destinationReachedThreshold = .5f, bool useNavMesh = true)
     {
         bool reached = false;
 
-        if (Vector3.Distance(transform.position, destinationPoint) <= _destinationReachedThreshold)
+        if (Vector3.Distance(transform.position, destinationPoint) <= destinationReachedThreshold)
         {
             reached = true;
             _movement = Vector2.zero;
@@ -275,9 +284,20 @@ public class Sc_AIBrain : MonoBehaviour
             if (useNavMesh)
             {
                 NavMeshHit nmHit;
-                if (NavMesh.SamplePosition(destinationPoint, out nmHit, 5f, NavMesh.AllAreas))
+                if (NavMesh.SamplePosition(destinationPoint, out nmHit, 1f, NavMesh.AllAreas))
                 {
-                    NavMesh.CalculatePath(transform.position, nmHit.position, NavMesh.AllAreas, _path);
+                    if(!NavMesh.CalculatePath(transform.position, nmHit.position, NavMesh.AllAreas, _path))
+                    {
+                        reached = true;
+                        _movement = Vector2.zero;
+                        return reached;
+                    }
+                }
+                else
+                {
+                    reached = true;
+                    _movement = Vector2.zero;
+                    return reached;
                 }
 
                 if (_path.corners.Length > 0)
@@ -305,6 +325,55 @@ public class Sc_AIBrain : MonoBehaviour
 
         return reached;
     }
+
+    public void MoveForwards()
+    {
+        Vector3 forwardDestination = transform.position + (transform.forward * 1f);
+        MoveTo(forwardDestination, .1f, false);
+    }
+
+    public void Attack(Vector3 point)
+    {
+        StopAttack();
+        _attackingPoint = point;
+        _windUpCo = StartCoroutine(WindUpCoroutine());
+    }
+
+    public void StopAttack()
+    {
+        StopAttackWindup();
+    }
+
+    private void StopAttackWindup()
+    {
+        if (_windUpCo != null)
+        {
+            StopCoroutine(_windUpCo);
+            _windUpCo = null;
+        }
+    }
+
+    private IEnumerator WindUpCoroutine()
+    {
+        float timer = 0f;
+        Controller._rotationSharpness = WindUpRotationRate;
+        while (timer < WindUpTime)
+        {
+            Controller.LookAt(_attackingPoint);
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        ThrowAttack();
+    }
+
+    private void ThrowAttack()
+    {
+        Controller.CanMove = false;
+        Controller.CanRotate = false;
+
+        //Attack anim, make collision.
+    }
+
     #endregion
     #region Awareness
     private float GetPlayerAwarenessGenerationDistanceAlpha(Transform playerCharacter)

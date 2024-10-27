@@ -1535,6 +1535,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Battery (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8408848584890521766, guid: e684a8269d7aa65479721e2f8cdba6aa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2362,7 +2367,7 @@ PrefabInstance:
     - target: {fileID: 8408848584890521766, guid: e684a8269d7aa65479721e2f8cdba6aa,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7391,7 +7396,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1675738398}
         m_TargetAssemblyTypeName: Sc_LevelLoader, Assembly-CSharp
-        m_MethodName: LoadLevel
+        m_MethodName: ReloadLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10166,10 +10171,27 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1262159507}
     m_Modifications:
+    - target: {fileID: 293584554542140524, guid: 7b1d5bf883679c746ac324b32e003e14,
+        type: 3}
+      propertyPath: _rewards.Array.data[0].itemRewards.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 293584554542140524, guid: 7b1d5bf883679c746ac324b32e003e14,
+        type: 3}
+      propertyPath: _rewards.Array.data[0].itemRewards.Array.data[0]
+      value: 
+      objectReference: {fileID: 463824126832822998, guid: 7b1247e376eb398428066e2e0a33d18b,
+        type: 3}
+    - target: {fileID: 293584554542140524, guid: 7b1d5bf883679c746ac324b32e003e14,
+        type: 3}
+      propertyPath: _rewards.Array.data[0].itemRewards.Array.data[1]
+      value: 
+      objectReference: {fileID: 463824126832822998, guid: e684a8269d7aa65479721e2f8cdba6aa,
+        type: 3}
     - target: {fileID: 7813962308454014387, guid: 7b1d5bf883679c746ac324b32e003e14,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.75
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7813962308454014387, guid: 7b1d5bf883679c746ac324b32e003e14,
         type: 3}
@@ -10179,7 +10201,7 @@ PrefabInstance:
     - target: {fileID: 7813962308454014387, guid: 7b1d5bf883679c746ac324b32e003e14,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7
+      value: -4
       objectReference: {fileID: 0}
     - target: {fileID: 7813962308454014387, guid: 7b1d5bf883679c746ac324b32e003e14,
         type: 3}
@@ -10224,7 +10246,7 @@ PrefabInstance:
     - target: {fileID: 8657176143401118136, guid: 7b1d5bf883679c746ac324b32e003e14,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10383,6 +10405,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Battery
+      objectReference: {fileID: 0}
+    - target: {fileID: 8408848584890521766, guid: e684a8269d7aa65479721e2f8cdba6aa,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -10545,7 +10572,7 @@ PrefabInstance:
     - target: {fileID: 3304976529445817751, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4141666563257315592, guid: e83ffed012e3df24a8f556ca9b35f8c3,
         type: 3}

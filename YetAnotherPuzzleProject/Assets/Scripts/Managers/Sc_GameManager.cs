@@ -21,6 +21,7 @@ public class Sc_GameManager : MonoBehaviour
     //public Sc_SoundManager SoundManagerPrefab;
     public Sc_PlayerManager PlayerManager;
     public Sc_SoundManager SoundManager;
+    public Sc_TreasureManager TreasureManager;
     public Sc_Level CurrentLevel;
 
     [Header("GAMESTATE")]
@@ -59,8 +60,7 @@ public class Sc_GameManager : MonoBehaviour
     }
 
     private void Start()
-    {
-        
+    {        
         PlayerManager.CreatePlayerIfNone();
         SoundManager.InitializePresets();
 
@@ -88,6 +88,12 @@ public class Sc_GameManager : MonoBehaviour
         int sceneID = scene.buildIndex;
         Debug.Log("scene id: " + sceneID);
         //Can switch from scene ID to scene ID, such as main menu and whatever. Use this to check that a level has been unloaded.
+    }
+
+    public void ReloadCurrentLevel()
+    {
+        if (CurrentLevel == null) return;
+        Load(CurrentLevel.CurrentScene);
     }
 
     public void Load(Loader.Scene scene)

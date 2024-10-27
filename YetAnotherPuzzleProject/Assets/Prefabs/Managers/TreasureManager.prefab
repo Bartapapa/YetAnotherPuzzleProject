@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5742321251958899050
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1787651785791404980}
+  - component: {fileID: 2584955038609451881}
+  m_Layer: 0
+  m_Name: TreasureManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1787651785791404980
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742321251958899050}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2584955038609451881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5742321251958899050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643fb16193d45a6458d4f67e666646c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemDatabase: {fileID: 11400000, guid: bb4c4f979c7634f4b97711cf7d04884a, type: 2}
+  _potentialTreasures:
+  - {fileID: 463824126832822998, guid: 57453f7058a679f4e82ffad7d5b1b139, type: 3}
+  - {fileID: 463824126832822998, guid: 239f173b243912c4aad058bb236bf05c, type: 3}
+  - {fileID: 463824126832822998, guid: 1284b572b217ef845b97731093d95b0d, type: 3}
+  - {fileID: 463824126832822998, guid: 3a3e3597422554e4ea35785af73089db, type: 3}
+  - {fileID: 463824126832822998, guid: 571a381a63b8c4d45a26a9f9b46de5d9, type: 3}
+  _foundTreasures: []

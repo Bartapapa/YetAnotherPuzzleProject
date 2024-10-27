@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class Sc_Inventory : MonoBehaviour
 {
@@ -15,11 +17,13 @@ public class Sc_Inventory : MonoBehaviour
     [ReadOnly] public Sc_Item _currentlyHeldItem;
     private int _maximumItemCount = 3;
     public int MaximumItemCount { get { return _maximumItemCount; } }
+    public bool IsCurrentlyHoldingItem { get { return _currentlyHeldItem != null; } }
 
     [Header("THROWING")]
     public LayerMask ThrownObjectCollisionLayers;
     public LineRenderer TrajectoryLine;
     public GameObject ImpactSphere;
+    private Vector3 _actualAimDir;
     public bool CanAim { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || _currentlyHeldItem == null? false : true; } }
     [ReadOnly] public bool IsAiming = false;
 
@@ -31,8 +35,8 @@ public class Sc_Inventory : MonoBehaviour
     private void HandleAiming()
     {
         if (!IsAiming) return;
-
         DrawAimingTrajectory(_itemThrowPoint.position, _itemThrowPoint.forward * _currentlyHeldItem._itemData.ThrowForce);
+        //DrawTrajectory(_itemThrowPoint.position, _currentlyHeldItem._itemData.ThrowForce);
     }
 
     private void DrawAimingTrajectory(Vector3 initialPos, Vector3 initialVel)
@@ -40,6 +44,7 @@ public class Sc_Inventory : MonoBehaviour
         Vector3 pos = initialPos;
         Vector3 vel = initialVel;
         Vector3 gravity = Physics.gravity;
+        Vector3 aimDirection = initialVel;
 
         for (int i = 0; i < TrajectoryLine.positionCount; i++)
         {
@@ -69,6 +74,70 @@ public class Sc_Inventory : MonoBehaviour
     private bool MakesContact(Vector3 position)
     {
         return Physics.OverlapSphere(position, .3f, ThrownObjectCollisionLayers, QueryTriggerInteraction.Ignore).Length > 0;
+    }
+
+    private Sc_Interactible GetClosestContactedInteractible(Vector3 position, float contactAffectRange)
+    {
+        List<Sc_Interactible> contactedInteractibles = new List<Sc_Interactible>();
+        Sc_Interactible chosenInteractible = null;
+
+        Collider[] colls = Physics.OverlapSphere(position, contactAffectRange, ThrownObjectCollisionLayers);
+        foreach(Collider coll in colls)
+        {
+            Sc_Interactible interactible = coll.GetComponent<Sc_Interactible>();
+            if (interactible)
+            {
+                if (!contactedInteractibles.Contains(interactible))
+                {
+                    contactedInteractibles.Add(interactible);
+                }
+            }
+        }
+
+        float closestDistance = float.MaxValue;
+        foreach(Sc_Interactible interactible in contactedInteractibles)
+        {
+            float distance = Vector3.Distance(interactible.transform.position, position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                chosenInteractible = interactible;
+            }
+        }
+
+        return chosenInteractible;
+    }
+
+    private Sc_Character GetClosestContactedCharacter(Vector3 position, float contactAffectRange)
+    {
+        List<Sc_Character> contactedCharacters = new List<Sc_Character>();
+        Sc_Character chosenCharacter = null;
+
+        Collider[] colls = Physics.OverlapSphere(position, contactAffectRange, ThrownObjectCollisionLayers);
+        foreach (Collider coll in colls)
+        {
+            Sc_Character character = coll.GetComponent<Sc_Character>();
+            if (character)
+            {
+                if (!contactedCharacters.Contains(character))
+                {
+                    contactedCharacters.Add(character);
+                }
+            }
+        }
+
+        float closestDistance = float.MaxValue;
+        foreach (Sc_Character character in contactedCharacters)
+        {
+            float distance = Vector3.Distance(character.transform.position, position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                chosenCharacter = character;
+            }
+        }
+
+        return chosenCharacter;
     }
 
     public void PickUpItem(Sc_Item item)
@@ -244,7 +313,7 @@ public class Sc_Inventory : MonoBehaviour
         {
             _currentlyHeldItem = null;
             SetForThrow(item);
-            item.ThrowItem(Character);
+            item.ThrowItem(Character, _itemThrowPoint.forward);
         }
     }
 

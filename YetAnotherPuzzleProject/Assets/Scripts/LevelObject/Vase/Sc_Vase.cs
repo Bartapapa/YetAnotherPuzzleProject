@@ -5,17 +5,8 @@ using UnityEngine;
 [System.Serializable]
 public class Reward
 {
-    public RewardType type = RewardType.None;
     public List<Sc_Item> itemRewards = new List<Sc_Item>();
     public int weight = 10;
-}
-
-public enum RewardType
-{
-    None,
-    Treasure,
-    Item,
-    Length,
 }
 
 public class Sc_Vase : MonoBehaviour
@@ -43,11 +34,11 @@ public class Sc_Vase : MonoBehaviour
 
     public void OnInteract(Sc_Character interactor)
     {
-        CheckVase();
+        CheckVase(interactor);
         _interactible.CanBeInteractedWith = false;
     }
 
-    private void CheckVase()
+    private void CheckVase(Sc_Character interactor)
     {
         Reward foundReward = GetReward();
 
@@ -57,22 +48,55 @@ public class Sc_Vase : MonoBehaviour
             return;
         }
 
-        switch (foundReward.type)
-        {
-            case RewardType.None:
-                NoTreasure();
-                break;
-            case RewardType.Treasure:
-                break;
-            case RewardType.Item:
-                int randomItem = UnityEngine.Random.Range(0, foundReward.itemRewards.Count);
-                Sc_Item foundItem = foundReward.itemRewards[randomItem];
-                Sc_Item newItem = Instantiate<Sc_Item>(foundItem, _itemSpawn.position, _itemSpawn.rotation, _itemSpawn);
+        int randomItem = UnityEngine.Random.Range(0, foundReward.itemRewards.Count);
+        Sc_Item foundItem = foundReward.itemRewards[randomItem];
 
-                //Get interactor, and equip item if possible.
+        switch (foundItem._itemData.Type)
+        {
+            case ItemType.None:
                 break;
-            default:
-                NoTreasure();
+            case ItemType.Item:
+                break;
+            case ItemType.Treasure:
+                if (foundItem._itemData.ID == 100)
+                {
+                    //Found a random treasure.
+                    if (Sc_TreasureManager.instance != null)
+                    {
+                        foundItem = Sc_TreasureManager.instance.FindRandomNewTreasure();
+                        if (foundItem == null)
+                        {
+                            NoTreasure();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        NoTreasure();
+                        return;
+                    }
+                }
+                break;
+        }
+
+        Sc_Item newItem = Instantiate<Sc_Item>(foundItem, _itemSpawn.position, _itemSpawn.rotation, _itemSpawn);
+
+        switch (newItem._itemData.Type)
+        {
+            case ItemType.None:
+                break;
+            case ItemType.Item:
+                Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+                if (player)
+                {
+                    if (!player.Inventory.IsCurrentlyHoldingItem)
+                    {
+                        newItem.OnInteractedWith(interactor);
+                    }
+                }
+                break;
+            case ItemType.Treasure:
+                newItem.AcquireTreasure(interactor.transform);
                 break;
         }
     }
@@ -89,6 +113,7 @@ public class Sc_Vase : MonoBehaviour
             if (roll < 0)
             {
                 chosenReward = _rewards[i];
+                break;
             }
         }
 

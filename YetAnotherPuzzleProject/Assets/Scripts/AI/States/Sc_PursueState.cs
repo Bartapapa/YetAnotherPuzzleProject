@@ -4,16 +4,12 @@ using UnityEngine;
 
 public class Sc_PursueState : Sc_State
 {
-    //[Header("PURSUE PARAMETERS AND REFS")]
-    //canSeeHearPlayer bool
-    //lastKnownPlayerPosition v3
-    //goToPlayerPosition
-
     [Header("PURSUE REFS")]
     public Sc_Character_Player CurrentPlayerTarget;
     [ReadOnly] public Vector3 TargetLastKnownLocation = Vector3.zero;
     public float HearTargetSoundTrackingDuration = 1f;
     public float ChangeTargetDuration = 1.5f;
+    public float AttackRange = 2f;
     private Coroutine _changeTargetCo;
     public bool ChangingTarget { get { return _changeTargetCo != null; } }
 
@@ -60,6 +56,7 @@ public class Sc_PursueState : Sc_State
 
         if (brain.MoveTo(TargetLastKnownLocation))
         {
+            //Attack state.
             InvestigateState.InvestigationPoint = TargetLastKnownLocation;
             return InvestigateState;
         }
@@ -97,6 +94,18 @@ public class Sc_PursueState : Sc_State
         }
     }
 
+    public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
+    {
+        if (!CanLocateTarget(brain) && !ChangingTarget)
+        {
+            CurrentPlayerTarget = breachingPlayer;
+            TargetLastKnownLocation = breachingPlayer.transform.position;
+        }
+        //Only change target if target isn't 'seen'.
+    }
+
+    #region Location and tracking
+
     public bool CanLocateTarget(Sc_AIBrain brain)
     {
         bool canLocateTarget = false;
@@ -132,16 +141,7 @@ public class Sc_PursueState : Sc_State
         }
         _hearTargetSoundTrackingCo = null;
     }
-
-    public override void OnAwarenessThresholdReached(Sc_AIBrain brain, Sc_Character_Player breachingPlayer)
-    {
-        if (!CanLocateTarget(brain) && !ChangingTarget)
-        {
-            CurrentPlayerTarget = breachingPlayer;
-            TargetLastKnownLocation = breachingPlayer.transform.position;
-        }
-        //Only change target if target isn't 'seen'.
-    }
+    #endregion
 
     #region Change targets
 
@@ -162,6 +162,7 @@ public class Sc_PursueState : Sc_State
         float timer = 0f;
         while (timer < ChangeTargetDuration)
         {
+            TargetLastKnownLocation = CurrentPlayerTarget.transform.position;
             brain.Controller.LookAt(TargetLastKnownLocation);
             timer += Time.deltaTime;
             yield return null;
@@ -178,6 +179,15 @@ public class Sc_PursueState : Sc_State
             StopCoroutine(_changeTargetCo);
             _changeTargetCo = null;
         }
+    }
+
+    #endregion
+
+    #region Attacking
+
+    private void Attack(Sc_AIBrain brain, Vector3 point)
+    {
+
     }
 
     #endregion

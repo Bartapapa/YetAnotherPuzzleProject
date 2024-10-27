@@ -24,6 +24,12 @@ public class Sc_Item : MonoBehaviour
     private float _destroyItemDuration = .25f;
     private float _destroyItemFlashIntensity = 2f;
 
+    private Vector3 _treasureAcquireOffset = new Vector3(0f, 2f, 0f);
+    private Transform _treasureAcquireAnchor = null;
+    private Vector3 _treasureAcquirePoint = Vector3.zero;
+    private float _treasureAcquireLifetime = 1f;
+    private bool _acquire;
+
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
@@ -36,7 +42,7 @@ public class Sc_Item : MonoBehaviour
         Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
         if (player)
         {
-            if (player.Inventory._currentlyHeldItem != null)
+            if (player.Inventory.IsCurrentlyHoldingItem)
             {
                 player.Inventory.PickUpItem(this);
             }
@@ -56,7 +62,30 @@ public class Sc_Item : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    public virtual void ThrowItem(Sc_Character throwingCharacter)
+    public virtual void AcquireTreasure(Transform acquirer)
+    {
+        _treasureAcquireAnchor = acquirer;
+        _treasureAcquirePoint = acquirer.position;
+        StartCoroutine(AcquireTreasureCoroutine());
+    }
+
+    private IEnumerator AcquireTreasureCoroutine()
+    {
+        float timer = 0f;
+        while (timer < _treasureAcquireLifetime)
+        {
+            if (_treasureAcquireAnchor != null)
+            {
+                _treasureAcquirePoint = _treasureAcquireAnchor.position;
+            }
+            transform.position = _treasureAcquirePoint + _treasureAcquireOffset;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        DestroyItem();
+    }
+
+    public virtual void ThrowItem(Sc_Character throwingCharacter, Vector3 throwDirection)
     {
         _interactible.CanBeInteractedWith = false;
         _rb.isKinematic = false;
@@ -64,7 +93,7 @@ public class Sc_Item : MonoBehaviour
         _coll.isTrigger = false;
         _rb.AddTorque(_itemData.SpinForce, ForceMode.Impulse);
 
-        Vector3 throwDir = transform.forward * _itemData.ThrowForce;
+        Vector3 throwDir = throwDirection * _itemData.ThrowForce;
 
         _rb.AddForce(throwDir, ForceMode.Impulse);
 
@@ -98,7 +127,6 @@ public class Sc_Item : MonoBehaviour
             {
                 foreach (Material mat in rend.materials)
                 {
-                    //mat.EnableKeyword("_EMISSION");
                     mat.color = Color.white * ((timer / _destroyItemDuration) * _destroyItemFlashIntensity);
                 }
             }
@@ -110,6 +138,7 @@ public class Sc_Item : MonoBehaviour
             ParticleSystem particles = Instantiate<ParticleSystem>(ItemDestroyParticles, MeshCenterPoint.position, Quaternion.identity);
         }
 
+        StopAllCoroutines();
         Destroy(this.gameObject);
     }
 
@@ -156,7 +185,7 @@ public class Sc_Item : MonoBehaviour
                 Vector3 directionOfAttack = character.transform.position - positionAtContact;
                 directionOfAttack = new Vector3(directionOfAttack.x, 0f, directionOfAttack.z);
                 directionOfAttack = directionOfAttack.normalized;
-                character.Hurt(_thrownByCharacter, directionOfAttack);
+                character.Hurt(_thrownByCharacter, directionOfAttack, positionAtContact);
             }
         }
 
