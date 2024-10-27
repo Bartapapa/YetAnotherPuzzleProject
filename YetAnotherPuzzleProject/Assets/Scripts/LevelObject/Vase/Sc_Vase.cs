@@ -38,7 +38,7 @@ public class Sc_Vase : MonoBehaviour
         _interactible.CanBeInteractedWith = false;
     }
 
-    private void CheckVase(Sc_Character interactor)
+    public void CheckVase(Sc_Character interactor)
     {
         Reward foundReward = GetReward();
 
@@ -86,17 +86,27 @@ public class Sc_Vase : MonoBehaviour
             case ItemType.None:
                 break;
             case ItemType.Item:
-                Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
-                if (player)
+                if (interactor != null)
                 {
-                    if (!player.Inventory.IsCurrentlyHoldingItem)
+                    Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+                    if (player)
                     {
-                        newItem.OnInteractedWith(interactor);
+                        if (!player.Inventory.IsCurrentlyHoldingItem)
+                        {
+                            newItem.OnInteractedWith(interactor);
+                        }
                     }
                 }
                 break;
             case ItemType.Treasure:
-                newItem.AcquireTreasure(interactor.transform);
+                if (interactor != null)
+                {
+                    newItem.AcquireTreasure(interactor.transform);
+                }
+                else
+                {
+                    newItem.AcquireTreasure(_itemSpawn);
+                }
                 break;
         }
     }

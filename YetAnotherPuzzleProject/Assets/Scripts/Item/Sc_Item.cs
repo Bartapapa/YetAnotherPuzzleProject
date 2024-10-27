@@ -17,6 +17,9 @@ public class Sc_Item : MonoBehaviour
     [Header("ITEM DATA")]
     public SO_ItemData _itemData;
 
+    [Header("EQUIPPED")]
+    [ReadOnly] public bool IsEquipped = false;
+
     [Header("THROW PARAMETERS")]
     [ReadOnly] public bool IsBeingThrown = false;
     private Sc_Character _thrownByCharacter;
@@ -55,11 +58,13 @@ public class Sc_Item : MonoBehaviour
 
     public virtual void UseItem()
     {
-        if (_inInventory != null)
-        {
-            _inInventory.DropItem(this);
-        }
-        Destroy(this.gameObject);
+        DestroyItem();
+    }
+
+    public virtual bool UseItemAsKey()
+    {
+        UseItem();
+        return true;
     }
 
     public virtual void AcquireTreasure(Transform acquirer)
@@ -113,6 +118,10 @@ public class Sc_Item : MonoBehaviour
 
     public void DestroyItem()
     {
+        if (_inInventory != null)
+        {
+            _inInventory.DropItem(this);
+        }
         StartCoroutine(DestroyItemCo());
     }
 

@@ -49,8 +49,10 @@ public class Sc_Interactible : MonoBehaviour
                 Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
                 if (player)
                 {
-                    player.Inventory._currentlyHeldItem.UseItem();
-                    OnInteractedWith?.Invoke(interactor);
+                    if (player.Inventory._currentlyHeldItem.UseItemAsKey())
+                    {
+                        OnInteractedWith?.Invoke(interactor);
+                    }                   
                 }
             }
             else

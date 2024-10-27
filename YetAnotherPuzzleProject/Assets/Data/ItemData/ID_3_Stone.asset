@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98eb132d4bc0faf4c92a03b3114501f7, type: 3}
-  m_Name: ID_0_Battery
+  m_Name: ID_3_Stone
   m_EditorClassIdentifier: 
-  _id: 0
-  _name: Battery
+  _id: 3
+  _name: Stone
   _itemType: 1
   Rarity: 0
-  ThrowForce: 5
+  ThrowForce: 10
   SpinForce: {x: 0, y: 0, z: 0.2}
   OnContactAffectRange: 0.6
   InteractsOnThrow: 1

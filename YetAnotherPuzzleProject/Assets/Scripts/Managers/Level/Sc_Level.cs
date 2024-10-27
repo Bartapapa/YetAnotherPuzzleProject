@@ -27,7 +27,7 @@ public class Sc_Level : MonoBehaviour
 
     private int _spawnedPlayers = 0;
 
-    private bool _buildNavmeshRequested = false;
+    private bool _buildNavmeshRequested = true;
 
     private void Awake()
     {

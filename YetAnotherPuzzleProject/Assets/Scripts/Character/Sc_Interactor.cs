@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class Sc_Interactor : MonoBehaviour
 
     private void Update()
     {
+        RemoveNullInteractibles();
         Sc_Interactible chosenInteractible = SelectInteractible();
         if (_currentSelectedInteractible == null)
         {
@@ -59,6 +61,17 @@ public class Sc_Interactor : MonoBehaviour
         }
     }
 
+    private void RemoveNullInteractibles()
+    {
+        foreach(Sc_Interactible interactible in _potentialInteractibles)
+        {
+            if (interactible == null)
+            {
+                _potentialInteractibles.Remove(interactible);
+            }
+        }
+    }
+
     private Sc_Interactible SelectInteractible()
     {
         Sc_Interactible chosenInteractible = null;
@@ -79,7 +92,7 @@ public class Sc_Interactor : MonoBehaviour
                     }
                     else
                     {
-                        if (_inventory._currentlyHeldItem == null)
+                        if (!_inventory.IsCurrentlyHoldingItem)
                         {
                             //Do nothing
                         }
@@ -143,8 +156,6 @@ public class Sc_Interactor : MonoBehaviour
         float closestDistance = float.MaxValue;
         foreach (Sc_Interactible interactible in localChosenInteractibles)
         {
-
-
             float distance = Vector3.Distance(interactible.transform.position, this.transform.position);
             if (distance < closestDistance)
             {
@@ -161,26 +172,25 @@ public class Sc_Interactor : MonoBehaviour
         _potentialInteractibles.Clear();
     }
 
-    public void AddPotentialInteractible(Sc_Interactible interactible)
-    {
-
-    }
-
-    public void RemovePotentialInteractible(Sc_Interactible interactible)
-    {
-
-    }
-
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         Sc_Interactible interactible = other.GetComponent<Sc_Interactible>();
         if (interactible)
         {
             if (!_potentialInteractibles.Contains(interactible))
             {
-                _potentialInteractibles.Add(interactible);
+                if (interactible.CanBeInteractedWith)
+                {
+                    _potentialInteractibles.Add(interactible);
+                }              
             }
-            
+            else
+            {
+                if (!interactible.CanBeInteractedWith)
+                {
+                    _potentialInteractibles.Remove(interactible);
+                }
+            }           
         }
     }
 

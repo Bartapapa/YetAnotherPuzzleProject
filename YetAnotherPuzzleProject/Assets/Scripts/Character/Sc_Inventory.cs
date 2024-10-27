@@ -166,6 +166,7 @@ public class Sc_Inventory : MonoBehaviour
             return;
         }
 
+        item.IsEquipped = false;
         item.gameObject.SetActive(true);
         item._interactible.CanBeInteractedWith = true;
         if (Sc_Level.instance != null)
@@ -240,17 +241,24 @@ public class Sc_Inventory : MonoBehaviour
         if (IsCurrentlyStoredItem(item))
         {
             canStore = true;
+            if (item == _currentlyHeldItem)
+            {
+                _currentlyHeldItem = null;
+            }
+
             item._interactible.CanBeInteractedWith = false;
+            item.IsEquipped = false;
 
             item.gameObject.SetActive(false);
         }
         else
         {
-            canStore = _items.Length + 1 > _maximumItemCount;
+            canStore = CurrentItemCount()+1 <= _maximumItemCount;
 
             if (canStore)
             {
                 item._interactible.CanBeInteractedWith = false;
+                item.IsEquipped = false;
 
                 _items[GetNextItemIndex()] = item;
                 item._inInventory = this;
@@ -264,6 +272,19 @@ public class Sc_Inventory : MonoBehaviour
         return canStore;
     }
 
+    private int CurrentItemCount()
+    {
+        int currentItemCount = 0;
+        foreach(Sc_Item item in _items)
+        {
+            if (item != null)
+            {
+                currentItemCount++;
+            }
+        }
+        return currentItemCount;
+    }
+
     private bool IsCurrentlyStoredItem(Sc_Item item)
     {
         return GetIndexFromItem(item) != -1;
@@ -274,6 +295,8 @@ public class Sc_Inventory : MonoBehaviour
         _currentlyHeldItem = item;
 
         item.gameObject.SetActive(true);
+        item.IsEquipped = true;
+
         item.transform.parent = _itemHoldAnchor;
         item.transform.position = _itemHoldAnchor.position;
         item.transform.rotation = _itemHoldAnchor.rotation;
@@ -321,6 +344,8 @@ public class Sc_Inventory : MonoBehaviour
     {
         item.gameObject.SetActive(true);
         item._interactible.CanBeInteractedWith = false;
+        item.IsEquipped = false;
+
         if (Sc_Level.instance != null)
         {
             item.transform.parent = Sc_Level.instance.transform;

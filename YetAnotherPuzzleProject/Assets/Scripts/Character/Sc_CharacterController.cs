@@ -143,7 +143,7 @@ public class Sc_CharacterController : MonoBehaviour
     {
         //_isGrounded = GroundCheck(!_isGrounded);
         _isGrounded = GroundCheck();
-        if (_isGrounded && _currentState == CharacterState.Default) HandleBalancingVerticalForce();
+        if (_isGrounded && _currentState == CharacterState.Default && !IsClimbing) HandleBalancingVerticalForce();
         //If add physics based floors
         //if (_walkingOnRb) HandleWalkingOnRB();
 
