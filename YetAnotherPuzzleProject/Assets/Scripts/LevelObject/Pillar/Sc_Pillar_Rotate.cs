@@ -73,6 +73,11 @@ public class Sc_Pillar_Rotate : Sc_Pillar
     public void GaugeRotate(float gauge)
     {
         //if (gauge > 1f) gauge = 1f;
+        if (Lock != null)
+        {
+            Lock.GaugeSpin(gauge);
+            if (!Lock.IsEngaged) return;
+        }
 
         Vector3 euler = new Vector3(0f, _rotateAngle * gauge, 0f);     
         Quaternion newRot = Quaternion.Euler(euler);
@@ -104,6 +109,12 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
     public void StartRotate()
     {
+        if (Lock != null)
+        {
+            Lock.Spin(true);
+            if (!Lock.IsEngaged) return;
+        }
+
         StopRotate();
         _rotateCo = StartCoroutine(Rotate());
     }

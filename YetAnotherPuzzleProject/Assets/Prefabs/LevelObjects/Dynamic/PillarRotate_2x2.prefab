@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a70020eb6fb07a741a299c07bb26ba3f, type: 2}
+  - {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -313,9 +313,9 @@ MonoBehaviour:
   OnForceActivate:
     m_PersistentCalls:
       m_Calls: []
-  _debugDeactivatedMat: {fileID: 2100000, guid: a70020eb6fb07a741a299c07bb26ba3f,
+  _debugDeactivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4,
     type: 2}
-  _debugActivatedMat: {fileID: 2100000, guid: a70020eb6fb07a741a299c07bb26ba3f, type: 2}
+  _debugActivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
   _activationMeshes:
   - {fileID: 5243821927142261792}
   - {fileID: 3994583345902668507}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38031fc7121fdd4bb9b5142ad0e068d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterParenter: {fileID: 0}
+  _headParent: {fileID: 0}
   _travelDistance: 4
   _overTime: 4
   _movementCurve:

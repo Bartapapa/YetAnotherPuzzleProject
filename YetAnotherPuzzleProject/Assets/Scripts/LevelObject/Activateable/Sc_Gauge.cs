@@ -6,8 +6,10 @@ using UnityEngine.Events;
 
 public class Sc_Gauge : MonoBehaviour
 {
-    [Header("UNITYEVENTS")]
     public UnityEvent<float> OnCompletionChanged;
+
+    [Header("LOCK")]
+    public Sc_Lock Lock;
 
     [Header("PARAMETERS")]
     [SerializeField][ReadOnly] private float _completion = 0f;
@@ -68,6 +70,12 @@ public class Sc_Gauge : MonoBehaviour
 
     public void Input(float input)
     {
+        if (Lock != null)
+        {
+            Lock.GaugeSpin(input, true);
+            if (!Lock.IsEngaged) return;
+        }
+
         _toCompletion += input;
     }
 

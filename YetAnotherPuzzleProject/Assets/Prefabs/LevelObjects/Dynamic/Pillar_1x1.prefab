@@ -147,9 +147,9 @@ MonoBehaviour:
   OnForceActivate:
     m_PersistentCalls:
       m_Calls: []
-  _debugDeactivatedMat: {fileID: 2100000, guid: a70020eb6fb07a741a299c07bb26ba3f,
+  _debugDeactivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4,
     type: 2}
-  _debugActivatedMat: {fileID: 2100000, guid: a70020eb6fb07a741a299c07bb26ba3f, type: 2}
+  _debugActivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
   _activationMeshes:
   - {fileID: 1052622400188621326}
   _startActivated: 0
@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b531f10f7f9253647ab086454417ebe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _headParent: {fileID: 0}
   _travelDistance: 2
   _overTime: 2
   _movementCurve:
@@ -308,7 +309,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a70020eb6fb07a741a299c07bb26ba3f, type: 2}
+  - {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

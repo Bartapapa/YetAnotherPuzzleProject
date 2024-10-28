@@ -8,6 +8,9 @@ public class Sc_Pillar : MonoBehaviour
     [Header("OBJECT REFS")]
     public Transform _headParent;
 
+    [Header("LOCK")]
+    public Sc_Lock Lock;
+
     [Header("PARAMETERS")]
     public float _travelDistance = 2f;
     public float _overTime = 1f;
@@ -35,6 +38,12 @@ public class Sc_Pillar : MonoBehaviour
 
     public void Move(bool activated)
     {
+        if (Lock != null)
+        {
+            Lock.Spin(activated);
+            if (!Lock.IsEngaged) return;
+        }
+
         if (_movementCo != null)
         {
             StopCoroutine(_movementCo);
@@ -56,7 +65,14 @@ public class Sc_Pillar : MonoBehaviour
 
     public void GaugeMove(float gauge)
     {
+        if (Lock != null)
+        {
+            Lock.GaugeSpin(gauge);
+            if (!Lock.IsEngaged) return;
+        }
+
         if (gauge > 1f) gauge = 1f;
+        if (gauge < 0f) gauge = 0f;
 
         float alpha = _movementCurve.Evaluate(gauge / 1f);
         Vector3 newPos = Vector3.Lerp(_bottomPos, _topPos, alpha);

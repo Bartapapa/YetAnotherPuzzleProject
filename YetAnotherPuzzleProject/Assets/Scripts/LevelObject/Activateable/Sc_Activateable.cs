@@ -16,6 +16,9 @@ public class Sc_Activateable : MonoBehaviour
     public List<Transform> _activationMeshes = new List<Transform>();
     private List<Renderer> _meshRenderers = new List<Renderer>();
 
+    [Header("LOCK")]
+    public Sc_Lock Lock;
+
     [Header("PARAMETERS")]
     public bool _startActivated = false;
     private bool _isActivated = false;
@@ -69,6 +72,11 @@ public class Sc_Activateable : MonoBehaviour
     public void Activate(bool toggleOn)
     {
         if (toggleOn == _isActivated) return;
+        if (Lock != null)
+        {
+            Lock.Spin(toggleOn);
+            if (!Lock.IsEngaged) return;
+        }
         if (toggleOn && !HasFilledConditionsForActivation())
         {
             Activate(false);
