@@ -16,7 +16,6 @@ public class SO_ItemDatabase : ScriptableObject
                 return item;
             }
         }
-
         return null;
     }
 }

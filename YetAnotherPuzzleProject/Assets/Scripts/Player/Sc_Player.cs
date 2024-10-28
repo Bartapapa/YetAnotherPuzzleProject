@@ -98,6 +98,8 @@ public class Sc_Player : MonoBehaviour
         PlayerCharacter.Controller.StopAnchoringSequence();
         PlayerCharacter.Controller.ResetAnchor();
         PlayerCharacter.Controller.StopClimbing();
+        PlayerCharacter.Inventory.ResetInventory();
+
         PlayerCharacter.Controller.ParentToObject(this.transform);
     }
 
@@ -195,6 +197,14 @@ public class Sc_Player : MonoBehaviour
         if (context.performed)
         {
             _playerCharacter.Inventory.DropCurrentItem();
+        }
+    }
+
+    public void OnRestartLevel(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Sc_GameManager.instance.ReloadCurrentLevel();
         }
     }
 

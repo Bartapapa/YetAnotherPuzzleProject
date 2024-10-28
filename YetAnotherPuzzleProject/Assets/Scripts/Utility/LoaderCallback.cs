@@ -12,7 +12,7 @@ public class LoaderCallback : MonoBehaviour
         {
             if (Sc_GameManager.instance != null)
             {
-                Sc_GameManager.instance.CurrentGameState = GameState.Loading;
+                //Sc_GameManager.instance.CurrentGameState = GameState.Loading;
             }
             else
             {

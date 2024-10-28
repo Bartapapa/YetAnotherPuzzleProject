@@ -6,10 +6,12 @@ public class Sc_Item_Rope : Sc_Item
 {
     [Header("ROPE OBJECT REFS")]
     public Sc_Ladder RopePrefab;
+    public LineRenderer RopeLine;
 
     [Header("ROPE PARAMETERS")]
     public float ForwardCheckDistance = 1f;
     public float MaximumRopeHeight = 4f;
+    public float MinimumRopeHeight = 1f;
     public LayerMask RopeLayers;
 
     private bool _foundAnchorPoint = false;
@@ -23,8 +25,15 @@ public class Sc_Item_Rope : Sc_Item
     {
         if (IsEquipped)
         {
-            //Check in front of user. If find wall, then check for foot of the wall. Once foot is found, check total height of wall.
-            _foundAnchorPoint = CheckForRopeAnchor();
+            if (!_inInventory.IsAiming)
+            {
+                //Check in front of user. If find wall, then check for foot of the wall. Once foot is found, check total height of wall.
+                _foundAnchorPoint = CheckForRopeAnchor();
+            }
+        }
+        else
+        {
+            RopeLine.enabled = false;
         }
     }
 
@@ -63,17 +72,34 @@ public class Sc_Item_Rope : Sc_Item
                     fromPos = _wallHit.point - (_wallHit.normal * .1f) + (Vector3.up * MaximumRopeHeight);
                     if (Physics.Raycast(fromPos, Vector3.down, out _topWallHit, MaximumRopeHeight, RopeLayers, QueryTriggerInteraction.Ignore))
                     {
-                        Vector3 floorHitY = new Vector3(0f, _floorHit.point.y, 0f);
-                        Vector3 topWallHitY = new Vector3(0f, _topWallHit.point.y, 0f);
-                        _calculatedHeight = Vector3.Distance(floorHitY, topWallHitY);
-                        if (_calculatedHeight <= MaximumRopeHeight)
+                        //Check if top of wall is flat
+                        if (_topWallHit.normal == Vector3.up)
                         {
-                            return true;
+                            Vector3 floorHitY = new Vector3(0f, _floorHit.point.y, 0f);
+                            Vector3 topWallHitY = new Vector3(0f, _topWallHit.point.y, 0f);
+                            _calculatedHeight = Vector3.Distance(floorHitY, topWallHitY);
+                            if (_calculatedHeight <= MaximumRopeHeight && _calculatedHeight >= MinimumRopeHeight)
+                            {
+                                //Verify if exit point is not in wall
+                                fromPos = _topWallHit.point + (Vector3.up * .1f);
+                                if (!Physics.Raycast(fromPos, Vector3.up, 2f, RopeLayers, QueryTriggerInteraction.Ignore))
+                                {
+                                    fromPos = _topWallHit.point + (Vector3.up * 2.1f);
+                                    if (!Physics.Raycast(fromPos, Vector3.down, 2f, RopeLayers, QueryTriggerInteraction.Ignore))
+                                    {
+                                        RopeLine.enabled = true;
+                                        RopeLine.SetPosition(0, _floorHit.point);
+                                        RopeLine.SetPosition(1, _floorHit.point + (Vector3.up * _calculatedHeight));
+                                        return true;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+        RopeLine.enabled = false;
         return false;
     }
 }

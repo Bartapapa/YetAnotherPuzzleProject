@@ -51,6 +51,8 @@ MonoBehaviour:
   SoundManager: {fileID: 6406465733144814101}
   TreasureManager: {fileID: 4018043597503164465}
   CurrentLevel: {fileID: 0}
+  BaseData: {fileID: 11400000, guid: 06fc966969d42b046a9753bd4340248a, type: 2}
+  CurrentData: {fileID: 0}
   _startGameState: 0
   _currentGameState: 0
 --- !u!1001 &1449437476075166552

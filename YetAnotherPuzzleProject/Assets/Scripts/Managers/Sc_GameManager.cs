@@ -24,6 +24,10 @@ public class Sc_GameManager : MonoBehaviour
     public Sc_TreasureManager TreasureManager;
     public Sc_Level CurrentLevel;
 
+    [Header("SAVEDATA")]
+    public SO_SaveData OverrideData;
+    public SO_SaveData CurrentData;
+
     [Header("GAMESTATE")]
     public GameState _startGameState = GameState.InGame;
     [ReadOnly][SerializeField] private GameState _currentGameState = GameState.None;
@@ -77,7 +81,7 @@ public class Sc_GameManager : MonoBehaviour
     private void OnSceneFinishedLoad(Scene scene, LoadSceneMode mode)
     {
         int sceneID = scene.buildIndex;
-        Debug.Log("scene id: " + sceneID);
+        Debug.Log("loaded scene id: " + sceneID);
         //Can switch from scene ID to scene ID, such as main menu and whatever.
 
         //CheckManagers();
@@ -86,13 +90,15 @@ public class Sc_GameManager : MonoBehaviour
     private void OnSceneFinishedUnload(Scene scene)
     {
         int sceneID = scene.buildIndex;
-        Debug.Log("scene id: " + sceneID);
+        Debug.Log("unloaded scene id: " + sceneID);
         //Can switch from scene ID to scene ID, such as main menu and whatever. Use this to check that a level has been unloaded.
     }
 
     public void ReloadCurrentLevel()
     {
         if (CurrentLevel == null) return;
+        if (!CurrentLevel.CanBeReloaded) return;
+        Debug.LogWarning("RELOADING CURRENT LEVEL!");
         Load(CurrentLevel.CurrentScene);
     }
 
@@ -182,6 +188,34 @@ public class Sc_GameManager : MonoBehaviour
     #endregion
 
     #region SAVEDATA
+    public void SavePlayerCharacterData()
+    {
+        if (CurrentData == null)
+        {
+            SO_SaveData newSaveData = ScriptableObject.CreateInstance<SO_SaveData>();
+            CurrentData = newSaveData;
+            if (OverrideData != null)
+            {
+                CurrentData.CharacterSaveProfiles = OverrideData.CharacterSaveProfiles;
+            }         
+        }
+        CurrentData.CreateCharacterSaveProfiles(PlayerManager.CurrentPlayers);
+    }
+
+    public void LoadPlayerCharacterData()
+    {
+        if (CurrentData == null) return;
+
+        List<Sc_Player> players = PlayerManager.GetPlayersFromPInputs();
+        for (int i = 0; i < players.Count; i++)
+        {
+            int[] savedInventory = CurrentData.CharacterSaveProfiles[i].PlayerCharacterInventoryIDs;
+            int savedCurrentHeldItem = CurrentData.CharacterSaveProfiles[i].CurrentHeldItemIndex;
+            players[i].PlayerCharacter.Inventory.PopulateInventory(savedInventory, savedCurrentHeldItem);
+        }
+    }
+
+
     //public void SaveData()
     //{
     //    if (_saveData == null)

@@ -9,6 +9,7 @@ public class Sc_LevelLoader : MonoBehaviour
 
     public void LoadLevel()
     {
+        Sc_GameManager.instance.SavePlayerCharacterData();
         Sc_GameManager.instance.Load(LevelToLoad);
     }
 

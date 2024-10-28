@@ -3,53 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerSaveProfile
+[System.Serializable]
+public class PlayerCharacterSaveProfile
 {
-    public PlayerInput Player;
-    public int SkinIndex = -1;
-    public List<int> InventoryItemIDs = new List<int>();
-    public int CurrentHeldItemID = -1;
+    public Sc_Player Player;
+    public int[] PlayerCharacterInventoryIDs = new int[3] { -1, -1, -1 };
+    public int CurrentHeldItemIndex = -1;
 
-    public PlayerSaveProfile (PlayerInput player)
+    public PlayerCharacterSaveProfile (PlayerInput player)
     {
         Sc_Player playerObject = Sc_GameManager.instance.PlayerManager.GetPlayerFromPInput(player);
         if (playerObject.PlayerCharacter == null) return;
 
-        Player = player;
-        SkinIndex = playerObject.PlayerCharacter.SkinIndex;
-        Sc_Inventory inventory = playerObject.PlayerCharacter.Inventory;
-
-        for (int i = 0; i < inventory._items.Length; i++)
+        Player = playerObject;
+        Sc_Inventory playerInventory = playerObject.PlayerCharacter.Inventory;
+        for (int i = 0; i < PlayerCharacterInventoryIDs.Length; i++)
         {
-            InventoryItemIDs.Add(inventory._items[i]._itemData.ID);
+            if (playerInventory._items[i] != null)
+            {
+                PlayerCharacterInventoryIDs[i] = playerInventory._items[i]._itemData.ID;
+            }
+            else
+            {
+                PlayerCharacterInventoryIDs[i] = -1;
+            }
         }
-        if (inventory._currentlyHeldItem != null)
+        if (playerInventory._currentlyHeldItem != null)
         {
-            CurrentHeldItemID = inventory._currentlyHeldItem._itemData.ID;
+            CurrentHeldItemIndex = playerInventory.GetInventoryIndexOfCurrentlyHeldItem();
+        }
+        else
+        {
+            CurrentHeldItemIndex = -1;
         }
     }
 }
 
-public class SO_SaveData : MonoBehaviour
+[CreateAssetMenu(menuName = "YetAnotherPuzzleProject/Save/BlankSaveData", fileName = "BlankSaveData")]
+public class SO_SaveData : ScriptableObject
 {
-    public List<PlayerSaveProfile> SaveProfiles = new List<PlayerSaveProfile>();
+    public List<PlayerCharacterSaveProfile> CharacterSaveProfiles = new List<PlayerCharacterSaveProfile>();
 
-    public void CreateSaveProfiles(List<PlayerInput> players)
+    public void CreateCharacterSaveProfiles(List<PlayerInput> players)
     {
+        ClearCharacterSaveProfiles();
+
         for (int i = 0; i < players.Count; i++)
         {
-            PlayerSaveProfile newSaveProfile = new PlayerSaveProfile(players[i]);
+            PlayerCharacterSaveProfile newSaveProfile = new PlayerCharacterSaveProfile(players[i]);
 
-            //Verification if player has been saved.
-            if (newSaveProfile.Player != null)
-            {
-                SaveProfiles.Add(newSaveProfile);
-            }
+            CharacterSaveProfiles.Add(newSaveProfile);
         }
     }
 
-    public void ClearSaveProfiles()
+    public void ClearCharacterSaveProfiles()
     {
-        SaveProfiles.Clear();
+        CharacterSaveProfiles.Clear();
     }
 }

@@ -16,6 +16,7 @@ public class Sc_PlayerManager : MonoBehaviour
 
     public event System.Action<PlayerInput> PlayerJoinedGame;
     public event System.Action<PlayerInput> PlayerLeftGame;
+    [ReadOnly] public bool CanPlayersJoinLeave = true;
 
     private void Awake()
     {
@@ -73,11 +74,14 @@ public class Sc_PlayerManager : MonoBehaviour
 
     void JoinAction(InputAction.CallbackContext context)
     {
+        if (!CanPlayersJoinLeave) return;
         PlayerInputManager.instance.JoinPlayerFromActionIfNotAlreadyJoined(context);
     }
 
     void LeaveAction(InputAction.CallbackContext context)
     {
+        if (!CanPlayersJoinLeave) return;
+
         if (_currentPlayers.Count > 1)
         {
             foreach (var player in _currentPlayers)
@@ -127,5 +131,11 @@ public class Sc_PlayerManager : MonoBehaviour
     {
         Sc_Player player = input.GetComponent<Sc_Player>();
         return player;
+    }
+
+    public Sc_Player GetPlayerFromIndex(int index)
+    {
+        if (index > CurrentPlayers.Count) return null;
+        return GetPlayerFromPInput(CurrentPlayers[index]);
     }
 }

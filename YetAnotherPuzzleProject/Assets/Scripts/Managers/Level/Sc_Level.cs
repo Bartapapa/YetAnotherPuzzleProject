@@ -10,6 +10,7 @@ public class Sc_Level : MonoBehaviour
 
     [Header("CURRENT SCENE")]
     public Loader.Scene CurrentScene = Loader.Scene.SampleScene1;
+    public bool CanBeReloaded = true;
 
     [Header("NAVMESH")]
     public NavMeshSurface NMSurface;
@@ -51,6 +52,10 @@ public class Sc_Level : MonoBehaviour
             Sc_GameManager.instance.PlayerManager.AssignEventsToLevelManager();
 
             SpawnAllPlayerCharacters();
+            //Load all player character data
+            Sc_GameManager.instance.LoadPlayerCharacterData();
+            Sc_GameManager.instance.SavePlayerCharacterData();
+            //Save all player character data
         }
     }
 
@@ -108,6 +113,7 @@ public class Sc_Level : MonoBehaviour
         {
             player.InitializePlayerCharacter(Vector3.zero, Quaternion.identity);
         }
+
         _spawnedPlayers++;
     }
 

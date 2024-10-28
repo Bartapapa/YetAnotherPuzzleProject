@@ -18,6 +18,7 @@ public class Sc_Inventory : MonoBehaviour
     private int _maximumItemCount = 3;
     public int MaximumItemCount { get { return _maximumItemCount; } }
     public bool IsCurrentlyHoldingItem { get { return _currentlyHeldItem != null; } }
+    public bool CanUseItem { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || IsAiming || _currentlyHeldItem == null ? false : true; } }
 
     [Header("THROWING")]
     public LayerMask ThrownObjectCollisionLayers;
@@ -30,6 +31,53 @@ public class Sc_Inventory : MonoBehaviour
     private void Update()
     {
         HandleAiming();
+    }
+
+    public void ResetInventory()
+    {
+        _currentlyHeldItem = null;
+
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (_items[i] != null)
+            {
+                Destroy(_items[i].gameObject);
+                _items[i] = null;
+            }
+        }
+    }
+
+    public void PopulateInventory(int[] inventoryItemIDs, int currentlyHeldItemIndex)
+    {
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (inventoryItemIDs[i] >= 0)
+            {
+                Sc_Item newItem = Instantiate<Sc_Item>(
+                    Sc_GameManager.instance.TreasureManager.ItemDatabase.GetItemFromID(inventoryItemIDs[i]),
+                    _itemHoldAnchor);
+                Store(newItem, i);
+            }
+        }
+        if (currentlyHeldItemIndex >= 0)
+        {
+            Equip(_items[currentlyHeldItemIndex]);
+        }
+    }
+
+    public int GetInventoryIndexOfCurrentlyHeldItem()
+    {
+        if (_currentlyHeldItem != null)
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                if (_currentlyHeldItem == _items[i])
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     private void HandleAiming()
@@ -199,7 +247,6 @@ public class Sc_Inventory : MonoBehaviour
 
     private Sc_Item GetItemFromIndex(int index)
     {
-        Sc_Item item = null;
         if (index < 0 || index > _items.Length)
         {
             return null;
@@ -235,7 +282,7 @@ public class Sc_Inventory : MonoBehaviour
             DropItem(itemToDrop);
         }
     }
-    public bool Store(Sc_Item item)
+    public bool Store(Sc_Item item, int forceIndex = -1)
     {
         bool canStore = false;
         if (IsCurrentlyStoredItem(item))
@@ -260,7 +307,14 @@ public class Sc_Inventory : MonoBehaviour
                 item._interactible.CanBeInteractedWith = false;
                 item.IsEquipped = false;
 
-                _items[GetNextItemIndex()] = item;
+                if (forceIndex >= 0 && forceIndex < _items.Length)
+                {
+                    _items[forceIndex] = item;
+                }
+                else
+                {
+                    _items[GetNextItemIndex()] = item;
+                }                
                 item._inInventory = this;
                 item.transform.parent = _itemHoldAnchor;
                 item.transform.position = _itemHoldAnchor.position;
@@ -325,7 +379,7 @@ public class Sc_Inventory : MonoBehaviour
 
     public void UseCurrentItem()
     {
-        if (_currentlyHeldItem == null) return;
+        if (!CanUseItem) return;
 
         _currentlyHeldItem.UseItem();
     }
