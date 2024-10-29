@@ -11,6 +11,7 @@ public class Sc_Button : MonoBehaviour
     public Transform _buttonPivot;
 
     [Header("PARAMETERS")]
+    public float ActivationDelay = 1f;
     public float _activationDuration = 1f;
     public bool _onlyActivateOnPush = false;
     private float _activationTimer = 0f;
@@ -21,13 +22,15 @@ public class Sc_Button : MonoBehaviour
     public AudioClip _buttonPress;
     public AudioClip _buttonLift;
 
+    private Coroutine _delayedActivationCo = null;
+
 
     private void Update()
     {
         if (_buttonPushed)
         {
             _activationTimer += Time.deltaTime;
-            if (_activationTimer >= _activationDuration)
+            if (_activationTimer >= _activationDuration+ActivationDelay)
             {
                 LiftButton();
                 _activationTimer = 0f;
@@ -41,9 +44,8 @@ public class Sc_Button : MonoBehaviour
 
     private void PushButton()
     {
-        _buttonPushed = true;
+        DelayActivation();
         _interactible.CanBeInteractedWith = false;
-        _activateable.ToggleActivation();
 
         _buttonPivot.localPosition = new Vector3(0f, 0f, -.1f);
 
@@ -52,8 +54,10 @@ public class Sc_Button : MonoBehaviour
 
     private void LiftButton()
     {
+        StopDelayedActivation();
         _buttonPushed = false;
         _interactible.CanBeInteractedWith = true;
+
         if (!_onlyActivateOnPush)
         {
             _activateable.ToggleActivation();
@@ -62,5 +66,33 @@ public class Sc_Button : MonoBehaviour
         _buttonPivot.localPosition = new Vector3(0f, 0f, 0f);
 
         Sc_GameManager.instance.SoundManager.PlaySFX(_source, _buttonLift, new Vector2(.95f, 1.05f));
+    }
+
+    private void DelayActivation()
+    {
+        if (_buttonPushed) return;
+        _buttonPushed = true;
+        _delayedActivationCo = StartCoroutine(DelayedActivationCoroutine());
+    }
+
+    private void StopDelayedActivation()
+    {
+        if (_delayedActivationCo != null)
+        {
+            StopCoroutine(_delayedActivationCo);
+            _delayedActivationCo = null;
+        }
+    }
+
+    private IEnumerator DelayedActivationCoroutine()
+    {
+        float timer = 0f;
+        while (timer < ActivationDelay)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        _activateable.ToggleActivation();
+        _delayedActivationCo = null;
     }
 }

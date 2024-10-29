@@ -35,6 +35,7 @@ public class Sc_ExitDoor : MonoBehaviour
 
     public void LoadLevel()
     {
+        Sc_GameManager.instance.SavePlayerCharacterData();
         Sc_GameManager.instance.Load(_toLevel);
     }
 
