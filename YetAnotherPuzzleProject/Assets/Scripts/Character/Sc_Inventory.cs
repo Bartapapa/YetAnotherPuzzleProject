@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 
 public class Sc_Inventory : MonoBehaviour
 {
@@ -192,7 +190,7 @@ public class Sc_Inventory : MonoBehaviour
     {
         if (Store(item))
         {
-
+            item.OnItemPickup();
         }
         else
         {
@@ -227,6 +225,8 @@ public class Sc_Inventory : MonoBehaviour
         }      
         item.transform.position = this.transform.position;
         item.transform.rotation = this.transform.rotation;
+
+        item.OnItemDrop();
 
         _items[GetIndexFromItem(item)] = null;
         item._inInventory = null;

@@ -21,14 +21,7 @@ public class Sc_Lock : MonoBehaviour
 
     private void Start()
     {
-        if (StartEngaged)
-        {
-            Engage();
-        }
-        else
-        {
-            Disengage();
-        }
+        ToggleEngage(StartEngaged);
     }
 
     public void ToggleEngage(bool engage)

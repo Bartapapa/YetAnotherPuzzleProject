@@ -28,6 +28,8 @@ public class Sc_CameraManager : MonoBehaviour
         }
     }
 
+    #region CAMERAFOCUS
+
     public void AddFocus(Sc_CameraFocus toFocus, Transform focus, int weight = 1)
     {
         Debug.Log(focus.gameObject.name + " has been added to camera focus.");
@@ -63,6 +65,10 @@ public class Sc_CameraManager : MonoBehaviour
 
         return hasFocus;
     }
+
+    #endregion
+
+    #region CAMERACOMMANDS
 
     public void RotateDefaultCamera(float degreesEuler, float overTime)
     {
@@ -143,4 +149,10 @@ public class Sc_CameraManager : MonoBehaviour
 
         _cameraShakeCO = null;
     }
+
+    public void CameraShake(CinemachineImpulseSource impulseSource, float force = 1f)
+    {
+        impulseSource.GenerateImpulseWithForce(force);
+    }
+    #endregion
 }

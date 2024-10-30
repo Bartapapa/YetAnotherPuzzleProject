@@ -21,7 +21,7 @@ public class Sc_Activateable : MonoBehaviour
 
     [Header("PARAMETERS")]
     public bool _startActivated = false;
-    private bool _isActivated = false;
+    [ReadOnly][SerializeField] private bool _isActivated = false;
     public bool IsActivated { get { return _isActivated; } set { _isActivated = value; } }
 
     [Header("CONDITIONAL ACTIVATORS")]
@@ -71,7 +71,10 @@ public class Sc_Activateable : MonoBehaviour
 
     public void Activate(bool toggleOn)
     {
-        if (toggleOn == _isActivated) return;
+        if (toggleOn == _isActivated)
+        {
+            return;
+        }
         if (Lock != null)
         {
             Lock.Spin(toggleOn);
@@ -85,8 +88,6 @@ public class Sc_Activateable : MonoBehaviour
         _isActivated = toggleOn;
         ToggleMeshMaterial(toggleOn);
 
-        OnActivate?.Invoke(toggleOn);
-
         if (toggleOn)
         {
             Debug.Log(this.name + " has been activated!");
@@ -95,6 +96,8 @@ public class Sc_Activateable : MonoBehaviour
         {
             Debug.Log(this.name + " has been deactivated!");
         }
+
+        OnActivate?.Invoke(toggleOn);
     }
 
     public void ToggleActivation()

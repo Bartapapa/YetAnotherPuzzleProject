@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,8 @@ public class Sc_Pushable : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Sc_Activateable _activateable;
+    public CinemachineImpulseSource ImpulseSource;
+    public ParticleSystem Dust;
 
     [Header("MOVEMENT")]
     public float _maxSpeed = 1f;
@@ -18,9 +21,9 @@ public class Sc_Pushable : MonoBehaviour
 
     [Header("GROUND")]
     public LayerMask _groundLayers;
-    protected RaycastHit _obstacleHit;
-    protected RaycastHit _slopeHit;
+    [SerializeField] protected bool _isGrounded = true;
     protected RaycastHit _groundHit;
+    protected RaycastHit _obstacleHit;
 
     protected Sc_CharacterController _pushedBy;
     public Sc_CharacterController PushedBy { get { return _pushedBy; } set { _pushedBy = value; } }
@@ -31,6 +34,7 @@ public class Sc_Pushable : MonoBehaviour
     public Rigidbody RB { get { return _rb; } }
     protected Vector3 _boxColliderCenter;
     protected Vector3 _boxColliderHalfExtents;
+
     protected bool _onSlope;
     protected Vector3 _cachedLastPushDirection;
     protected bool _isBeingPushed;
@@ -65,8 +69,36 @@ public class Sc_Pushable : MonoBehaviour
 
     private void FixedUpdate()
     {
+        _isGrounded = Grounded();
         HandleVelocity();
         HandleRotation();
+    }
+
+    private bool Grounded()
+    {
+        bool localIsGrounded = Physics.Raycast(transform.position + (Vector3.up * .2f), Vector3.down, out _groundHit, .5f, _groundLayers, QueryTriggerInteraction.Ignore);
+        if (localIsGrounded && !_isGrounded)
+        {
+            OnLand();
+        }
+        return localIsGrounded;
+    }
+
+    private void OnLand()
+    {
+        GroundShake();
+    }
+
+    private void GroundShake()
+    {
+        if (Sc_CameraManager.instance != null)
+        {
+            Sc_CameraManager.instance.CameraShake(ImpulseSource, .1f);
+        }
+        if (Dust)
+        {
+            Dust.Play();
+        }
     }
 
     private void HandleRotation()
@@ -105,7 +137,7 @@ public class Sc_Pushable : MonoBehaviour
 
     protected virtual bool CheckObstacle(Vector3 direction)
     {
-        Physics.BoxCast(transform.position + _boxColliderCenter, new Vector3(_boxColliderHalfExtents.x -.1f, _boxColliderHalfExtents.y - .1f, _boxColliderHalfExtents.z - .1f), direction, out _obstacleHit, transform.rotation, .3f, _groundLayers, QueryTriggerInteraction.Ignore);
+        Physics.BoxCast(transform.position + _boxColliderCenter, new Vector3(_boxColliderHalfExtents.x - .1f, _boxColliderHalfExtents.y - .1f, _boxColliderHalfExtents.z - .1f), direction, out _obstacleHit, transform.rotation, .3f, _groundLayers, QueryTriggerInteraction.Ignore);
         float angle = Vector3.Angle(Vector3.up, _obstacleHit.normal);
         return Mathf.Abs(angle) <= 1 || Mathf.Abs(angle) >= 80 ? false : true;
     }

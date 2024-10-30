@@ -212,6 +212,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnThrownInteraction:
+    m_PersistentCalls:
+      m_Calls: []
   _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
   _debugUnselectedMat: {fileID: 2100000, guid: f59c6e9ce19ff3249860e0e99d100f77, type: 2}
   _mesh: {fileID: 8261293789251523800}
@@ -253,6 +256,7 @@ MonoBehaviour:
   _debugActivatedMat: {fileID: 2100000, guid: b8e401aca5335fd4f836659a254444b5, type: 2}
   _activationMeshes:
   - {fileID: 1140826569671452615}
+  Lock: {fileID: 0}
   _startActivated: 0
   _conditions: []
   _periodicActivation: 0
@@ -272,6 +276,7 @@ MonoBehaviour:
   _activateable: {fileID: 8597429006008886909}
   _interactible: {fileID: 6500350389156150550}
   _buttonPivot: {fileID: 8942054882490839897}
+  ActivationDelay: 0.5
   _activationDuration: 10
   _onlyActivateOnPush: 0
   _source: {fileID: 2346428838816974435}

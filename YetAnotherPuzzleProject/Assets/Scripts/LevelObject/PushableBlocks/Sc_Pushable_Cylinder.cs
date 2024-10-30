@@ -54,12 +54,15 @@ public class Sc_Pushable_Cylinder : Sc_Pushable
 
     public override void Push(Vector3 direction)
     {
-        if (CheckObstacle(direction) || _onSlope) return;
-
+        if (CheckObstacle(direction) || _onSlope)
+        {
+            return;
+        }
         float dot = Vector3.Dot(direction, transform.forward);
-
-        if (dot < 1 && dot > -1) return;
-
+        if (Mathf.Abs(dot)<= .98f)
+        {
+            return;
+        }
         _pushedDirection = direction;
     }
 }

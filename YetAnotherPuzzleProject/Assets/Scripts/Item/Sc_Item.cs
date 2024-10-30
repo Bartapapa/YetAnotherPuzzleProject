@@ -10,8 +10,8 @@ public class Sc_Item : MonoBehaviour
     public ParticleSystem ItemDestroyParticles;
     public Transform MeshCenterPoint;
     [ReadOnly] public Sc_Inventory _inInventory;
-    private Rigidbody _rb;
-    private Collider _coll;
+    protected Rigidbody _rb;
+    protected Collider _coll;
     private Renderer[] _renderers;
 
     [Header("ITEM DATA")]
@@ -22,7 +22,7 @@ public class Sc_Item : MonoBehaviour
 
     [Header("THROW PARAMETERS")]
     [ReadOnly] public bool IsBeingThrown = false;
-    private Sc_Character _thrownByCharacter;
+    protected Sc_Character _thrownByCharacter;
 
     private float _destroyItemDuration = .25f;
     private float _destroyItemFlashIntensity = 2f;
@@ -63,7 +63,7 @@ public class Sc_Item : MonoBehaviour
 
     public virtual bool UseItemAsKey()
     {
-        UseItem();
+        DestroyItem();
         return true;
     }
 
@@ -151,7 +151,7 @@ public class Sc_Item : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-    private void SpreadContact()
+    protected void SpreadContact()
     {
         Vector3 positionAtContact = transform.position;
         Collider[] coll = Physics.OverlapSphere(positionAtContact, _itemData.OnContactAffectRange);
@@ -202,7 +202,17 @@ public class Sc_Item : MonoBehaviour
         //If any enemies in range of spread, stun them.
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public virtual void OnItemDrop()
+    {
+
+    }
+
+    public virtual void OnItemPickup()
+    {
+
+    }
+
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (IsBeingThrown)
         {
@@ -219,6 +229,8 @@ public class Sc_Item : MonoBehaviour
             DestroyItem();
         }
     }
+
+
 
 
 }
