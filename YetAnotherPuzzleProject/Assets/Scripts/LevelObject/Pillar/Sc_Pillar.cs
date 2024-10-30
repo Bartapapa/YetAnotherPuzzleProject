@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Sc_Pillar : MonoBehaviour
 {
-    [Header("OBJECT REFS")]
-    public Transform _headParent;
-
     [Header("LOCK")]
     public Sc_Lock Lock;
 
@@ -16,12 +14,15 @@ public class Sc_Pillar : MonoBehaviour
     public float _overTime = 1f;
     public AnimationCurve _movementCurve;
 
-    protected List<Rigidbody> _parentedRBs = new List<Rigidbody>();
+    protected List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
+    protected List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
 
     protected Rigidbody _rb;
     private Coroutine _movementCo;
     private Vector3 _bottomPos;
     private Vector3 _topPos;
+
+    private Vector3 _cachedPos;
 
     protected virtual void Awake()
     {
@@ -34,6 +35,7 @@ public class Sc_Pillar : MonoBehaviour
 
         _bottomPos = transform.position;
         _topPos = _bottomPos + (transform.up * _travelDistance);
+        _cachedPos = transform.position;
     }
 
     public void Move(bool activated)
@@ -51,15 +53,32 @@ public class Sc_Pillar : MonoBehaviour
         _movementCo = StartCoroutine(Movement(activated));
     }
 
-    private void TransmitPosition(Vector3 toPos)
+    private void TransmitVelocity(Vector3 toVel)
     {
-        foreach(Rigidbody rb in _parentedRBs)
+        foreach (Sc_CharacterController controller in _parentedControllers)
         {
-            Vector3 offset = toPos - _rb.position;
-            //Debug.Log(offset);
-            offset = new Vector3(offset.x, 0f, offset.z);
-            rb.MovePosition(rb.position + (offset*.22f));
-            //WHY .22F???? DUNNO LMAO
+            controller.InheritedVelocity += toVel;
+
+            //Vector3 offset = toPos - _rb.position;
+            ////Debug.Log(offset);
+            //offset = new Vector3(offset.x, 0f, offset.z);
+            //rb.MovePosition(rb.position + (offset*.22f));
+            ////WHY .22F???? DUNNO LMAO
+
+            //rb.velocity = rb.velocity + toVel;
+        }
+
+        foreach (Sc_Pushable pushable in _parentedPushables)
+        {
+            pushable.InheritedVelocity += toVel;
+
+            //Vector3 offset = toPos - _rb.position;
+            ////Debug.Log(offset);
+            //offset = new Vector3(offset.x, 0f, offset.z);
+            //rb.MovePosition(rb.position + (offset*.22f));
+            ////WHY .22F???? DUNNO LMAO
+
+            //rb.velocity = rb.velocity + toVel;
         }
     }
 
@@ -77,9 +96,12 @@ public class Sc_Pillar : MonoBehaviour
         float alpha = _movementCurve.Evaluate(gauge / 1f);
         Vector3 newPos = Vector3.Lerp(_bottomPos, _topPos, alpha);
         _rb.Move(newPos, _rb.rotation);
-        TransmitPosition(newPos);
+        Vector3 transmittedVel = (transform.position - _cachedPos)/Time.fixedDeltaTime;
+        TransmitVelocity(newPos);
 
         RebuildNavMesh();
+
+        _cachedPos = transform.position;
 
         if (gauge >= 1f)
         {
@@ -115,6 +137,7 @@ public class Sc_Pillar : MonoBehaviour
     {
         Vector3 fromPos = transform.position;
         Vector3 toPos = up ? _topPos : _bottomPos;
+        Vector3 transmittedVel = Vector3.zero;
         float time = 0f;
         while (time < _overTime)
         {
@@ -122,17 +145,23 @@ public class Sc_Pillar : MonoBehaviour
             Vector3 newPos = Vector3.Lerp(fromPos, toPos, alpha);
             //transform.position = newPos;
             _rb.Move(newPos, _rb.rotation);
-            TransmitPosition(newPos);
+            transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
+            TransmitVelocity(transmittedVel);
             time += Time.deltaTime;
 
             RebuildNavMesh();
 
+            _cachedPos = transform.position;
+
             yield return null;
         }
         _rb.Move(toPos, _rb.rotation);
-        TransmitPosition(toPos);
+        transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
+        TransmitVelocity(transmittedVel);
 
         RebuildNavMesh();
+
+        _cachedPos = transform.position;
         //transform.position = toPos;
         if (up)
         {
@@ -169,28 +198,54 @@ public class Sc_Pillar : MonoBehaviour
         if (character)
         {
             //character.ParentToObject(_headParent);
-            if (_parentedRBs.Contains(character.RB))
+            if (_parentedControllers.Contains(character))
             {
                 return;
             }
-            _parentedRBs.Add(character.RB);
-            Debug.Log("Added RB to platform: " + character.name);
+            _parentedControllers.Add(character);
+            Debug.Log("Added Controller to platform: " + character.name);
             return;
         }
 
         Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
         if (pushable)
         {
-            if (_parentedRBs.Contains(pushable.RB))
+            if (_parentedPushables.Contains(pushable))
             {
                 return;
             }
-            _parentedRBs.Add(pushable.RB);
-            Debug.Log("Added RB to platform: " + pushable.name);
+            _parentedPushables.Add(pushable);
+            Debug.Log("Added Pushable to platform: " + pushable.name);
+            return;
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        if (character)
+        {
+            //character.ParentToObject(_headParent);
+            if (_parentedControllers.Contains(character))
+            {
+                return;
+            }
+            _parentedControllers.Add(character);
+            Debug.Log("Added Controller to platform: " + character.name);
             return;
         }
 
-
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+        if (pushable)
+        {
+            if (_parentedPushables.Contains(pushable))
+            {
+                return;
+            }
+            _parentedPushables.Add(pushable);
+            Debug.Log("Added Pushable to platform: " + pushable.name);
+            return;
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -199,15 +254,17 @@ public class Sc_Pillar : MonoBehaviour
         if (character)
         {
             //character.ParentToObject(null);
-            _parentedRBs.Remove(character.RB);
-            Debug.Log("Removed RB from platform: " + character.name);
+            _parentedControllers.Remove(character);
+            //_parentedRBs.Remove(character.RB);
+            Debug.Log("Removed Controller from platform: " + character.name);
         }
 
         Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
         if (pushable)
         {
-            _parentedRBs.Remove(pushable.RB);
-            Debug.Log("Removed RB from platform: " + pushable.name);
+            _parentedPushables.Remove(pushable);
+            //_parentedRBs.Remove(pushable.RB);
+            Debug.Log("Removed Pushable from platform: " + pushable.name);
             return;
         }
     }

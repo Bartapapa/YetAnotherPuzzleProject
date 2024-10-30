@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5243821927142261792}
   - component: {fileID: 852444588969921673}
   - component: {fileID: 3603158565312362235}
+  - component: {fileID: 2405327801459375505}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -83,6 +84,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2405327801459375505
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3194448994627142175}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6506469712211637695
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,11 +229,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4660864542399808388}
-  - component: {fileID: 6080823278411242351}
   - component: {fileID: 7928514506142923720}
   - component: {fileID: 6982318457857571188}
   - component: {fileID: 7997201025475106202}
   - component: {fileID: 1781143009102776685}
+  - component: {fileID: 2763942358304384148}
   m_Layer: 0
   m_Name: PillarRotate_2x2
   m_TagString: Untagged
@@ -235,27 +257,6 @@ Transform:
   - {fileID: 7776176997273265829}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &6080823278411242351
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7654891711046621455}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 0.5, z: 2}
-  m_Center: {x: 0, y: -0.25, z: 0}
 --- !u!54 &7928514506142923720
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -299,9 +300,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 7997201025475106202}
-        m_TargetAssemblyTypeName: Sc_Pillar, Assembly-CSharp
-        m_MethodName: Move
-        m_Mode: 0
+        m_TargetAssemblyTypeName: Sc_Pillar_Rotate, Assembly-CSharp
+        m_MethodName: StartRotate
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -319,10 +320,11 @@ MonoBehaviour:
   _activationMeshes:
   - {fileID: 5243821927142261792}
   - {fileID: 3994583345902668507}
+  Lock: {fileID: 0}
   _startActivated: 0
   _conditions: []
-  _periodicActivation: 0
-  _activationDuration: 10
+  _periodicActivation: 1
+  _activationDuration: 5
 --- !u!114 &7997201025475106202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,7 +337,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38031fc7121fdd4bb9b5142ad0e068d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _headParent: {fileID: 0}
+  Lock: {fileID: 0}
   _travelDistance: 4
   _overTime: 4
   _movementCurve:
@@ -344,26 +346,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   _rotateAngle: 90
-  _rotateOverTime: 1
+  _rotateOverTime: 4
 --- !u!65 &1781143009102776685
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -383,8 +385,42 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.4, y: 1, z: 1.4}
+  m_Size: {x: 1.8, y: 1, z: 1.8}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2763942358304384148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7654891711046621455}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d84464d6b58c1f4e9ecfd6249902609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnCompletionChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7997201025475106202}
+        m_TargetAssemblyTypeName: Sc_Pillar_Rotate, Assembly-CSharp
+        m_MethodName: GaugeRotate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  Lock: {fileID: 0}
+  _completion: 0
+  _interpolateCompletion: 0
+  _completionRate: 2
+  _depletionRate: 0
+  _maxCompletion: 99
+  _looping: 0
 --- !u!1 &7975966406870833888
 GameObject:
   m_ObjectHideFlags: 0

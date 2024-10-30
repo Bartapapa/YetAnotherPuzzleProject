@@ -32,6 +32,8 @@ public class Sc_CharacterController : MonoBehaviour
     public bool CanMove { get { return _canMove; } set { _canMove = value; } }
     public bool CanRotate { get { return _canRotate; } set { _canRotate = value; } }
     private Vector3 _forcedLookAtDir = Vector3.zero;
+    [ReadOnly] public Vector3 InheritedVelocity = Vector3.zero;
+    [ReadOnly] public float InheritedYaw = 0f;
 
     [Header("PARTICLES")]
     public ParticleSystem _runParticles;
@@ -268,6 +270,8 @@ public class Sc_CharacterController : MonoBehaviour
                     if (_lookInputVector.sqrMagnitude > 0f && _rotationSharpness > 0f)
                     {
                         Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, _lookInputVector, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+                        smoothedLookInputDirection = Quaternion.Euler(0f, InheritedYaw, 0f) * smoothedLookInputDirection;
+
                         if (_isPushingBlock)
                         {
                             smoothedLookInputDirection = Vector3.Slerp(transform.forward, _pushDirection, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
@@ -275,6 +279,16 @@ public class Sc_CharacterController : MonoBehaviour
 
                         if (!_canRotate) break;
                         transform.forward = smoothedLookInputDirection;
+                        InheritedYaw = 0f;
+                    }
+                    else
+                    {
+                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, transform.forward, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+                        smoothedLookInputDirection = Quaternion.Euler(0f, InheritedYaw, 0f) * smoothedLookInputDirection;
+
+                        if (!_canRotate) break;
+                        transform.forward = smoothedLookInputDirection;
+                        InheritedYaw = 0f;
                     }
                 }
                 else
@@ -285,6 +299,7 @@ public class Sc_CharacterController : MonoBehaviour
 
                         if (!_canRotate) break;
                         transform.forward = smoothedLookInputDirection;
+                        InheritedYaw = 0f;
                     }
                 }
 
@@ -293,6 +308,7 @@ public class Sc_CharacterController : MonoBehaviour
             case CharacterState.Anchored:
                 if (!_canRotate) break;
                 _rb.rotation = _anchor.rotation;
+                InheritedYaw = 0f;
                 break;
 
         }
@@ -316,6 +332,8 @@ public class Sc_CharacterController : MonoBehaviour
                         Vector3 reorientedInput = Vector3.Cross(groundNormal, inputRight).normalized * _moveInputVector.magnitude;
 
                         Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
+                        targetMovementVelocity = targetMovementVelocity + InheritedVelocity;
+                        InheritedVelocity = Vector3.zero;
                         if (!_canMove) targetMovementVelocity = Vector3.zero;
                         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_groundedMovementSharpness * Time.fixedDeltaTime));
 
@@ -342,6 +360,7 @@ public class Sc_CharacterController : MonoBehaviour
                             if (!_canMove) addedVelocity = Vector3.zero;
                             _rb.velocity += addedVelocity;
                         }
+                        InheritedVelocity = Vector3.zero;
                         _rb.velocity += _gravity * Time.fixedDeltaTime;
 
                         _rb.velocity *= (1f / (1f + (_airDrag * Time.fixedDeltaTime)));
@@ -353,6 +372,7 @@ public class Sc_CharacterController : MonoBehaviour
                 {
                     Vector3 targetClimbVelocity = new Vector3(0f, _maxClimbSpeed * _climbInputVector.y, 0f);
                     if (!_canMove) targetClimbVelocity = Vector3.zero;
+                    InheritedVelocity = Vector3.zero;
                     _rb.velocity = Vector3.Lerp(_rb.velocity, targetClimbVelocity, 1f - Mathf.Exp(-_climbMovementSharpness * Time.fixedDeltaTime));
 
                     if (transform.position.y >= _topOfLadder.y)

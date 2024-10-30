@@ -94,7 +94,7 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
         reorientedInput = Vector3.ProjectOnPlane(reorientedInput, Vector3.up);
         reorientedInput = reorientedInput.normalized;
 
-        Vector3 smoothedLookInputDirection = Vector3.Lerp(transform.forward, reorientedInput, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+        Vector3 smoothedLookInputDirection = Vector3.MoveTowards(transform.forward, reorientedInput, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
         transform.forward = smoothedLookInputDirection;
     }
 

@@ -13,6 +13,8 @@ public class Sc_Pushable : MonoBehaviour
     public float _speedSharpness = 15f;
     public Vector3 _gravity = new Vector3(0f, -30f, 0f);
     protected Vector3 _pushedDirection = Vector3.zero;
+    [ReadOnly] public Vector3 InheritedVelocity = Vector3.zero;
+    [ReadOnly] public float InheritedYaw = 0f;
 
     [Header("GROUND")]
     public LayerMask _groundLayers;
@@ -64,6 +66,16 @@ public class Sc_Pushable : MonoBehaviour
     private void FixedUpdate()
     {
         HandleVelocity();
+        HandleRotation();
+    }
+
+    private void HandleRotation()
+    {
+        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, transform.forward, 1 - Mathf.Exp(-10f * Time.fixedDeltaTime)).normalized;
+        smoothedLookInputDirection = Quaternion.Euler(0f, InheritedYaw, 0f) * smoothedLookInputDirection;
+
+        transform.forward = smoothedLookInputDirection;
+        InheritedYaw = 0f;
     }
 
     private void HandleVelocity()
@@ -77,6 +89,8 @@ public class Sc_Pushable : MonoBehaviour
         //targetMovementVelocity += _gravity * Time.fixedDeltaTime;
         float rbYVelocity = _rb.velocity.y + (_gravity.y * Time.fixedDeltaTime);
         targetMovementVelocity = new Vector3(targetMovementVelocity.x, rbYVelocity, targetMovementVelocity.z);
+        targetMovementVelocity = targetMovementVelocity + new Vector3(InheritedVelocity.x, 0f, InheritedVelocity.z);
+        InheritedVelocity = Vector3.zero;
         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_speedSharpness * Time.fixedDeltaTime));
         //_rb.velocity += _gravity * Time.fixedDeltaTime;
     }

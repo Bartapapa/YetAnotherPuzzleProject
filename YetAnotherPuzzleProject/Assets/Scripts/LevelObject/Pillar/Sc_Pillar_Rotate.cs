@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.UI.Image;
 
 public class Sc_Pillar_Rotate : Sc_Pillar
 {
@@ -30,21 +32,58 @@ public class Sc_Pillar_Rotate : Sc_Pillar
     {
         //angle = angle * .22f;
 
-        foreach (Rigidbody rb in _parentedRBs)
+        foreach (Sc_CharacterController controller in _parentedControllers)
         {
-            Vector3 point = new Vector3(rb.position.x, 0f, rb.position.z);
+            Vector3 point = new Vector3(controller.transform.position.x, 0f, controller.transform.position.z);
             Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
             Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
-            toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
+            toPoint = new Vector3(toPoint.x, 0f, toPoint.y);
+            Vector3 toVel = (toPoint - point)/Time.fixedDeltaTime;
 
-            //Vector3 euler = rb.rotation.eulerAngles;
-            //euler = new Vector3(euler.x, euler.y -angle, euler.z);
-            //Quaternion newRot = Quaternion.Euler(euler);
+            controller.InheritedVelocity += toVel * .485f;
+            controller.InheritedYaw -= angle * .48f;
 
-            //rb.MovePosition(toPoint);
-            Quaternion toRot = rb.transform.rotation * difference;
-            rb.Move(toPoint, toRot);
-            //rb.transform.rotation = Quaternion.Slerp(rb.transform.rotation, rb.transform.rotation * difference, .5f);
+
+            //Vector3 point = new Vector3(rb.position.x, 0f, rb.position.z);
+            //Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
+            //Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
+            //toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
+
+            ////Vector3 euler = rb.rotation.eulerAngles;
+            ////euler = new Vector3(euler.x, euler.y -angle, euler.z);
+            ////Quaternion newRot = Quaternion.Euler(euler);
+
+            ////rb.MovePosition(toPoint);
+            //Quaternion toRot = rb.transform.rotation * difference;
+            //rb.Move(toPoint, toRot);
+            ////rb.transform.rotation = Quaternion.Slerp(rb.transform.rotation, rb.transform.rotation * difference, .5f);
+        }
+
+        foreach (Sc_Pushable pushable in _parentedPushables)
+        {
+            Vector3 point = new Vector3(pushable.transform.position.x, 0f, pushable.transform.position.z);
+            Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
+            Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
+            toPoint = new Vector3(toPoint.x, 0f, toPoint.y);
+            Vector3 toVel = (toPoint - point) / Time.fixedDeltaTime;
+
+            pushable.InheritedVelocity += toVel * .50f;
+            pushable.InheritedYaw -= angle * .48f;
+
+
+            //Vector3 point = new Vector3(rb.position.x, 0f, rb.position.z);
+            //Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
+            //Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
+            //toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
+
+            ////Vector3 euler = rb.rotation.eulerAngles;
+            ////euler = new Vector3(euler.x, euler.y -angle, euler.z);
+            ////Quaternion newRot = Quaternion.Euler(euler);
+
+            ////rb.MovePosition(toPoint);
+            //Quaternion toRot = rb.transform.rotation * difference;
+            //rb.Move(toPoint, toRot);
+            ////rb.transform.rotation = Quaternion.Slerp(rb.transform.rotation, rb.transform.rotation * difference, .5f);
         }
     }
 
@@ -81,14 +120,14 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
         Vector3 euler = new Vector3(0f, _rotateAngle * gauge, 0f);     
         Quaternion newRot = Quaternion.Euler(euler);
-        float angle = Quaternion.Angle(transform.rotation, newRot);
+        float angle = Quaternion.Angle(_rb.rotation, newRot);
         Quaternion difference = Quaternion.Inverse(transform.rotation) * newRot;
         //_rb.MoveRotation(newRot);
         //euler = transform.rotation.eulerAngles;
         //euler = new Vector3(euler.x, euler.y - angle, euler.z);
         //newRot = Quaternion.Euler(euler);
-        transform.rotation = newRot;
-        //_rb.MoveRotation(newRot);
+        //transform.rotation = newRot;
+        _rb.MoveRotation(newRot);
 
         if (gauge >= _cachedGauge)
         {
