@@ -49,3 +49,5 @@ MonoBehaviour:
   MusicVolume: 1
   SFXVolume: 1
   MusicSource: {fileID: 0}
+  ASOprefab: {fileID: 249035509425408681, guid: 707be2645f1663d4b89f55bea91db75a,
+    type: 3}

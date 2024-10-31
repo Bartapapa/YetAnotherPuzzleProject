@@ -75,7 +75,7 @@ GameObject:
   - component: {fileID: 3710368202969151758}
   - component: {fileID: 463824126832822998}
   m_Layer: 9
-  m_Name: 0_RandomTreasure
+  m_Name: 192_RandomRare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -114,9 +114,14 @@ MonoBehaviour:
     type: 3}
   MeshCenterPoint: {fileID: 3214937345842884796}
   _inInventory: {fileID: 0}
-  _itemData: {fileID: 11400000, guid: c9d3a72576344db4196c77b6119beb9b, type: 2}
+  _itemData: {fileID: 11400000, guid: 045a1c6dad62ada479bd6f8e3bb10401, type: 2}
   IsEquipped: 0
   IsBeingThrown: 0
+  Source: {fileID: 0}
+  Store: {fileID: 0}
+  Equip: {fileID: 0}
+  Drop: {fileID: 0}
+  Break: {fileID: 0}
 --- !u!1 &8856820706372577631
 GameObject:
   m_ObjectHideFlags: 0

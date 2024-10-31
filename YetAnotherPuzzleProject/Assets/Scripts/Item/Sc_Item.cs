@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -24,14 +25,24 @@ public class Sc_Item : MonoBehaviour
     [ReadOnly] public bool IsBeingThrown = false;
     protected Sc_Character _thrownByCharacter;
 
+    [Header("Sounds")]
+    public AudioSource Source;
+    public AudioClip Store;
+    public AudioClip Equip;
+    public AudioClip Drop;
+    public AudioClip Break;
+
     private float _destroyItemDuration = .25f;
     private float _destroyItemFlashIntensity = 2f;
 
     private Vector3 _treasureAcquireOffset = new Vector3(0f, 2f, 0f);
     private Transform _treasureAcquireAnchor = null;
     private Vector3 _treasureAcquirePoint = Vector3.zero;
-    private float _treasureAcquireLifetime = 1f;
+    private float _commonTreasureLifetime = 1.5f;
+    private float _rareTreasureLifetime = 2f;
+    private float _veryRareTreasureLifetime = 3f;
     private bool _acquire;
+
 
     private void Start()
     {
@@ -77,17 +88,44 @@ public class Sc_Item : MonoBehaviour
     private IEnumerator AcquireTreasureCoroutine()
     {
         float timer = 0f;
-        while (timer < _treasureAcquireLifetime)
+        Vector3 dir = -Camera.main.transform.forward;
+        ParticleSystem particles;
+        float lifetime = 1f;
+        switch (_itemData.Rarity)
+        {
+            case TreasureRarity.Common:
+                lifetime = _commonTreasureLifetime;
+                particles = Instantiate<ParticleSystem>(Sc_TreasureManager.instance.CommonParticles, _treasureAcquirePoint + _treasureAcquireOffset, Quaternion.identity, Sc_GameManager.instance.CurrentLevel.transform);
+                break;
+            case TreasureRarity.Rare:
+                lifetime = _rareTreasureLifetime;
+                particles = Instantiate<ParticleSystem>(Sc_TreasureManager.instance.RareParticles, _treasureAcquirePoint + _treasureAcquireOffset, Quaternion.identity, Sc_GameManager.instance.CurrentLevel.transform);
+                break;
+            case TreasureRarity.VeryRare:
+                lifetime = _veryRareTreasureLifetime;
+                particles = Instantiate<ParticleSystem>(Sc_TreasureManager.instance.VeryRareParticles, _treasureAcquirePoint + _treasureAcquireOffset, Quaternion.identity, Sc_GameManager.instance.CurrentLevel.transform);
+                break;
+            default:
+                lifetime = _commonTreasureLifetime;
+                particles = Instantiate<ParticleSystem>(Sc_TreasureManager.instance.CommonParticles, _treasureAcquirePoint + _treasureAcquireOffset, Quaternion.identity, Sc_GameManager.instance.CurrentLevel.transform);
+                break;
+        }
+        while (timer < lifetime)
         {
             if (_treasureAcquireAnchor != null)
             {
                 _treasureAcquirePoint = _treasureAcquireAnchor.position;
             }
+            if (particles != null)
+            {
+                particles.transform.position = _treasureAcquirePoint + _treasureAcquireOffset;
+            }
             transform.position = _treasureAcquirePoint + _treasureAcquireOffset;
+            transform.forward = dir;
             timer += Time.deltaTime;
             yield return null;
         }
-        DestroyItem();
+        TreasureDisappear();
     }
 
     public virtual void ThrowItem(Sc_Character throwingCharacter, Vector3 throwDirection)
@@ -114,6 +152,52 @@ public class Sc_Item : MonoBehaviour
     private IEnumerator ThrowCoroutine()
     {
         yield return null;
+    }
+
+    public void TreasureDisappear()
+    {
+        if (_inInventory != null)
+        {
+            _inInventory.DropItem(this);
+        }
+        StartCoroutine(DisappearTreasureCo());
+    }
+
+    private IEnumerator DisappearTreasureCo()
+    {
+        float timer = 0f;
+        while (timer < _destroyItemDuration)
+        {
+            timer += Time.deltaTime;
+
+            foreach (Renderer rend in _renderers)
+            {
+                foreach (Material mat in rend.materials)
+                {
+                    mat.color = Color.white * ((timer / _destroyItemDuration) * _destroyItemFlashIntensity);
+                }
+            }
+            yield return null;
+        }
+
+        if (ItemDestroyParticles)
+        {
+            ParticleSystem particles = Instantiate<ParticleSystem>(ItemDestroyParticles, MeshCenterPoint.position, Quaternion.identity);
+        }
+
+        OnTreasureDisappear();
+    }
+
+    public void OnTreasureDisappear()
+    {
+        if (Sc_GameManager.instance != null)
+        {
+            //Sc_GameManager.instance.SoundManager.PlaySFX(Source, Break);
+            //Sc_GameManager.instance.SoundManager.CreateAudioSourceObject(Break, transform.position, .5f);
+        }
+
+        StopAllCoroutines();
+        Destroy(this.gameObject);
     }
 
     public void DestroyItem()
@@ -147,8 +231,7 @@ public class Sc_Item : MonoBehaviour
             ParticleSystem particles = Instantiate<ParticleSystem>(ItemDestroyParticles, MeshCenterPoint.position, Quaternion.identity);
         }
 
-        StopAllCoroutines();
-        Destroy(this.gameObject);
+        OnItemDestroyed();
     }
 
     protected void SpreadContact()
@@ -204,12 +287,39 @@ public class Sc_Item : MonoBehaviour
 
     public virtual void OnItemDrop()
     {
-
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.SoundManager.PlaySFX(Source, Drop, new Vector2(.9f, 1f));
+        }
     }
 
-    public virtual void OnItemPickup()
+    public virtual void OnItemStore()
     {
+        if (Sc_GameManager.instance != null)
+        {
+            //Sc_GameManager.instance.SoundManager.PlaySFX(Source, Store);
+            Sc_GameManager.instance.SoundManager.CreateAudioSourceObject(Store, transform.position, .3f);
+        }
+    }
 
+    public virtual void OnItemEquip()
+    {
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.SoundManager.PlaySFX(Source, Equip, new Vector2(.9f, 1f));
+        }
+    }
+
+    public virtual void OnItemDestroyed()
+    {
+        if (Sc_GameManager.instance != null)
+        {
+            //Sc_GameManager.instance.SoundManager.PlaySFX(Source, Break);
+            Sc_GameManager.instance.SoundManager.CreateAudioSourceObject(Break, transform.position, .5f);
+        }
+
+        StopAllCoroutines();
+        Destroy(this.gameObject);
     }
 
     protected virtual void OnCollisionEnter(Collision collision)

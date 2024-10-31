@@ -15,7 +15,7 @@ MonoBehaviour:
   _id: 105
   _name: Torus_Red
   _itemType: 2
-  Rarity: 1
+  Rarity: 3
   ThrowForce: 1
   SpinForce: {x: 0, y: 0, z: 0.2}
   OnContactAffectRange: 0.6

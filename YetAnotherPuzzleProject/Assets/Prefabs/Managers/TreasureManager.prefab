@@ -57,3 +57,12 @@ MonoBehaviour:
   - {fileID: 463824126832822998, guid: 2b87621f20610fd4987b3481cec52e58, type: 3}
   - {fileID: 463824126832822998, guid: 84d37d282a1361048923c82afe7b0236, type: 3}
   _foundTreasures: []
+  CommonParticles: {fileID: 4648991780238432369, guid: 3ffad891efbac7b459afb3e6b3da764d,
+    type: 3}
+  RareParticles: {fileID: 8160217462825025623, guid: 71835b25a1b6aa04282cc9d461f0ea1c,
+    type: 3}
+  VeryRareParticles: {fileID: 281797824080258186, guid: 286d385ad6734a84f8346f95bf8e7ee2,
+    type: 3}
+  CommonTreasure: {fileID: 8300000, guid: 762a38c0f79e40b48af67b123ce6c7cb, type: 3}
+  RareTreasure: {fileID: 8300000, guid: 2e2290c56cc276d4a8725ce0195cf3f8, type: 3}
+  VeryRareTreasure: {fileID: 8300000, guid: c373c72bf431e7044a985951d538994b, type: 3}

@@ -13,8 +13,8 @@ public enum TreasureRarity
 {
     None,
     Common,
-    Exotic,
-    Legendary
+    Rare,
+    VeryRare
 }
 
 [CreateAssetMenu(menuName = "YetAnotherPuzzleProject/Item/ItemData", fileName = "ID_#_ItemName")]

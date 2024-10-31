@@ -6135,6 +6135,8 @@ MonoBehaviour:
   _airMovementSharpness: 15
   _airDrag: 0
   _gravity: {x: 0, y: -30, z: 0}
+  InheritedVelocity: {x: 0, y: 0, z: 0}
+  InheritedYaw: 0
   _runParticles: {fileID: 5573489547609364782}
   _weight: 10
   _groundCheckEmissionPoint: {fileID: 8898206127385556764}
@@ -6146,7 +6148,7 @@ MonoBehaviour:
   _pushCheckDistance: 1
   _characterHeight: 1.4
   _characterRadius: 0.5
-  _pushRequestTime: 0.5
+  _pushRequestTime: 0.3
   _pushableObjectLayers:
     serializedVersion: 2
     m_Bits: 256
@@ -6242,6 +6244,8 @@ MonoBehaviour:
   _quack: {fileID: 8300000, guid: 07594957d7f841c40ab228dd731c39fb, type: 3}
   _duckParticles: {fileID: 8084786853120568642}
   _minMaxQuackPitch: {x: 1, y: 1.1}
+  _throw: {fileID: 8300000, guid: 4b918783e453d584cb24f5e0ce75fadf, type: 3}
+  _minMaxThrowPitch: {x: 1, y: 1.1}
   _footstepDelay: 0.28
   _footsteps:
   - {fileID: 8300000, guid: 0798c3391d61c3947a042ccdfc567a83, type: 3}

@@ -18,8 +18,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
     Quaternion _originalRot;
     Quaternion _destRot;
 
-    private float _cachedGauge = 0f;
-
     protected override void Awake()
     {
         base.Awake();
@@ -129,13 +127,18 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         //transform.rotation = newRot;
         _rb.MoveRotation(newRot);
 
-        if (gauge >= _cachedGauge)
+        Debug.Log(111);
+        if (gauge > _cachedGauge)
         {
+            Debug.Log(222);
             TransmitRotation(-angle, difference);
+            ContinuousStoneScrape(true);
         }
-        else
+        else if(gauge < _cachedGauge)
         {
+            Debug.Log(333);
             TransmitRotation(angle, difference);
+            ContinuousStoneScrape(false);
         }
 
         RebuildNavMesh();
@@ -173,10 +176,13 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         Quaternion difference;
         Quaternion originalRot = _rb.rotation;
         Quaternion destRot = Quaternion.Euler(_rb.rotation.eulerAngles + new Vector3(0, _rotateAngle, 0f));
+
         //Vector3 originalRot = transform.rotation.eulerAngles;
         //Vector3 toEulerRot = transform.rotation.eulerAngles + new Vector3(0f, transform.rotation.eulerAngles.y + _rotateAngle, 0f);
         while (time < _rotateOverTime)
         {
+            ContinuousStoneScrape(true);
+
             float alpha = _movementCurve.Evaluate(time / _rotateOverTime);
             Quaternion toRot = Quaternion.Lerp(originalRot, destRot, alpha);
             angle = Quaternion.Angle(_rb.rotation, toRot);
@@ -217,6 +223,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
         _rotateCo = null;
 
-        Move(false);
+        //Move(false);
     }
 }

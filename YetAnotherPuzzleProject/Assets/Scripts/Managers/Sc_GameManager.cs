@@ -78,6 +78,15 @@ public class Sc_GameManager : MonoBehaviour
         }
     }
 
+    #region GENERAL FUNCTIONS
+    private void PurgeAllManagerCoroutines()
+    {
+        Debug.Log("STOP");
+        SoundManager.StopCos();
+    }
+    #endregion
+
+    #region LOADING
     private void OnSceneFinishedLoad(Scene scene, LoadSceneMode mode)
     {
         int sceneID = scene.buildIndex;
@@ -105,6 +114,8 @@ public class Sc_GameManager : MonoBehaviour
     public void Load(Loader.Scene scene)
     {
         if (_isLoading) return;
+        Debug.Log("LOADING");
+        OnBeforeLoadNewLevel();
 
         if (Sc_UIManager.instance != null)
         {
@@ -117,6 +128,12 @@ public class Sc_GameManager : MonoBehaviour
         {
             return;
         }
+    }
+
+    private void OnBeforeLoadNewLevel()
+    {
+        Debug.Log("PURGING");
+        PurgeAllManagerCoroutines();
     }
 
     private void TwinUnloadLoad(Loader.Scene unloadScene, Loader.Scene loadScene)
@@ -135,6 +152,8 @@ public class Sc_GameManager : MonoBehaviour
         TwinUnloadLoad(unloadScene, loadScene);
         _isLoading = false;
     }
+
+    #endregion
 
     #region GAMESTATE
     public void TransitionToGameState(GameState toState)

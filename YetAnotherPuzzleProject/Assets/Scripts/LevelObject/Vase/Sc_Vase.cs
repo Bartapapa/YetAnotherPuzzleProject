@@ -58,23 +58,38 @@ public class Sc_Vase : MonoBehaviour
             case ItemType.Item:
                 break;
             case ItemType.Treasure:
-                if (foundItem._itemData.ID == 100)
+                if (Sc_TreasureManager.instance == null)
+                {
+                    NoTreasure();
+                    return;
+                }
+
+                if (foundItem._itemData.ID == 190)
                 {
                     //Found a random treasure.
-                    if (Sc_TreasureManager.instance != null)
-                    {
-                        foundItem = Sc_TreasureManager.instance.FindRandomNewTreasure();
-                        if (foundItem == null)
-                        {
-                            NoTreasure();
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        NoTreasure();
-                        return;
-                    }
+                    foundItem = Sc_TreasureManager.instance.FindRandomNewTreasure();
+                }
+                else if (foundItem._itemData.ID == 191)
+                {
+                    //Found a random common treasure.
+                    foundItem = Sc_TreasureManager.instance.FindRandomNewCommonTreasure();
+                }
+                else if (foundItem._itemData.ID == 192)
+                {
+                    //Found a random rare treasure.
+                    foundItem = Sc_TreasureManager.instance.FindRandomNewRareTreasure();
+                }
+                else if (foundItem._itemData.ID == 193)
+                {
+                    //Found a random very rare treasure.
+                    foundItem = Sc_TreasureManager.instance.FindRandomNewVeryRareTreasure();
+                    Debug.Log(foundItem);
+                }
+
+                if (foundItem == null)
+                {
+                    NoTreasure();
+                    return;
                 }
                 break;
         }

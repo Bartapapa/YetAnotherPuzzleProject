@@ -19,6 +19,18 @@ public class Sc_Pushable : MonoBehaviour
     [ReadOnly] public Vector3 InheritedVelocity = Vector3.zero;
     [ReadOnly] public float InheritedYaw = 0f;
 
+    [Header("SOUND")]
+    public AudioSource Source;
+    public AudioClip PushLoop;
+    public float PushLoopVolume = .3f;
+    public AudioClip Land;
+    public float LandVolume = .5f;
+    public Vector2 MinMaxLandPitch = new Vector2(.9f, 1f);
+
+    private float _pushLoopTimer = 0f;
+    private float _pushLoopCallDuration = .3f;
+    private bool _loopSound = false;
+
     [Header("GROUND")]
     public LayerMask _groundLayers;
     [SerializeField] protected bool _isGrounded = true;
@@ -45,6 +57,49 @@ public class Sc_Pushable : MonoBehaviour
     private void Start()
     {
         InitializePushable();
+    }
+
+    private void Update()
+    {
+        HandlePushSound();
+    }
+
+    private void HandlePushSound()
+    {
+        if (_pushLoopTimer < _pushLoopCallDuration && _loopSound)
+        {
+            _pushLoopTimer += Time.deltaTime;
+        }
+        else
+        {
+            StopPushSound();
+        }
+    }
+
+    private void StopPushSound()
+    {
+        if (!_loopSound) return;
+
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.SoundManager.FadeOut(Source, .2f);
+        }
+        _pushLoopTimer = -99f;
+        _loopSound = false;
+    }
+
+    private void PushSound()
+    {
+        if (!_loopSound)
+        {
+            if (Sc_GameManager.instance != null)
+            {
+                Sc_GameManager.instance.SoundManager.PlayLoopingSFX(Source, PushLoop);
+                Sc_GameManager.instance.SoundManager.FadeIn(Source, .2f, PushLoopVolume);
+            }
+            _loopSound = true;
+        }
+        _pushLoopTimer = 0f;
     }
 
     protected virtual void InitializePushable()
@@ -87,6 +142,15 @@ public class Sc_Pushable : MonoBehaviour
     private void OnLand()
     {
         GroundShake();
+        LandSound();
+    }
+
+    private void LandSound()
+    {
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.SoundManager.PlaySFX(Source, Land, LandVolume, MinMaxLandPitch);
+        }
     }
 
     private void GroundShake()
@@ -115,8 +179,15 @@ public class Sc_Pushable : MonoBehaviour
         Vector3 targetMovementVelocity = Vector3.zero;
         if (_pushedDirection != Vector3.zero)
         {
+            //Pushable has been pushed - play continuous sound.
+            PushSound();
+
             targetMovementVelocity = _pushedDirection * _maxSpeed;
             _pushedDirection = Vector3.zero;
+        }
+        else
+        {
+            StopPushSound();
         }
         //targetMovementVelocity += _gravity * Time.fixedDeltaTime;
         float rbYVelocity = _rb.velocity.y + (_gravity.y * Time.fixedDeltaTime);

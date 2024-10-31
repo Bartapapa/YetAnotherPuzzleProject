@@ -51,7 +51,7 @@ MonoBehaviour:
   SoundManager: {fileID: 6406465733144814101}
   TreasureManager: {fileID: 4018043597503164465}
   CurrentLevel: {fileID: 0}
-  BaseData: {fileID: 11400000, guid: 06fc966969d42b046a9753bd4340248a, type: 2}
+  OverrideData: {fileID: 0}
   CurrentData: {fileID: 0}
   _startGameState: 0
   _currentGameState: 0
@@ -113,6 +113,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2584955038609451881, guid: 5aae1b0d1b0363840a4e41d193ddabca,
+        type: 3}
+      propertyPath: RareTreasure
+      value: 
+      objectReference: {fileID: 8300000, guid: 2e2290c56cc276d4a8725ce0195cf3f8, type: 3}
+    - target: {fileID: 2584955038609451881, guid: 5aae1b0d1b0363840a4e41d193ddabca,
+        type: 3}
+      propertyPath: CommonTreasure
+      value: 
+      objectReference: {fileID: 8300000, guid: 762a38c0f79e40b48af67b123ce6c7cb, type: 3}
+    - target: {fileID: 2584955038609451881, guid: 5aae1b0d1b0363840a4e41d193ddabca,
+        type: 3}
+      propertyPath: VeryRareTreasure
+      value: 
+      objectReference: {fileID: 8300000, guid: c373c72bf431e7044a985951d538994b, type: 3}
     - target: {fileID: 5742321251958899050, guid: 5aae1b0d1b0363840a4e41d193ddabca,
         type: 3}
       propertyPath: m_Name

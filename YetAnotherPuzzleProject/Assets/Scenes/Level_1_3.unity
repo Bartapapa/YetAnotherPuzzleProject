@@ -3503,7 +3503,7 @@ PrefabInstance:
     - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
       propertyPath: _toLevel
-      value: 5
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8233131079191082521, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
@@ -5318,6 +5318,80 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883382217}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &886722717
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1262159507}
+    m_Modifications:
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079802378645112028, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_Name
+      value: Vase_Treasure
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93a44b05b7ab4f244bf0b543a43a248d, type: 3}
+--- !u!4 &886722718 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+    type: 3}
+  m_PrefabInstance: {fileID: 886722717}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &889493460
 Mesh:
   m_ObjectHideFlags: 0
@@ -6918,6 +6992,8 @@ Transform:
   - {fileID: 1953243554}
   - {fileID: 960997761}
   - {fileID: 592740991}
+  - {fileID: 886722718}
+  - {fileID: 1605919082}
   m_Father: {fileID: 445569200}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &1302636485
@@ -9501,6 +9577,86 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!1001 &1605919081
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1262159507}
+    m_Modifications:
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -6.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3138036077720695928, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: _rewards.Array.data[0].itemRewards.Array.data[0]
+      value: 
+      objectReference: {fileID: 463824126832822998, guid: 4dbb7fdf8566b144699c858139773b76,
+        type: 3}
+    - target: {fileID: 9079802378645112028, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_Name
+      value: Vase_Treasure (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93a44b05b7ab4f244bf0b543a43a248d, type: 3}
+--- !u!4 &1605919082 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1176521346374917077, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1605919081}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1624890185
 GameObject:
   m_ObjectHideFlags: 0

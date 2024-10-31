@@ -19,6 +19,10 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
     public ParticleSystem _duckParticles;
     public Vector2 _minMaxQuackPitch = new Vector2(1f, 1f);
 
+    [Header("THROW")]
+    public AudioClip _throw;
+    public Vector2 _minMaxThrowPitch = new Vector2(1f, 1f);
+
     [Header("FOOTSTEPS")]
     public float _footstepDelay = .33f;
     public List<AudioClip> _footsteps = new List<AudioClip>();
@@ -40,6 +44,14 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
         PlayerCharacter.Controller.OnGroundedMovement += OnGroundedMovement;
         PlayerCharacter.Controller.OnAerialMovement += OnAerialMovement;
         PlayerCharacter.Controller.OnLanded += OnLanded;
+
+        PlayerCharacter.Inventory.ItemThrown -= OnItemThrown;
+        PlayerCharacter.Inventory.ItemDropped -= OnItemDropped;
+        PlayerCharacter.Inventory.ItemPickedUp -= OnItemPickedup;
+
+        PlayerCharacter.Inventory.ItemThrown += OnItemThrown;
+        PlayerCharacter.Inventory.ItemDropped += OnItemDropped;
+        PlayerCharacter.Inventory.ItemPickedUp += OnItemPickedup;
     }
 
     private void OnDisable()
@@ -47,6 +59,10 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
         PlayerCharacter.Controller.OnGroundedMovement -= OnGroundedMovement;
         PlayerCharacter.Controller.OnAerialMovement -= OnAerialMovement;
         PlayerCharacter.Controller.OnLanded -= OnLanded;
+
+        PlayerCharacter.Inventory.ItemThrown -= OnItemThrown;
+        PlayerCharacter.Inventory.ItemDropped -= OnItemDropped;
+        PlayerCharacter.Inventory.ItemPickedUp -= OnItemPickedup;
     }
 
     public void Grunt()
@@ -60,6 +76,11 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
         _duckParticles.Play();
 
         GenerateSoundObject(PlayerCharacter.gameObject, transform.position, 1f, 1f, PlayerCharacter);
+    }
+
+    public void Throw()
+    {
+        Sc_GameManager.instance.SoundManager.PlaySFX(MouthSource, _throw, _minMaxThrowPitch);
     }
 
     public void StartFootsteps()
@@ -126,7 +147,22 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
     {
         if (rb.velocity.y >= _landingThreshold) return;
         Sc_GameManager.instance.SoundManager.PlayRandomSFX(MouthSource, _landing, new Vector2(.8f, 1.1f));
-        Grunt();
+        //Grunt();
+    }
+
+    private void OnItemThrown(Sc_Item item)
+    {
+        Throw();
+    }
+
+    private void OnItemDropped(Sc_Item item)
+    {
+
+    }
+
+    private void OnItemPickedup(Sc_Item item)
+    {
+
     }
 
     #endregion

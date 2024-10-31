@@ -8712,6 +8712,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9021106798358883316, guid: 503315248fcf8a04fae98fe0efd5345c,
         type: 3}
+      propertyPath: _frontBlockElement
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9021106798358883316, guid: 503315248fcf8a04fae98fe0efd5345c,
+        type: 3}
       propertyPath: _rightBlockElement
       value: 0
       objectReference: {fileID: 0}
@@ -12288,6 +12293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentScene: 7
+  CanBeReloaded: 1
+  NMSurface: {fileID: 0}
   _minMaxXZLevelDimensions: {x: -10, y: 10, z: -10, w: 10}
   _ceilingHeight: 25
   _spawnPoints:

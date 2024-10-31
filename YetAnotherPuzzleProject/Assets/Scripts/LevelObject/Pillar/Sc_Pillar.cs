@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
@@ -14,6 +15,12 @@ public class Sc_Pillar : MonoBehaviour
     public float _overTime = 1f;
     public AnimationCurve _movementCurve;
 
+    [Header("SOUND")]
+    public AudioSource Source;
+    public AudioClip Loop;
+    public Vector2 MinMaxLoopPitch = new Vector2(.45f, .55f);
+    public float LoopVolume = .5f;
+
     protected List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
     protected List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
 
@@ -23,6 +30,13 @@ public class Sc_Pillar : MonoBehaviour
     private Vector3 _topPos;
 
     private Vector3 _cachedPos;
+    private bool _reachedTop = false;
+    private bool _reachedBottom = true;
+
+    private float _continuousScrapeTimer = 0f;
+    private float _continuousScrapeCallDuration = .1f;
+
+    protected float _cachedGauge = 0f;
 
     protected virtual void Awake()
     {
@@ -36,6 +50,25 @@ public class Sc_Pillar : MonoBehaviour
         _bottomPos = transform.position;
         _topPos = _bottomPos + (transform.up * _travelDistance);
         _cachedPos = transform.position;
+    }
+
+    private void Update()
+    {
+        HandleContinuousScrape();
+    }
+
+    private void HandleContinuousScrape()
+    {
+        if (!Source) return;
+
+        if (_continuousScrapeTimer < _continuousScrapeCallDuration && Source.isPlaying)
+        {
+            _continuousScrapeTimer += Time.deltaTime;
+        }
+        else
+        {
+            StopContinuousStoneScrape();
+        }
     }
 
     public void Move(bool activated)
@@ -93,6 +126,8 @@ public class Sc_Pillar : MonoBehaviour
         if (gauge > 1f) gauge = 1f;
         if (gauge < 0f) gauge = 0f;
 
+        
+
         float alpha = _movementCurve.Evaluate(gauge / 1f);
         Vector3 newPos = Vector3.Lerp(_bottomPos, _topPos, alpha);
         _rb.Move(newPos, _rb.rotation);
@@ -103,13 +138,30 @@ public class Sc_Pillar : MonoBehaviour
 
         _cachedPos = transform.position;
 
-        if (gauge >= 1f)
+        if (gauge > _cachedGauge)
+        {
+            ContinuousStoneScrape(true);
+        }
+        else if (gauge < _cachedGauge)
+        {
+            ContinuousStoneScrape(false);
+        }
+
+        _cachedGauge = gauge;
+
+
+        if (gauge >= 1f && !_reachedTop)
         {
             OnReachedTop();
         }
-        else if (gauge <= 0f)
+        else if (gauge <= 0f && !_reachedBottom)
         {
             OnReachedBottom();
+        }
+        else
+        {
+            _reachedBottom = false;
+            _reachedTop = false;
         }
     }
 
@@ -141,6 +193,8 @@ public class Sc_Pillar : MonoBehaviour
         float time = 0f;
         while (time < _overTime)
         {
+            ContinuousStoneScrape(up);
+
             float alpha = _movementCurve.Evaluate(time / _overTime);
             Vector3 newPos = Vector3.Lerp(fromPos, toPos, alpha);
             //transform.position = newPos;
@@ -176,12 +230,52 @@ public class Sc_Pillar : MonoBehaviour
 
     protected virtual void OnReachedTop()
     {
-
+        _reachedTop = true;
+        ReachedEnd();
     }
 
     protected virtual void OnReachedBottom()
     {
+        _reachedBottom = true;
+        ReachedEnd();
+    }
 
+    protected void ReachedEnd()
+    {
+        StopContinuousStoneScrape();
+        //Sc_GameManager.instance.SoundManager.PlaySFX(Source, End, MinMaxEndPitch);
+    }
+
+    protected void ContinuousStoneScrape(bool up)
+    {
+        if (!Source) return;
+
+        if (!Source.isPlaying)
+        {
+            if (Sc_GameManager.instance != null)
+            {
+                float scrapePitch = up ? MinMaxLoopPitch.y : MinMaxLoopPitch.x;
+                Sc_GameManager.instance.SoundManager.PlayLoopingSFX(Source, Loop, new Vector2(scrapePitch, scrapePitch));
+                Sc_GameManager.instance.SoundManager.FadeIn(Source, .2f, LoopVolume);
+
+                Debug.Log(up);
+                Debug.Log(222);
+            }
+        }
+        _continuousScrapeTimer = 0f;
+    }
+
+    protected void StopContinuousStoneScrape()
+    {
+        if (!Source) return;
+        if (!Source.isPlaying) return;
+
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.SoundManager.FadeOut(Source, .2f);
+            Debug.Log(333);
+        }
+        _continuousScrapeTimer = -99f;
     }
 
     protected void RebuildNavMesh()

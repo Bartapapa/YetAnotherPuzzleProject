@@ -35,13 +35,21 @@ public class Sc_Item_Effigy : Sc_Item
         WeightedObject.StateChange();
     }
 
-    public override void OnItemPickup()
+    public override void OnItemEquip()
     {
+        base.OnItemEquip();
+        WeightedObject.StateChange();
+    }
+
+    public override void OnItemStore()
+    {
+        base.OnItemEquip();
         WeightedObject.StateChange();
     }
 
     public override void OnItemDrop()
     {
+        base.OnItemDrop();
         WeightedObject.StateChange();
         GroundShake();
     }

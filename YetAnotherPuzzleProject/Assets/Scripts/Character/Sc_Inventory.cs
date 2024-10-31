@@ -26,6 +26,11 @@ public class Sc_Inventory : MonoBehaviour
     public bool CanAim { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || _currentlyHeldItem == null? false : true; } }
     [ReadOnly] public bool IsAiming = false;
 
+    public delegate void ItemEvent(Sc_Item item);
+    public ItemEvent ItemThrown;
+    public ItemEvent ItemDropped;
+    public ItemEvent ItemPickedUp;
+
     private void Update()
     {
         HandleAiming();
@@ -190,7 +195,7 @@ public class Sc_Inventory : MonoBehaviour
     {
         if (Store(item))
         {
-            item.OnItemPickup();
+            ItemPickedUp?.Invoke(item);
         }
         else
         {
@@ -227,6 +232,7 @@ public class Sc_Inventory : MonoBehaviour
         item.transform.rotation = this.transform.rotation;
 
         item.OnItemDrop();
+        ItemDropped?.Invoke(item);
 
         _items[GetIndexFromItem(item)] = null;
         item._inInventory = null;
@@ -293,6 +299,8 @@ public class Sc_Inventory : MonoBehaviour
                 _currentlyHeldItem = null;
             }
 
+            item.OnItemStore();
+
             item._interactible.CanBeInteractedWith = false;
             item.IsEquipped = false;
 
@@ -314,7 +322,9 @@ public class Sc_Inventory : MonoBehaviour
                 else
                 {
                     _items[GetNextItemIndex()] = item;
-                }                
+                }
+                item.OnItemStore();
+
                 item._inInventory = this;
                 item.transform.parent = _itemHoldAnchor;
                 item.transform.position = _itemHoldAnchor.position;
@@ -354,6 +364,8 @@ public class Sc_Inventory : MonoBehaviour
         item.transform.parent = _itemHoldAnchor;
         item.transform.position = _itemHoldAnchor.position;
         item.transform.rotation = _itemHoldAnchor.rotation;
+
+        item.OnItemEquip();
     }
 
     public void EquipFromInventory(int index)
@@ -391,6 +403,7 @@ public class Sc_Inventory : MonoBehaviour
             _currentlyHeldItem = null;
             SetForThrow(item);
             item.ThrowItem(Character, _itemThrowPoint.forward);
+            ItemThrown?.Invoke(item);
         }
     }
 
