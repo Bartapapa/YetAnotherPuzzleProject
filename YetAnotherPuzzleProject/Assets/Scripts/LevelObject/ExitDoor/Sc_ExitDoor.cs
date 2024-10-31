@@ -6,6 +6,7 @@ public class Sc_ExitDoor : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Sc_Activateable _activateable;
+    public bool IsAlreadyActivated = false;
 
     [Header("TO LEVEL")]
     public Loader.Scene _toLevel = Loader.Scene.SampleScene1;
@@ -24,7 +25,15 @@ public class Sc_ExitDoor : MonoBehaviour
     private void Start()
     {
         _trigger.isTrigger = true;
-        _trigger.enabled = _activateable._startActivated;
+        if (_activateable)
+        {
+            _trigger.enabled = _activateable._startActivated;
+        }
+        else
+        {
+            _trigger.enabled = IsAlreadyActivated;
+        }
+        
     }
 
     public void OnActivate(bool activate)

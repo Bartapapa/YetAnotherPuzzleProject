@@ -4729,7 +4729,7 @@ PrefabInstance:
     - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
       propertyPath: _toLevel
-      value: 12
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8233131079191082521, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
@@ -13000,8 +13000,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10be3f15851c603428849371289d06ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentScene: 11
+  CurrentScene: 12
   CanBeReloaded: 1
+  IsLobby: 0
   NMSurface: {fileID: 0}
   _minMaxXZLevelDimensions: {x: -10, y: 10, z: -10, w: 10}
   _ceilingHeight: 25

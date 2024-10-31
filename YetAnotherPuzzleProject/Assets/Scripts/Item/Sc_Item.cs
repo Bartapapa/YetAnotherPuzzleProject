@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
-using UnityEngine.Android;
 
 public class Sc_Item : MonoBehaviour
 {

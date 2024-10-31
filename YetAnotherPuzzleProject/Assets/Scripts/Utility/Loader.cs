@@ -16,6 +16,7 @@ public static class Loader
         PlayerCharacterScene,
         SampleScene1,
         SampleScene2,
+        Lobby,
         Level_0_1,
         Level_0_2,
         Level_0_3,
