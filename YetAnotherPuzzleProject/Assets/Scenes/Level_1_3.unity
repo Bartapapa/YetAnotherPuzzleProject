@@ -8950,7 +8950,7 @@ PrefabInstance:
     - target: {fileID: 7109498619842076266, guid: 503315248fcf8a04fae98fe0efd5345c,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.9534633
+      value: 0.95346355
       objectReference: {fileID: 0}
     - target: {fileID: 7109498619842076266, guid: 503315248fcf8a04fae98fe0efd5345c,
         type: 3}
@@ -8960,7 +8960,7 @@ PrefabInstance:
     - target: {fileID: 7109498619842076266, guid: 503315248fcf8a04fae98fe0efd5345c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.750002
+      value: 4.000002
       objectReference: {fileID: 0}
     - target: {fileID: 7109498619842076266, guid: 503315248fcf8a04fae98fe0efd5345c,
         type: 3}
@@ -8997,6 +8997,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7470539738603941545, guid: 503315248fcf8a04fae98fe0efd5345c,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 9ca4e4c04b316164f84cf87c1d975f41,
+        type: 2}
     - target: {fileID: 9021106798358883316, guid: 503315248fcf8a04fae98fe0efd5345c,
         type: 3}
       propertyPath: _frontBlockElement

@@ -1,22 +1,18 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_PressurePlate : MonoBehaviour
+public class Sc_PressurePlate : Sc_Activator
 {
-    [Header("OBJECT REFS")]
-    public Sc_Activateable _activator;
-
     [Header("PARAMETERS")]
-    public float ActivationDelay = 1f;
-    public int _weightThreshold = 10;
-    public int _currentWeight = 0;
-    public List<Sc_WeightedObject> _registeredObjects = new List<Sc_WeightedObject>();
-    private bool HasReachedWeightThreshold { get { return _currentWeight >= _weightThreshold; } }
-
+    public int WeightThreshold = 10;
+    [ReadOnly] public int CurrentWeight = 0;
+    [ReadOnly] public List<Sc_WeightedObject> RegisteredObjects = new List<Sc_WeightedObject>();
+    private bool HasReachedWeightThreshold { get { return CurrentWeight >= WeightThreshold; } }
 
     private Coroutine _delayedActivationCo = null;
-    private bool _activated = false;
+    private bool _pressed = false;
     private BoxCollider _coll;
 
     private void Start()
@@ -24,16 +20,6 @@ public class Sc_PressurePlate : MonoBehaviour
         _coll = GetComponent<BoxCollider>();
 
         RecheckWeightedObjects();
-    }
-    private void RegisterObject(Sc_WeightedObject wObject)
-    {
-        if (_registeredObjects.Contains(wObject)) return;
-
-        _registeredObjects.Add(wObject);
-        wObject.OnStateChanged -= OnWeightObjectStateChanged;
-        wObject.OnStateChanged += OnWeightObjectStateChanged;
-
-        CheckWeight();
     }
 
     private void OnWeightObjectStateChanged()
@@ -43,7 +29,7 @@ public class Sc_PressurePlate : MonoBehaviour
 
     private void RecheckWeightedObjects()
     {
-        _registeredObjects.Clear();
+        RegisteredObjects.Clear();
 
         Vector3 center = transform.position + _coll.center;
         Vector3 halfExtents = _coll.size * .5f;
@@ -60,32 +46,68 @@ public class Sc_PressurePlate : MonoBehaviour
 
     private void CheckWeight()
     {
-        _currentWeight = 0;
-        foreach(Sc_WeightedObject wObject in _registeredObjects)
+        CurrentWeight = 0;
+        foreach(Sc_WeightedObject wObject in RegisteredObjects)
         {
-            _currentWeight += wObject._weight;
+            CurrentWeight += wObject._weight;
         }
 
         if (HasReachedWeightThreshold)
         {
-            if (!_activated)
+            if (!_pressed)
             {
                 DelayActivation();
+                PressPlate(true);
             }
         }
         else
         {
-            StopDelayedActivation();
-            _activator.Activate(false);
-            _activated = false;
+            if (_pressed)
+            {
+                if (!StopDelayedActivation())
+                {
+                    ToggleActivate();
+                }
+                PressPlate(false);
+            }
         }
+    }
+
+    private void PressPlate(bool press)
+    {
+        _pressed = press;
+    }
+
+    //protected override IEnumerator DelayedActivationCoroutine()
+    //{
+    //    float timer = 0f;
+    //    while (timer < ActivationDelay)
+    //    {
+    //        timer += Time.deltaTime;
+    //        yield return null;
+    //    }
+
+    //    Activate();
+
+    //    _delayedActivationCo = null;
+    //}
+
+    private void RegisterObject(Sc_WeightedObject wObject)
+    {
+        if (RegisteredObjects.Contains(wObject)) return;
+
+        RegisteredObjects.Add(wObject);
+        wObject.OnStateChanged -= OnWeightObjectStateChanged;
+        wObject.OnStateChanged += OnWeightObjectStateChanged;
+
+        CheckWeight();
     }
 
     private void UnregisterObject(Sc_WeightedObject wObject)
     {
-        if (!_registeredObjects.Contains(wObject)) return;
+        if (!RegisteredObjects.Contains(wObject)) return;
 
-        _registeredObjects.Remove(wObject);
+        RegisteredObjects.Remove(wObject);
         wObject.OnStateChanged -= OnWeightObjectStateChanged;
 
         CheckWeight();
@@ -101,33 +123,5 @@ public class Sc_PressurePlate : MonoBehaviour
     {
         Sc_WeightedObject wObject = other.GetComponent<Sc_WeightedObject>();
         if (wObject) UnregisterObject(wObject);
-    }
-
-    private void DelayActivation()
-    {
-        if (_activated) return;
-        _activated = true;
-        _delayedActivationCo = StartCoroutine(DelayedActivationCoroutine());
-    }
-
-    private void StopDelayedActivation()
-    {
-        if (_delayedActivationCo != null)
-        {
-            StopCoroutine(_delayedActivationCo);
-            _delayedActivationCo = null;
-        }
-    }
-
-    private IEnumerator DelayedActivationCoroutine()
-    {
-        float timer = 0f;
-        while (timer < ActivationDelay)
-        {
-            timer += Time.deltaTime;
-            yield return null;
-        }
-        _activator.Activate(true);
-        _delayedActivationCo = null;
     }
 }

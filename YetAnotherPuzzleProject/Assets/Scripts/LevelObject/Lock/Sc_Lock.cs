@@ -2,12 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_Lock : MonoBehaviour
+public class Sc_Lock : Sc_Activateable
 {
-    [Header("LOCK PARAMETERS")]
-    public bool StartEngaged = true;
-    [ReadOnly] public bool IsEngaged;
-
     [Header("SPIN PARAMETERS")]
     public float SpinDuration = 1f;
     public float SpinRotation = 360f;
@@ -19,9 +15,36 @@ public class Sc_Lock : MonoBehaviour
     private Coroutine _spinCo;
     private float _input = 0f;
 
-    private void Start()
+    public delegate void DefaultEvent();
+    public DefaultEvent LockEngaged;
+    public DefaultEvent LockDisengaged;
+
+    #region Activateable implementation
+    public override bool Activate(bool toggleOn)
     {
-        ToggleEngage(StartEngaged);
+        if (base.Activate(toggleOn))
+        {
+            ToggleEngage(toggleOn);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+
+    public override void ForceActivate(bool toggleOn)
+    {
+        base.ForceActivate(toggleOn);
+        ForceEngage(toggleOn);
+    }
+    #endregion
+
+    public void ForceEngage(bool engage)
+    {
+        //When sounds come, redo this.
+        ToggleEngage(engage);
     }
 
     public void ToggleEngage(bool engage)
@@ -38,22 +61,14 @@ public class Sc_Lock : MonoBehaviour
 
     public void Engage()
     {
-        if (IsEngaged) return;
-        IsEngaged = true;
-
         TopPivot.localPosition = new Vector3(0f, 0f, 0f);
-        TopPivot.eulerAngles = Vector3.zero;
-        BottomPivot.eulerAngles = Vector3.zero;
+        TopPivot.eulerAngles = BottomPivot.eulerAngles;
     }
 
     public void Disengage()
     {
-        if (!IsEngaged) return;
-        IsEngaged = false;
-
         TopPivot.localPosition = new Vector3(0f, .75f, 0f);
         TopPivot.eulerAngles = Vector3.zero;
-        BottomPivot.eulerAngles = Vector3.zero;
     }
 
     public void Spin(bool activated)
@@ -78,7 +93,8 @@ public class Sc_Lock : MonoBehaviour
         }
 
         Vector3 euler = new Vector3(0f, SpinRotation * alpha, 0f);
-        if (IsEngaged)
+
+        if (IsActivated)
         {
             TopPivot.eulerAngles = euler;
             BottomPivot.eulerAngles = euler;
@@ -98,8 +114,8 @@ public class Sc_Lock : MonoBehaviour
             _spinCo = null;
         }
 
-        TopPivot.eulerAngles = Vector3.zero;
-        BottomPivot.eulerAngles = Vector3.zero;
+        //TopPivot.eulerAngles = Vector3.zero;
+        //BottomPivot.eulerAngles = Vector3.zero;
     }
 
     private IEnumerator SpinCoroutine(bool activated)
@@ -113,7 +129,7 @@ public class Sc_Lock : MonoBehaviour
             float rotateValue = (SpinRotation / SpinDuration) * Time.deltaTime;
             float multiplier = activated ? 1f : -1f;
             rotateValue = rotateValue * multiplier;
-            if (IsEngaged)
+            if (IsActivated)
             {
                 TopPivot.Rotate(0f, rotateValue, 0f);
                 BottomPivot.Rotate(0f, rotateValue, 0f);

@@ -5,55 +5,29 @@ using UnityEngine.Events;
 
 public class Sc_Activateable : MonoBehaviour
 {
-    [Header("UNITY EVENTS")]
-    public UnityEvent<bool> OnActivate;
-    public UnityEvent<bool> OnForceActivate;
-    //public UnityEvent<bool> OnDeactivate;
-
-    [Header("OBJECT REFS")]
-    public Material _debugDeactivatedMat;
-    public Material _debugActivatedMat;
-    public List<Transform> _activationMeshes = new List<Transform>();
-    private List<Renderer> _meshRenderers = new List<Renderer>();
-
     [Header("LOCK")]
     public Sc_Lock Lock;
 
     [Header("PARAMETERS")]
-    public bool _startActivated = false;
-    [ReadOnly][SerializeField] private bool _isActivated = false;
-    public bool IsActivated { get { return _isActivated; } set { _isActivated = value; } }
-
-    [Header("CONDITIONAL ACTIVATORS")]
-    public List<Sc_Activateable> _conditions = new List<Sc_Activateable>();
+    public bool StartActivated = false;
+    [ReadOnly][SerializeField] public bool IsActivated = false;
 
     [Header("PERIODIC ACTIVATION")]
-    public bool _periodicActivation = false;
-    public float _activationDuration = 5f;
+    public bool PeriodicActivation = false;
+    public float PeriodicActivationDuration = 5f;
     private float _activationTimer = 0f;
 
     private void Start()
     {
-        //_meshRenderers = _activationMeshes.GetComponent<Renderer>();
-        foreach(Transform mesh in _activationMeshes)
-        {
-            Renderer renderer = mesh.GetComponent<Renderer>();
-            if (renderer)
-            {
-                _meshRenderers.Add(renderer);
-            }
-        }
-
-        //ForceActivate(_startActivated);
-        Activate(_startActivated);
+        ForceActivate(StartActivated);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
-        if (_periodicActivation)
+        if (PeriodicActivation)
         {
             _activationTimer += Time.deltaTime;
-            if (_activationTimer >= _activationDuration)
+            if (_activationTimer >= PeriodicActivationDuration)
             {
                 ToggleActivation();
                 _activationTimer = 0f;
@@ -61,33 +35,33 @@ public class Sc_Activateable : MonoBehaviour
         }
     }
 
-    public void ForceActivate(bool toggleOn)
+    public virtual void ForceActivate(bool toggleOn)
     {
-        _isActivated = toggleOn;
-        ToggleMeshMaterial(toggleOn);
+        IsActivated = toggleOn;
 
-        OnForceActivate?.Invoke(toggleOn);
+        if (toggleOn)
+        {
+            Debug.Log(this.name + " has been forcefully activated!");
+        }
+        else
+        {
+            Debug.Log(this.name + " has been forcefully deactivated!");
+        }
     }
 
-    public void Activate(bool toggleOn)
+    public virtual bool Activate(bool toggleOn)
     {
-        if (toggleOn == _isActivated)
+        if (toggleOn == IsActivated)
         {
-            return;
+            return false;
         }
         if (Lock != null)
         {
             Lock.Spin(toggleOn);
-            if (!Lock.IsEngaged) return;
+            if (!Lock.IsActivated) return false;
         }
-        if (toggleOn && !HasFilledConditionsForActivation())
-        {
-            Activate(false);
-            return;
-        }
-        _isActivated = toggleOn;
-        ToggleMeshMaterial(toggleOn);
-
+        IsActivated = toggleOn;
+        
         if (toggleOn)
         {
             Debug.Log(this.name + " has been activated!");
@@ -97,36 +71,11 @@ public class Sc_Activateable : MonoBehaviour
             Debug.Log(this.name + " has been deactivated!");
         }
 
-        OnActivate?.Invoke(toggleOn);
+        return true;
     }
 
-    public void ToggleActivation()
+    public bool ToggleActivation()
     {
-        Activate(!_isActivated);
-    }
-
-    private void ToggleMeshMaterial(bool toggleOn)
-    {
-        foreach(Renderer renderer in _meshRenderers)
-        {
-            renderer.material = toggleOn ? _debugActivatedMat : _debugDeactivatedMat;
-        }
-    }
-
-    private bool HasFilledConditionsForActivation()
-    {
-        if (_conditions.Count == 0) return true;
-
-        bool canActivate = true;
-
-        foreach(Sc_Activateable condition in _conditions)
-        {
-            if (!condition.IsActivated)
-            {
-                canActivate = false;
-            }
-        }
-
-        return canActivate;
+        return Activate(!IsActivated);
     }
 }

@@ -12,6 +12,7 @@ public class Sc_Level : MonoBehaviour
     public Loader.Scene CurrentScene = Loader.Scene.SampleScene1;
     public bool CanBeReloaded = true;
     public bool IsLobby = false;
+    public bool IsDebugLevel = false;
 
     [Header("NAVMESH")]
     public NavMeshSurface NMSurface;

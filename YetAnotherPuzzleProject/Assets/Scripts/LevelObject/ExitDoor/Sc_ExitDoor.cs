@@ -27,7 +27,7 @@ public class Sc_ExitDoor : MonoBehaviour
         _trigger.isTrigger = true;
         if (_activateable)
         {
-            _trigger.enabled = _activateable._startActivated;
+            _trigger.enabled = _activateable.StartActivated;
         }
         else
         {

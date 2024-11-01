@@ -5,11 +5,8 @@ using Unity.AI.Navigation;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Sc_Pillar : MonoBehaviour
+public class Sc_Pillar : Sc_Activateable
 {
-    [Header("LOCK")]
-    public Sc_Lock Lock;
-
     [Header("PARAMETERS")]
     public float _travelDistance = 2f;
     public float _overTime = 1f;
@@ -26,12 +23,13 @@ public class Sc_Pillar : MonoBehaviour
 
     protected Rigidbody _rb;
     private Coroutine _movementCo;
-    private Vector3 _bottomPos;
-    private Vector3 _topPos;
-
+    private Vector3 _originPos;
+    private Vector3 _destinationPos;
     private Vector3 _cachedPos;
-    private bool _reachedTop = false;
-    private bool _reachedBottom = true;
+    private float _alphaPos;
+
+    private bool _reachedDestination = false;
+    private bool _reachedOrigin = true;
 
     private float _continuousScrapeTimer = 0f;
     private float _continuousScrapeCallDuration = .1f;
@@ -47,13 +45,14 @@ public class Sc_Pillar : MonoBehaviour
             return;
         }
 
-        _bottomPos = transform.position;
-        _topPos = _bottomPos + (transform.up * _travelDistance);
+        _originPos = transform.position;
+        _destinationPos = _originPos + (transform.up * _travelDistance);
         _cachedPos = transform.position;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         HandleContinuousScrape();
     }
 
@@ -71,14 +70,42 @@ public class Sc_Pillar : MonoBehaviour
         }
     }
 
-    public void Move(bool activated)
+    #region Activateable implementation
+    public override bool Activate(bool toggleOn)
     {
-        if (Lock != null)
+        if (base.Activate(toggleOn))
         {
-            Lock.Spin(activated);
-            if (!Lock.IsEngaged) return;
+            Move(toggleOn);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override void ForceActivate(bool toggleOn)
+    {
+        base.ForceActivate(toggleOn);
+        ForceMove(toggleOn);
+    }
+    #endregion
+
+    private void TransmitVelocity(Vector3 toVel)
+    {
+        foreach (Sc_CharacterController controller in _parentedControllers)
+        {
+            controller.InheritedVelocity += toVel;
         }
 
+        foreach (Sc_Pushable pushable in _parentedPushables)
+        {
+            pushable.InheritedVelocity += toVel;
+        }
+    }
+
+    public void Move(bool activated)
+    {
         if (_movementCo != null)
         {
             StopCoroutine(_movementCo);
@@ -86,50 +113,19 @@ public class Sc_Pillar : MonoBehaviour
         _movementCo = StartCoroutine(Movement(activated));
     }
 
-    private void TransmitVelocity(Vector3 toVel)
-    {
-        foreach (Sc_CharacterController controller in _parentedControllers)
-        {
-            controller.InheritedVelocity += toVel;
-
-            //Vector3 offset = toPos - _rb.position;
-            ////Debug.Log(offset);
-            //offset = new Vector3(offset.x, 0f, offset.z);
-            //rb.MovePosition(rb.position + (offset*.22f));
-            ////WHY .22F???? DUNNO LMAO
-
-            //rb.velocity = rb.velocity + toVel;
-        }
-
-        foreach (Sc_Pushable pushable in _parentedPushables)
-        {
-            pushable.InheritedVelocity += toVel;
-
-            //Vector3 offset = toPos - _rb.position;
-            ////Debug.Log(offset);
-            //offset = new Vector3(offset.x, 0f, offset.z);
-            //rb.MovePosition(rb.position + (offset*.22f));
-            ////WHY .22F???? DUNNO LMAO
-
-            //rb.velocity = rb.velocity + toVel;
-        }
-    }
-
     public void GaugeMove(float gauge)
     {
         if (Lock != null)
         {
-            Lock.GaugeSpin(gauge);
-            if (!Lock.IsEngaged) return;
+            //Lock.GaugeSpin(gauge);
+            if (!Lock.IsActivated) return;
         }
 
         if (gauge > 1f) gauge = 1f;
         if (gauge < 0f) gauge = 0f;
 
-        
-
-        float alpha = _movementCurve.Evaluate(gauge / 1f);
-        Vector3 newPos = Vector3.Lerp(_bottomPos, _topPos, alpha);
+        float alpha = _movementCurve.Evaluate(gauge);
+        Vector3 newPos = GetPosFromAlpha(alpha);
         _rb.Move(newPos, _rb.rotation);
         Vector3 transmittedVel = (transform.position - _cachedPos)/Time.fixedDeltaTime;
         TransmitVelocity(newPos);
@@ -137,6 +133,7 @@ public class Sc_Pillar : MonoBehaviour
         RebuildNavMesh();
 
         _cachedPos = transform.position;
+        _alphaPos = GetAlphaPosFromCachedPos();
 
         if (gauge > _cachedGauge)
         {
@@ -150,45 +147,49 @@ public class Sc_Pillar : MonoBehaviour
         _cachedGauge = gauge;
 
 
-        if (gauge >= 1f && !_reachedTop)
+        if (gauge >= 1f && !_reachedDestination)
         {
             OnReachedTop();
         }
-        else if (gauge <= 0f && !_reachedBottom)
+        else if (gauge <= 0f && !_reachedOrigin)
         {
             OnReachedBottom();
         }
         else
         {
-            _reachedBottom = false;
-            _reachedTop = false;
+            _reachedOrigin = false;
+            _reachedDestination = false;
         }
     }
 
     public void ForceMove(bool activated)
     {
+        StopMoving();
+        transform.position = activated ? _destinationPos : _originPos;
+
+        _cachedPos = transform.position;
+        _alphaPos = GetAlphaPosFromCachedPos();
+
+        _reachedDestination = activated ? true : false;
+        _reachedOrigin = activated ? false : true;
+    }
+
+    public void StopMoving()
+    {
         if (_movementCo != null)
         {
             StopCoroutine(_movementCo);
-            _movementCo = null;          
+            _movementCo = null;
         }
 
-        _rb.Move(activated ? _topPos : _bottomPos, _rb.rotation);
-
-        if (activated)
-        {
-            OnReachedTop();
-        }
-        else
-        {
-            OnReachedBottom();
-        }
+        _cachedPos = transform.position;
+        _alphaPos = GetAlphaPosFromCachedPos();
     }
 
     private IEnumerator Movement(bool up)
     {
         Vector3 fromPos = transform.position;
-        Vector3 toPos = up ? _topPos : _bottomPos;
+        Vector3 toPos = up ? _destinationPos : _originPos;
         Vector3 transmittedVel = Vector3.zero;
         float time = 0f;
         while (time < _overTime)
@@ -196,7 +197,7 @@ public class Sc_Pillar : MonoBehaviour
             ContinuousStoneScrape(up);
 
             float alpha = _movementCurve.Evaluate(time / _overTime);
-            Vector3 newPos = Vector3.Lerp(fromPos, toPos, alpha);
+            Vector3 newPos = Vector3.MoveTowards(fromPos, toPos, alpha * _travelDistance);
             //transform.position = newPos;
             _rb.Move(newPos, _rb.rotation);
             transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
@@ -206,6 +207,16 @@ public class Sc_Pillar : MonoBehaviour
             RebuildNavMesh();
 
             _cachedPos = transform.position;
+            _alphaPos = GetAlphaPosFromCachedPos();
+
+            if (_alphaPos == 1 && up)
+            {
+                break;
+            }
+            else if (_alphaPos == 0 && !up)
+            {
+                break;
+            }
 
             yield return null;
         }
@@ -216,7 +227,8 @@ public class Sc_Pillar : MonoBehaviour
         RebuildNavMesh();
 
         _cachedPos = transform.position;
-        //transform.position = toPos;
+        _alphaPos = GetAlphaPosFromCachedPos();
+
         if (up)
         {
             OnReachedTop();
@@ -230,20 +242,19 @@ public class Sc_Pillar : MonoBehaviour
 
     protected virtual void OnReachedTop()
     {
-        _reachedTop = true;
+        _reachedDestination = true;
         ReachedEnd();
     }
 
     protected virtual void OnReachedBottom()
     {
-        _reachedBottom = true;
+        _reachedOrigin = true;
         ReachedEnd();
     }
 
     protected void ReachedEnd()
     {
         StopContinuousStoneScrape();
-        //Sc_GameManager.instance.SoundManager.PlaySFX(Source, End, MinMaxEndPitch);
     }
 
     protected void ContinuousStoneScrape(bool up)
@@ -257,9 +268,6 @@ public class Sc_Pillar : MonoBehaviour
                 float scrapePitch = up ? MinMaxLoopPitch.y : MinMaxLoopPitch.x;
                 Sc_GameManager.instance.SoundManager.PlayLoopingSFX(Source, Loop, new Vector2(scrapePitch, scrapePitch));
                 Sc_GameManager.instance.SoundManager.FadeIn(Source, .2f, LoopVolume);
-
-                Debug.Log(up);
-                Debug.Log(222);
             }
         }
         _continuousScrapeTimer = 0f;
@@ -273,7 +281,6 @@ public class Sc_Pillar : MonoBehaviour
         if (Sc_GameManager.instance != null)
         {
             Sc_GameManager.instance.SoundManager.FadeOut(Source, .2f);
-            Debug.Log(333);
         }
         _continuousScrapeTimer = -99f;
     }
@@ -284,6 +291,22 @@ public class Sc_Pillar : MonoBehaviour
         {
             Sc_GameManager.instance.CurrentLevel.RequestRebuildNavmesh();
         }
+    }
+
+    private float GetAlphaPosFromCachedPos()
+    {
+        Vector3 originPos = _originPos;
+        Vector3 destinationPos = _destinationPos;
+        Vector3 currentPos = _cachedPos;
+
+        Vector3 ab = destinationPos - originPos;
+        Vector3 av = currentPos - originPos;
+        return Vector3.Dot(av, ab) / Vector3.Dot(ab, ab);
+    }
+
+    private Vector3 GetPosFromAlpha(float alpha)
+    {
+        return Vector3.Lerp(_originPos, _destinationPos, alpha);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -165,7 +165,8 @@ public class Sc_CharacterController : MonoBehaviour
         float cameraRotation = input.cameraRef.transform.eulerAngles.y;
         Quaternion controlRotation = Quaternion.Euler(0, cameraRotation, 0);
 
-        _moveInputVector = controlRotation * moveInputVector;
+        Vector3 desiredMoveInputVector = controlRotation * moveInputVector;
+        _moveInputVector = Vector3.MoveTowards(_moveInputVector, desiredMoveInputVector, 20f*Time.deltaTime);
         if (_forcedLookAtDir != Vector3.zero)
         {
             _lookInputVector = _forcedLookAtDir;
@@ -705,7 +706,7 @@ public class Sc_CharacterController : MonoBehaviour
     private void HandleParticles()
     {       
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
-        if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f)
+        if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f && _currentValve == null)
         {
             if (!_runParticles.isPlaying)
             {

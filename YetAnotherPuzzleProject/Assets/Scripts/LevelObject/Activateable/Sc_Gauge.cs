@@ -12,6 +12,7 @@ public class Sc_Gauge : MonoBehaviour
     public Sc_Lock Lock;
 
     [Header("PARAMETERS")]
+    public float StartingCompletion = 0f;
     [SerializeField][ReadOnly] private float _completion = 0f;
     public float Completion { get { return _completion; } }
     public bool _interpolateCompletion = true;
@@ -21,6 +22,17 @@ public class Sc_Gauge : MonoBehaviour
     public bool _looping = false;
 
     private float _toCompletion = 0f;
+
+    private void Start()
+    {
+        if (StartingCompletion > 0)
+        {
+            _completion = StartingCompletion;
+            _toCompletion = StartingCompletion;
+
+            OnCompletionChanged?.Invoke(_completion);
+        }
+    }
 
     private void Update()
     {
@@ -73,7 +85,7 @@ public class Sc_Gauge : MonoBehaviour
         if (Lock != null)
         {
             Lock.GaugeSpin(input, true);
-            if (!Lock.IsEngaged) return;
+            if (!Lock.IsActivated) return;
         }
 
         _toCompletion += input;

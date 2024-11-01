@@ -113,7 +113,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         if (Lock != null)
         {
             Lock.GaugeSpin(gauge);
-            if (!Lock.IsEngaged) return;
+            if (!Lock.IsActivated) return;
         }
 
         Vector3 euler = new Vector3(0f, _rotateAngle * gauge, 0f);     
@@ -154,7 +154,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         if (Lock != null)
         {
             Lock.Spin(true);
-            if (!Lock.IsEngaged) return;
+            if (!Lock.IsActivated) return;
         }
 
         StopRotate();

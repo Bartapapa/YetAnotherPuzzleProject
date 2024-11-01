@@ -16,7 +16,7 @@ public class Sc_PlayerManager : MonoBehaviour
 
     public event System.Action<PlayerInput> PlayerJoinedGame;
     public event System.Action<PlayerInput> PlayerLeftGame;
-    public bool CanPlayersJoinLeave { get { return Sc_GameManager.instance.CurrentLevel.IsLobby; } }
+    public bool CanPlayersJoinLeave { get { return Sc_GameManager.instance.CurrentLevel.IsLobby || Sc_GameManager.instance.CurrentLevel.IsDebugLevel; } }
 
     private void Awake()
     {
