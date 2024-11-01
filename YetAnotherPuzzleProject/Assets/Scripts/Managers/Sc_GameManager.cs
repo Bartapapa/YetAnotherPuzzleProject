@@ -65,17 +65,20 @@ public class Sc_GameManager : MonoBehaviour
 
     private void Start()
     {        
-        PlayerManager.CreatePlayerIfNone();
-        SoundManager.InitializePresets();
-
         //Used if spawned in from directly within a level, for testing purposes.
         if (Sc_Level.instance != null)
         {
             CurrentLevel = Sc_Level.instance;
+            if (!CurrentLevel.IsLobby)
+            {
+                PlayerManager.CreatePlayerIfNone();
+            }
             PlayerManager.AssignEventsToLevelManager();
-
             CurrentLevel.SpawnAllPlayerCharacters();
         }
+
+        
+        SoundManager.InitializePresets();
     }
 
     #region GENERAL FUNCTIONS

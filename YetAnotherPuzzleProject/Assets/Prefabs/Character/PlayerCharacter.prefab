@@ -6128,10 +6128,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultState: 1
-  _maxGroundedMoveSpeed: 7
-  _groundedMovementSharpness: 15
+  _maxGroundedMoveSpeed: 6
+  _groundedMovementSharpness: 25
   _rotationSharpness: 10
-  _maxAirMoveSpeed: 7
+  _maxAirMoveSpeed: 6
   _airMovementSharpness: 15
   _airDrag: 0
   _gravity: {x: 0, y: -30, z: 0}

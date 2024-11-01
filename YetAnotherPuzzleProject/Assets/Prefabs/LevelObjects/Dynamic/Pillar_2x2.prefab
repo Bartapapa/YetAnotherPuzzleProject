@@ -148,9 +148,9 @@ MonoBehaviour:
   OnForceActivate:
     m_PersistentCalls:
       m_Calls: []
-  _debugDeactivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4,
+  _debugDeactivatedMat: {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247,
     type: 2}
-  _debugActivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
+  _debugActivatedMat: {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247, type: 2}
   _activationMeshes:
   - {fileID: 6032614787303185457}
   Lock: {fileID: 0}
@@ -200,7 +200,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   Source: {fileID: 5629576868800558927}
   Loop: {fileID: 8300000, guid: 8169117627c692f42884db165fee3131, type: 3}
-  LoopPitch: 0.5
+  MinMaxLoopPitch: {x: 0.45, y: 0.55}
   LoopVolume: 0.3
 --- !u!65 &4700189864224967415
 BoxCollider:
@@ -381,7 +381,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
+  - {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

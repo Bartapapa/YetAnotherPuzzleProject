@@ -65,6 +65,8 @@ public class Sc_Player : MonoBehaviour
             {
                 Sc_CameraManager.instance.AddFocus(Sc_CameraManager.instance._defaultCameraFocus, _playerCharacter.transform);
             }
+
+            Sc_GameManager.instance.SavePlayerCharacterData();
         }
         else
         {
@@ -118,25 +120,27 @@ public class Sc_Player : MonoBehaviour
             {
                 _playerCharacter.Controller.CurrentValve.EndUsing();
             }
-
-            if (_playerCharacter.Controller.IsClimbing)
+            else if (_playerCharacter.Controller.IsClimbing)
             {
                 _playerCharacter.Controller.StopClimbing();
             }
-
-            if (_playerCharacter.Interactor.CurrentSelectedInteractible != null)
+            else if (_playerCharacter.Interactor.CurrentSelectedInteractible != null)
             {
                 _playerCharacter.Interactor.CurrentSelectedInteractible.Interact(_playerCharacter);
+            }
+            else
+            {
+                _playerCharacter.SoundHandler.Quack();
             }
         }
     }
 
     public void OnQuack(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            _playerCharacter.SoundHandler.Quack();
-        }
+        //if (context.performed)
+        //{
+        //    _playerCharacter.SoundHandler.Quack();
+        //}
     }
 
     public void OnThrow(InputAction.CallbackContext context)

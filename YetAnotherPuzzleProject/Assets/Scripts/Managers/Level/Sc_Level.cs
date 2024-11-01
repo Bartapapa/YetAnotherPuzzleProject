@@ -52,6 +52,7 @@ public class Sc_Level : MonoBehaviour
 
             Sc_GameManager.instance.PlayerManager.AssignEventsToLevelManager();
 
+
             SpawnAllPlayerCharacters();
             //Load all player character data
             Sc_GameManager.instance.LoadPlayerCharacterData();

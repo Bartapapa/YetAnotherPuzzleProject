@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
+  - {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -166,7 +166,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -315,9 +315,9 @@ MonoBehaviour:
   OnForceActivate:
     m_PersistentCalls:
       m_Calls: []
-  _debugDeactivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4,
+  _debugDeactivatedMat: {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247,
     type: 2}
-  _debugActivatedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
+  _debugActivatedMat: {fileID: 2100000, guid: 65456b530acb3cc408be28a452303247, type: 2}
   _activationMeshes:
   - {fileID: 5243821927142261792}
   - {fileID: 3994583345902668507}
@@ -368,7 +368,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   Source: {fileID: 8099578410233161975}
   Loop: {fileID: 8300000, guid: 8169117627c692f42884db165fee3131, type: 3}
-  LoopPitch: 0.5
+  MinMaxLoopPitch: {x: 0.45, y: 0.55}
   LoopVolume: 0.3
   _rotateAngle: 90
   _rotateOverTime: 4

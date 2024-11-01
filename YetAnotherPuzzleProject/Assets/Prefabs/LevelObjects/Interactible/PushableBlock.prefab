@@ -161,21 +161,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activateable: {fileID: 0}
-  _frontElementAnchor: {fileID: 6670539496455917023}
-  _backElementAnchor: {fileID: 1027423094045613822}
-  _rightElementAnchor: {fileID: 1034883744060027539}
-  _leftElementAnchor: {fileID: 5871925784362542965}
-  _frontBlockElement: 0
-  _backBlockElement: 0
-  _rightBlockElement: 0
-  _leftBlockElement: 0
-  _batteryHolePrefab: {fileID: 0}
+  ImpulseSource: {fileID: 0}
+  Dust: {fileID: 0}
   _maxSpeed: 4
   _speedSharpness: 15
   _gravity: {x: 0, y: -30, z: 0}
+  InheritedVelocity: {x: 0, y: 0, z: 0}
+  InheritedYaw: 0
+  Source: {fileID: 0}
+  PushLoop: {fileID: 0}
+  PushLoopVolume: 0.3
+  Land: {fileID: 0}
+  LandVolume: 0.5
+  MinMaxLandPitch: {x: 0.9, y: 1}
   _groundLayers:
     serializedVersion: 2
     m_Bits: 1
+  _isGrounded: 1
 --- !u!114 &5493445285162975708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +198,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1598259560097223975}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 9ca4e4c04b316164f84cf87c1d975f41, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
