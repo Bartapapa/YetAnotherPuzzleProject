@@ -14,6 +14,9 @@ public class Sc_Level : MonoBehaviour
     public bool IsLobby = false;
     public bool IsDebugLevel = false;
 
+    [Header("TREASURE VASES")]
+    public List<Sc_Vase> TreasureVases = new List<Sc_Vase>();
+
     [Header("NAVMESH")]
     public NavMeshSurface NMSurface;
 
@@ -54,11 +57,16 @@ public class Sc_Level : MonoBehaviour
             Sc_GameManager.instance.PlayerManager.AssignEventsToLevelManager();
 
 
+            //Load current level data
+            Sc_GameManager.instance.LoadCurrentLevelData();
+            //Save current level data
+            Sc_GameManager.instance.SaveLevelData(this);
+
             SpawnAllPlayerCharacters();
             //Load all player character data
             Sc_GameManager.instance.LoadPlayerCharacterData();
-            Sc_GameManager.instance.SavePlayerCharacterData();
             //Save all player character data
+            Sc_GameManager.instance.SavePlayerCharacterData();
         }
     }
 
@@ -66,6 +74,15 @@ public class Sc_Level : MonoBehaviour
     {
         if (_buildNavmeshRequested) BuildNavmesh();
     }
+    #region LEVELDATA
+    public void LoadLevelData(LevelSaveProfile saveProfile)
+    {
+        for (int i = 0; i < saveProfile.VasesChecked.Count; i++)
+        {
+            TreasureVases[i]._interactible.CanBeInteractedWith = !saveProfile.VasesChecked[i];
+        }
+    }
+    #endregion
 
     #region PLAYERSPAWNING
     public void OnPlayerJoined(PlayerInput playerInput)

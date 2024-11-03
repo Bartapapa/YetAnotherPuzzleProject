@@ -42,14 +42,35 @@ public class PlayerCharacterSaveProfile
 [System.Serializable]
 public class LevelSaveProfile
 {
-    public Sc_Level Level;
+    public Loader.Scene Level = Loader.Scene.Managers;
+    public List<bool> VasesChecked = new List<bool>();
+
+    public LevelSaveProfile (Sc_Level level)
+    {
+        Level = level.CurrentScene;
+        for (int i = 0; i < level.TreasureVases.Count; i++)
+        {
+            VasesChecked.Add(level.TreasureVases[i].HasBeenSearchedThrough);
+        }
+    }
+
+    public void OverwriteSave(Sc_Level level)
+    {
+        VasesChecked.Clear();
+        for (int i = 0; i < level.TreasureVases.Count; i++)
+        {
+            VasesChecked.Add(level.TreasureVases[i].HasBeenSearchedThrough);
+        }
+    }
 }
 
 [CreateAssetMenu(menuName = "YetAnotherPuzzleProject/Save/BlankSaveData", fileName = "BlankSaveData")]
 public class SO_SaveData : ScriptableObject
 {
     public List<PlayerCharacterSaveProfile> CharacterSaveProfiles = new List<PlayerCharacterSaveProfile>();
+    public List<LevelSaveProfile> LevelSaveProfiles = new List<LevelSaveProfile>();
 
+    #region Character save
     public void CreateCharacterSaveProfiles(List<PlayerInput> players)
     {
         ClearCharacterSaveProfiles();
@@ -66,4 +87,46 @@ public class SO_SaveData : ScriptableObject
     {
         CharacterSaveProfiles.Clear();
     }
+    #endregion
+    #region Level save
+    public void CreateLevelSaveProfile(Sc_Level level)
+    {
+        Debug.Log(1);
+        LevelSaveProfile saveProfile = null;
+        foreach (LevelSaveProfile lsp in LevelSaveProfiles)
+        {
+            if (lsp.Level == level.CurrentScene)
+            {
+                saveProfile = lsp;
+                break;
+            }
+        }
+        if (saveProfile == null)
+        {
+            Debug.Log(2);
+            saveProfile = new LevelSaveProfile(level);
+            LevelSaveProfiles.Add(saveProfile);
+        }
+        else
+        {
+            Debug.Log(3);
+            saveProfile.OverwriteSave(level);
+        }
+    }
+
+    public LevelSaveProfile GetLevelSaveProfileForLevel(Sc_Level level)
+    {
+        LevelSaveProfile lsp = null;
+        foreach(LevelSaveProfile levelsave in LevelSaveProfiles)
+        {
+            if (levelsave.Level == level.CurrentScene)
+            {
+                lsp = levelsave;
+            }
+        }
+        Debug.Log(lsp);
+        return lsp;
+    }
+    #endregion
+
 }

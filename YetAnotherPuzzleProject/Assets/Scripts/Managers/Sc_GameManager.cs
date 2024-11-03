@@ -210,16 +210,46 @@ public class Sc_GameManager : MonoBehaviour
     #endregion
 
     #region SAVEDATA
+    private SO_SaveData CreateNewSaveData()
+    {
+        SO_SaveData newSaveData = ScriptableObject.CreateInstance<SO_SaveData>();
+        if (OverrideData != null)
+        {
+            newSaveData = OverrideData;
+        }
+        return newSaveData;
+    }
+
+    public void SaveLevelData(Sc_Level level)
+    {
+        if (CurrentData == null)
+        {
+            CurrentData = CreateNewSaveData();
+        }
+        Debug.Log(4);
+        CurrentData.CreateLevelSaveProfile(level);
+    }
+
+    public void LoadCurrentLevelData()
+    {
+        if (CurrentData == null) return;
+        if (CurrentLevel == null) return;
+        if (CurrentData.GetLevelSaveProfileForLevel(CurrentLevel) == null)
+        {
+            Debug.LogWarning("No save data found for " + CurrentLevel.CurrentScene + "!");
+            return;
+        }
+        else
+        {
+            CurrentLevel.LoadLevelData(CurrentData.GetLevelSaveProfileForLevel(CurrentLevel));
+        }
+    }
+
     public void SavePlayerCharacterData()
     {
         if (CurrentData == null)
         {
-            SO_SaveData newSaveData = ScriptableObject.CreateInstance<SO_SaveData>();
-            CurrentData = newSaveData;
-            if (OverrideData != null)
-            {
-                CurrentData.CharacterSaveProfiles = OverrideData.CharacterSaveProfiles;
-            }         
+            CurrentData = CreateNewSaveData();        
         }
         CurrentData.CreateCharacterSaveProfiles(PlayerManager.CurrentPlayers);
     }

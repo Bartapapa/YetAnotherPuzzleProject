@@ -18,6 +18,7 @@ public class Sc_Vase : MonoBehaviour
 
     [Header("PARAMETERS")]
     public List<Reward> _rewards = new List<Reward>();
+    [ReadOnly] public bool HasBeenSearchedThrough = false;
 
     [ReadOnly][SerializeField] private int _totalWeight = -1;
     private int TotalWeight
@@ -36,6 +37,8 @@ public class Sc_Vase : MonoBehaviour
     {
         CheckVase(interactor);
         _interactible.CanBeInteractedWith = false;
+        HasBeenSearchedThrough = true;
+        Sc_GameManager.instance.SaveLevelData(Sc_GameManager.instance.CurrentLevel);
     }
 
     public void CheckVase(Sc_Character interactor)
