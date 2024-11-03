@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_BatteryHole : MonoBehaviour
+public class Sc_BatteryHole : Sc_Activateable
 {
     [Header("OBJECT REFS")]
     public Sc_Interactible _interactible;
-    public Sc_Activateable _activateable;
+    public Sc_Pushable Pushable;
     public GameObject _batteryMesh;
 
     private bool _batteryPlaced = false;
@@ -20,7 +20,7 @@ public class Sc_BatteryHole : MonoBehaviour
     {
         _batteryPlaced = true;
         _interactible.CanBeInteractedWith = false;
-        _activateable.Activate(true);
+        Pushable.Energize(true);
 
         _batteryMesh.SetActive(true);
     }

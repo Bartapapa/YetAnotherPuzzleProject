@@ -14,12 +14,19 @@ public class Sc_Lever : Sc_Activator
     public AudioSource _source;
     public AudioClip _leverLower;
     public AudioClip _leverLift;
+    public AudioClip _leverFailed;
 
     private Coroutine _delayedActivationCo = null;
 
     public void OnInteract()
     {
         ToggleLever();     
+    }
+
+    protected override void FailedToActivate()
+    {
+        base.FailedToActivate();
+        Sc_GameManager.instance.SoundManager.PlaySFX(_source, _leverFailed, new Vector2(.95f, 1.05f));
     }
 
     private void ToggleLever()
@@ -36,11 +43,15 @@ public class Sc_Lever : Sc_Activator
 
     private void LiftLever()
     {
-        _axlePivot.localEulerAngles = new Vector3(-40f, 0f, 0f);
         if (!StopDelayedActivation())
         {
-            ToggleActivate();
-        }        
+            if (!ToggleActivate())
+            {
+                return;
+            }
+        }
+
+        _axlePivot.localEulerAngles = new Vector3(-40f, 0f, 0f);
         _leverLowered = false;
 
         Sc_GameManager.instance.SoundManager.PlaySFX(_source, _leverLift, new Vector2(.95f, 1.05f));
@@ -48,8 +59,12 @@ public class Sc_Lever : Sc_Activator
 
     private void LowerLever()
     {
+        if (!DelayActivation())
+        {
+            return;
+        }
+
         _axlePivot.localEulerAngles = new Vector3(40f, 0f, 0f);
-        DelayActivation();
         _leverLowered = true;
 
         Sc_GameManager.instance.SoundManager.PlaySFX(_source, _leverLower, new Vector2(.95f, 1.05f));

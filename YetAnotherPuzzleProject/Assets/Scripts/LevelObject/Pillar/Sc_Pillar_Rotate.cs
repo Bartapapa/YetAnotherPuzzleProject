@@ -26,10 +26,29 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         _destRot = Quaternion.Euler(_rb.rotation.eulerAngles + new Vector3(0, _rotateAngle, 0f));
     }
 
+    #region Activateable implementation
+    public override bool Activate(bool toggleOn)
+    {
+        if (base.Activate(toggleOn))
+        {
+            StartRotate();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override void ForceActivate(bool toggleOn)
+    {
+        //base.ForceActivate(toggleOn);
+        //ForceRotate();
+    }
+    #endregion
+
     private void TransmitRotation(float angle, Quaternion difference)
     {
-        //angle = angle * .22f;
-
         foreach (Sc_CharacterController controller in _parentedControllers)
         {
             Vector3 point = new Vector3(controller.transform.position.x, 0f, controller.transform.position.z);
@@ -40,21 +59,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
             controller.InheritedVelocity += toVel * .485f;
             controller.InheritedYaw -= angle * .48f;
-
-
-            //Vector3 point = new Vector3(rb.position.x, 0f, rb.position.z);
-            //Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
-            //Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
-            //toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
-
-            ////Vector3 euler = rb.rotation.eulerAngles;
-            ////euler = new Vector3(euler.x, euler.y -angle, euler.z);
-            ////Quaternion newRot = Quaternion.Euler(euler);
-
-            ////rb.MovePosition(toPoint);
-            //Quaternion toRot = rb.transform.rotation * difference;
-            //rb.Move(toPoint, toRot);
-            ////rb.transform.rotation = Quaternion.Slerp(rb.transform.rotation, rb.transform.rotation * difference, .5f);
         }
 
         foreach (Sc_Pushable pushable in _parentedPushables)
@@ -67,21 +71,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
             pushable.InheritedVelocity += toVel * .50f;
             pushable.InheritedYaw -= angle * .48f;
-
-
-            //Vector3 point = new Vector3(rb.position.x, 0f, rb.position.z);
-            //Vector3 origin = new Vector3(transform.position.x, 0f, transform.position.z);
-            //Vector3 toPoint = RotatePointAroundPoint(point, origin, angle);
-            //toPoint = new Vector3(toPoint.x, rb.position.y, toPoint.y);
-
-            ////Vector3 euler = rb.rotation.eulerAngles;
-            ////euler = new Vector3(euler.x, euler.y -angle, euler.z);
-            ////Quaternion newRot = Quaternion.Euler(euler);
-
-            ////rb.MovePosition(toPoint);
-            //Quaternion toRot = rb.transform.rotation * difference;
-            //rb.Move(toPoint, toRot);
-            ////rb.transform.rotation = Quaternion.Slerp(rb.transform.rotation, rb.transform.rotation * difference, .5f);
         }
     }
 
@@ -95,24 +84,25 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
     protected override void OnReachedTop()
     {
-        //if (_rotateCo != null)
-        //{
-        //    StopCoroutine(_rotateCo);
-        //}
-        //_rotateCo = StartCoroutine(Rotate());
+
     }
 
     protected override void OnReachedBottom()
     {
-        //base.OnReachedBottom();
+
+    }
+
+    public void ForceRotate()
+    {
+        StopRotate();
+
     }
 
     public void GaugeRotate(float gauge)
     {
-        //if (gauge > 1f) gauge = 1f;
         if (Lock != null)
         {
-            Lock.GaugeSpin(gauge);
+            //Lock.GaugeSpin(gauge);
             if (!Lock.IsActivated) return;
         }
 
@@ -120,23 +110,15 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         Quaternion newRot = Quaternion.Euler(euler);
         float angle = Quaternion.Angle(_rb.rotation, newRot);
         Quaternion difference = Quaternion.Inverse(transform.rotation) * newRot;
-        //_rb.MoveRotation(newRot);
-        //euler = transform.rotation.eulerAngles;
-        //euler = new Vector3(euler.x, euler.y - angle, euler.z);
-        //newRot = Quaternion.Euler(euler);
-        //transform.rotation = newRot;
         _rb.MoveRotation(newRot);
 
-        Debug.Log(111);
         if (gauge > _cachedGauge)
         {
-            Debug.Log(222);
             TransmitRotation(-angle, difference);
             ContinuousStoneScrape(true);
         }
         else if(gauge < _cachedGauge)
         {
-            Debug.Log(333);
             TransmitRotation(angle, difference);
             ContinuousStoneScrape(false);
         }
@@ -144,9 +126,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         RebuildNavMesh();
 
         _cachedGauge = gauge;
-        //transform.rotation = Quaternion.Euler(new Vector3(0f, _rotateAngle * gauge, 0f));
-        //transform.Rotate(new Vector3(0f, _rotateAngle * gauge, 0f));
-        //transform.rotation = newRot;
     }
 
     public void StartRotate()
@@ -166,6 +145,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         if (_rotateCo != null)
         {
             StopCoroutine(_rotateCo);
+            _rotateCo = null;
         }
     }
 
@@ -177,8 +157,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         Quaternion originalRot = _rb.rotation;
         Quaternion destRot = Quaternion.Euler(_rb.rotation.eulerAngles + new Vector3(0, _rotateAngle, 0f));
 
-        //Vector3 originalRot = transform.rotation.eulerAngles;
-        //Vector3 toEulerRot = transform.rotation.eulerAngles + new Vector3(0f, transform.rotation.eulerAngles.y + _rotateAngle, 0f);
         while (time < _rotateOverTime)
         {
             ContinuousStoneScrape(true);
@@ -187,8 +165,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             Quaternion toRot = Quaternion.Lerp(originalRot, destRot, alpha);
             angle = Quaternion.Angle(_rb.rotation, toRot);
             difference = Quaternion.Inverse(transform.rotation) * toRot;
-            //Vector3 toRot = Vector3.Slerp(originalRot, toEulerRot, alpha);
-            //_rb.Move(_rb.position, toRot);
+
             _rb.MoveRotation(toRot);
             if (_rotateAngle >= 0)
             {
@@ -198,15 +175,14 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             {
                 TransmitRotation(angle, difference);
             }
-            //transform.rotation = toRot;
+
             time += Time.deltaTime;
 
             RebuildNavMesh();
 
             yield return null;
         }
-        //_rb.Move(_rb.position, destRot);
-        //transform.rotation = destRot;
+
         angle = Quaternion.Angle(_rb.rotation, destRot);
         difference = Quaternion.Inverse(transform.rotation) * destRot;
         _rb.MoveRotation(destRot);
@@ -223,6 +199,5 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
         _rotateCo = null;
 
-        //Move(false);
     }
 }

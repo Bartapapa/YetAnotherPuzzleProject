@@ -7,7 +7,7 @@ using UnityEngine;
 public class Sc_Pushable : MonoBehaviour
 {
     [Header("OBJECT REFS")]
-    public Sc_Activateable _activateable;
+    public Sc_PowerGenerator Generator;
     public CinemachineImpulseSource ImpulseSource;
     public ParticleSystem Dust;
 
@@ -37,6 +37,12 @@ public class Sc_Pushable : MonoBehaviour
     protected RaycastHit _groundHit;
     protected RaycastHit _obstacleHit;
 
+    [Header("GENERATOR")]
+    public List<Transform> DebugGeneratorMeshes = new List<Transform>();
+    public Material DeEnergizedMat;
+    public Material EnergizedMat;
+    private List<Renderer> _renderers = new List<Renderer>();
+
     protected Sc_CharacterController _pushedBy;
     public Sc_CharacterController PushedBy { get { return _pushedBy; } set { _pushedBy = value; } }
 
@@ -57,11 +63,35 @@ public class Sc_Pushable : MonoBehaviour
     private void Start()
     {
         InitializePushable();
+        DBG_InitializeMats();
+    }
+
+    private void DBG_InitializeMats()
+    {
+        foreach(Transform mesh in DebugGeneratorMeshes)
+        {
+            Renderer[] rends = mesh.GetComponents<Renderer>();
+            foreach(Renderer rend in rends)
+            {
+                _renderers.Add(rend);
+            }
+        }
     }
 
     private void Update()
     {
         HandlePushSound();
+    }
+
+    public virtual void Energize(bool energize)
+    {
+        Generator.GeneratePower(energize);
+
+        Material toMat = energize ? EnergizedMat : DeEnergizedMat;
+        foreach(Renderer rend in _renderers)
+        {
+            rend.material = toMat;
+        }
     }
 
     private void HandlePushSound()

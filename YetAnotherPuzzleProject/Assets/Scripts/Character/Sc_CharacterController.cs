@@ -145,7 +145,7 @@ public class Sc_CharacterController : MonoBehaviour
     {
         //_isGrounded = GroundCheck(!_isGrounded);
         _isGrounded = GroundCheck();
-        if (_isGrounded && _currentState == CharacterState.Default && !IsClimbing) HandleBalancingVerticalForce();
+        if (_isGrounded && _currentState == CharacterState.Default && !IsClimbing && !IsAnchoring) HandleBalancingVerticalForce();
         //If add physics based floors
         //if (_walkingOnRb) HandleWalkingOnRB();
 
@@ -395,20 +395,7 @@ public class Sc_CharacterController : MonoBehaviour
 
     private bool GroundCheck()
     {
-        bool localIsGrounded = Physics.SphereCast(_groundCheckEmissionPoint.transform.position, .1f, Vector3.down, out _groundHit, _groundCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
-        //If add physics based floors
-        //if (localIsGrounded)
-        //{
-        //    _walkingOnRb = _groundHit.collider.GetComponent<Rigidbody>();
-        //    Debug.Log(_walkingOnRb);
-        //}
-
-        //bool localIsGrounded = Physics.SphereCast(transform.position + (Vector3.up * .1f), .1f, Vector3.down, out _groundHit, _groundCheckDistance + .1f, _groundLayers);
-
-        //if (snapToGround && localIsGrounded)
-        //{
-        //    _rb.Move(_groundHit.point, _rb.rotation);
-        //}
+        bool localIsGrounded = Physics.SphereCast(_groundCheckEmissionPoint.transform.position, .2f, Vector3.down, out _groundHit, _groundCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
 
         if (localIsGrounded && !_isGrounded)
         {

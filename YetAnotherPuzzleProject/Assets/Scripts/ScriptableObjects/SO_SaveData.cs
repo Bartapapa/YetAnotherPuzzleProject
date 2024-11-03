@@ -39,6 +39,12 @@ public class PlayerCharacterSaveProfile
     }
 }
 
+[System.Serializable]
+public class LevelSaveProfile
+{
+    public Sc_Level Level;
+}
+
 [CreateAssetMenu(menuName = "YetAnotherPuzzleProject/Save/BlankSaveData", fileName = "BlankSaveData")]
 public class SO_SaveData : ScriptableObject
 {

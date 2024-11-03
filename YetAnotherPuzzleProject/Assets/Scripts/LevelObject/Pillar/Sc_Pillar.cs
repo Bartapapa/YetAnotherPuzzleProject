@@ -89,6 +89,18 @@ public class Sc_Pillar : Sc_Activateable
         base.ForceActivate(toggleOn);
         ForceMove(toggleOn);
     }
+
+    public override void OnLockEngaged(bool engage)
+    {
+        if (engage)
+        {
+
+        }
+        else
+        {
+            StopMoving();
+        }
+    }
     #endregion
 
     private void TransmitVelocity(Vector3 toVel)
@@ -165,7 +177,10 @@ public class Sc_Pillar : Sc_Activateable
     public void ForceMove(bool activated)
     {
         StopMoving();
-        transform.position = activated ? _destinationPos : _originPos;
+        Vector3 toPos = activated ? _destinationPos : _originPos;
+
+        transform.position = toPos;
+        _rb.position = toPos;
 
         _cachedPos = transform.position;
         _alphaPos = GetAlphaPosFromCachedPos();

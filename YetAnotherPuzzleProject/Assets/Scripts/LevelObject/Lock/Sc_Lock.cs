@@ -15,9 +15,8 @@ public class Sc_Lock : Sc_Activateable
     private Coroutine _spinCo;
     private float _input = 0f;
 
-    public delegate void DefaultEvent();
-    public DefaultEvent LockEngaged;
-    public DefaultEvent LockDisengaged;
+    public delegate void BoolEvent(bool on);
+    public BoolEvent LockEngaged;
 
     #region Activateable implementation
     public override bool Activate(bool toggleOn)
@@ -57,6 +56,8 @@ public class Sc_Lock : Sc_Activateable
         {
             Disengage();
         }
+
+        LockEngaged?.Invoke(engage);
     }
 
     public void Engage()
@@ -114,6 +115,8 @@ public class Sc_Lock : Sc_Activateable
             _spinCo = null;
         }
 
+        CanBeActivated = true;
+
         //TopPivot.eulerAngles = Vector3.zero;
         //BottomPivot.eulerAngles = Vector3.zero;
     }
@@ -123,6 +126,8 @@ public class Sc_Lock : Sc_Activateable
         float timer = 0f;
         TopPivot.eulerAngles = Vector3.zero;
         BottomPivot.eulerAngles = Vector3.zero;
+
+        CanBeActivated = false;
 
         while (timer < SpinDuration)
         {
@@ -141,6 +146,8 @@ public class Sc_Lock : Sc_Activateable
             timer += Time.deltaTime;
             yield return null;
         }
+
+        CanBeActivated = true;
 
         TopPivot.eulerAngles = Vector3.zero;
         BottomPivot.eulerAngles = Vector3.zero;

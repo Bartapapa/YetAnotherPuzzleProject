@@ -5611,6 +5611,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
+      propertyPath: StartActivated
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
+        type: 3}
       propertyPath: IsAlreadyActivated
       value: 1
       objectReference: {fileID: 0}
@@ -7110,6 +7115,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _activateable
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
+        type: 3}
+      propertyPath: StartActivated
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
@@ -8750,6 +8760,7 @@ MonoBehaviour:
   CurrentScene: 6
   CanBeReloaded: 0
   IsLobby: 1
+  IsDebugLevel: 0
   NMSurface: {fileID: 0}
   _minMaxXZLevelDimensions: {x: -10, y: 10, z: -10, w: 10}
   _ceilingHeight: 25

@@ -56,7 +56,10 @@ public class Sc_PressurePlate : Sc_Activator
         {
             if (!_pressed)
             {
-                DelayActivation();
+                if (!DelayActivation())
+                {
+                    return;
+                }
                 PressPlate(true);
             }
         }
@@ -66,7 +69,10 @@ public class Sc_PressurePlate : Sc_Activator
             {
                 if (!StopDelayedActivation())
                 {
-                    ToggleActivate();
+                    if (!ToggleActivate())
+                    {
+                        return;
+                    }
                 }
                 PressPlate(false);
             }

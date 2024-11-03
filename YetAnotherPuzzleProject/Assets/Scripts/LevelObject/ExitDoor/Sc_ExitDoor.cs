@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_ExitDoor : MonoBehaviour
+public class Sc_ExitDoor : Sc_Activateable
 {
-    [Header("OBJECT REFS")]
-    public Sc_Activateable _activateable;
-    public bool IsAlreadyActivated = false;
+    [Header("GATE")]
+    public Renderer GateWayMesh;
+    public Material ClosedMat;
+    public Material OpenMat;
 
     [Header("TO LEVEL")]
     public Loader.Scene _toLevel = Loader.Scene.SampleScene1;
@@ -22,24 +23,43 @@ public class Sc_ExitDoor : MonoBehaviour
         _trigger = GetComponent<BoxCollider>();
     }
 
-    private void Start()
+    #region Activateable implementation
+
+    public override bool Activate(bool toggleOn)
     {
-        _trigger.isTrigger = true;
-        if (_activateable)
+        if (base.Activate(toggleOn))
         {
-            _trigger.enabled = _activateable.StartActivated;
+            OpenDoor(toggleOn);
+            return true;
         }
         else
         {
-            _trigger.enabled = IsAlreadyActivated;
+            return false;
         }
-        
     }
 
-    public void OnActivate(bool activate)
+    public override void ForceActivate(bool toggleOn)
     {
-        _trigger.enabled = activate;
+        base.ForceActivate(toggleOn);
+        ForceOpenDoor(toggleOn);
+    }
+
+    #endregion
+
+    public void OpenDoor(bool open)
+    {
+        _trigger.enabled = open;
+        Material toMat = open ? OpenMat : ClosedMat;
+        GateWayMesh.material = toMat;
         Sc_GameManager.instance.SoundManager.PlaySFX(_source, _doorSound);
+    }
+
+    public void ForceOpenDoor(bool open)
+    {
+        _trigger.enabled = open;
+        Material toMat = open ? OpenMat : ClosedMat;
+        GateWayMesh.material = toMat;
+        //Gate.ForceActivate(open);
     }
 
     public void LoadLevel()

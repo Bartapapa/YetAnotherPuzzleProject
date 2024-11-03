@@ -19,6 +19,7 @@ public class Sc_Button : Sc_Activator
     public AudioSource _source;
     public AudioClip _buttonPress;
     public AudioClip _buttonLift;
+    public AudioClip _buttonFailed;
 
     private Coroutine _delayedActivationCo = null;
 
@@ -40,11 +41,21 @@ public class Sc_Button : Sc_Activator
         PushButton();
     }
 
+    protected override void FailedToActivate()
+    {
+        base.FailedToActivate();
+        Sc_GameManager.instance.SoundManager.PlaySFX(_source, _buttonFailed, new Vector2(.95f, 1.05f));
+    }
+
     private void PushButton()
     {
         if (_buttonPushed) return;
+        if (!DelayActivation())
+        {
+            return;
+        }
+
         _buttonPushed = true;
-        DelayActivation();
         _interactible.CanBeInteractedWith = false;
 
         _buttonPivot.localPosition = new Vector3(0f, 0f, -.1f);
@@ -55,13 +66,17 @@ public class Sc_Button : Sc_Activator
     private void LiftButton()
     {
         StopDelayedActivation();
-        _buttonPushed = false;
-        _interactible.CanBeInteractedWith = true;
 
         if (!_onlyActivateOnPush)
         {
-            ToggleActivate();
-        }      
+            if (!ToggleActivate())
+            {
+                return;
+            }
+        }
+
+        _buttonPushed = false;
+        _interactible.CanBeInteractedWith = true;
 
         _buttonPivot.localPosition = new Vector3(0f, 0f, 0f);
 

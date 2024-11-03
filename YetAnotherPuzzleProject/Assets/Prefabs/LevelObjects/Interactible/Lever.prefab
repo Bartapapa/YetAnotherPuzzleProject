@@ -169,7 +169,19 @@ MonoBehaviour:
         m_CallState: 2
   OnThrownInteraction:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1227609153868722186}
+        m_TargetAssemblyTypeName: Sc_Lever, Assembly-CSharp
+        m_MethodName: OnInteract
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
   _debugUnselectedMat: {fileID: 2100000, guid: f59c6e9ce19ff3249860e0e99d100f77, type: 2}
   _mesh: {fileID: 7566556629002711936}
@@ -188,14 +200,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 196589698149a8a46adb62a1329389e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _activateables:
+  Activateables:
   - {fileID: 0}
-  _axlePivot: {fileID: 8580888243922677994}
-  _inverseLever: 0
+  CanFailToActivate: 0
   ActivationDelay: 0.5
+  _axlePivot: {fileID: 8580888243922677994}
   _source: {fileID: 5103654544350634459}
   _leverLower: {fileID: 8300000, guid: 4ead2e658bf67784bb1b8c4fff77b8d9, type: 3}
   _leverLift: {fileID: 8300000, guid: 945dae87a4df4044f8f9b340736c57c3, type: 3}
+  _leverFailed: {fileID: 8300000, guid: dcb422945c40ec641b30401320da0bfc, type: 3}
 --- !u!82 &5103654544350634459
 AudioSource:
   m_ObjectHideFlags: 0

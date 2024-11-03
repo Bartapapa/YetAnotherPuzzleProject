@@ -539,7 +539,6 @@ Transform:
   - {fileID: 3840610795294646188}
   - {fileID: 1657830174838059203}
   - {fileID: 6185096730222109008}
-  - {fileID: 8898206127385556764}
   - {fileID: 2435217427720209724}
   - {fileID: 6489618668060497778}
   - {fileID: 320353208800396480}
@@ -578,6 +577,7 @@ Transform:
   - {fileID: 4853797460617287090}
   - {fileID: 6876559667037564679}
   - {fileID: 3220536276634020308}
+  - {fileID: 8898206127385556764}
   m_Father: {fileID: 6071288817715316388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3131302744962042065
@@ -998,8 +998,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.5
+      scalar: 0.35
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -5575,11 +5575,11 @@ Transform:
   m_GameObject: {fileID: 3762510977411473759}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0.65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2199922127989336070}
+  m_Father: {fileID: 5079145290483917903}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3808924073756592381
 GameObject:
@@ -6129,7 +6129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _defaultState: 1
   _maxGroundedMoveSpeed: 6
-  _groundedMovementSharpness: 25
+  _groundedMovementSharpness: 10
   _rotationSharpness: 10
   _maxAirMoveSpeed: 6
   _airMovementSharpness: 15
@@ -6144,7 +6144,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _maxVerticalBalancingForce: 200
-  _groundCheckDistance: 0.8
+  _groundCheckDistance: 1.2
   _pushCheckDistance: 1
   _characterHeight: 1.4
   _characterRadius: 0.5

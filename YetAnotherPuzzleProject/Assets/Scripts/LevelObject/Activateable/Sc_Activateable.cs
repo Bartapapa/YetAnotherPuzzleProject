@@ -11,26 +11,48 @@ public class Sc_Activateable : MonoBehaviour
     [Header("PARAMETERS")]
     public bool StartActivated = false;
     [ReadOnly][SerializeField] public bool IsActivated = false;
+    [ReadOnly][SerializeField] public bool CanBeActivated = true;
+    [ReadOnly][SerializeField] public bool CanBeDeactivated = true;
 
     [Header("PERIODIC ACTIVATION")]
     public bool PeriodicActivation = false;
     public float PeriodicActivationDuration = 5f;
+    public float PeriodicActivationInitialDelay = 0f;
     private float _activationTimer = 0f;
+    private float _periodicActivationInitialDelayTimer = 0f;
 
     private void Start()
     {
+        if (Lock)
+        {
+            Lock.LockEngaged -= OnLockEngaged;
+            Lock.LockEngaged += OnLockEngaged;
+        }
+
         ForceActivate(StartActivated);
+
+        if (PeriodicActivation)
+        {
+            _activationTimer = PeriodicActivationDuration;
+        }
     }
 
     protected virtual void Update()
     {
         if (PeriodicActivation)
         {
-            _activationTimer += Time.deltaTime;
-            if (_activationTimer >= PeriodicActivationDuration)
+            if (_periodicActivationInitialDelayTimer < PeriodicActivationInitialDelay)
             {
-                ToggleActivation();
-                _activationTimer = 0f;
+                _periodicActivationInitialDelayTimer += Time.deltaTime;
+            }
+            else
+            {
+                _activationTimer += Time.deltaTime;
+                if (_activationTimer >= PeriodicActivationDuration)
+                {
+                    ToggleActivation();
+                    _activationTimer = 0f;
+                }
             }
         }
     }
@@ -55,11 +77,28 @@ public class Sc_Activateable : MonoBehaviour
         {
             return false;
         }
+
+        if (toggleOn)
+        {
+            if (!CanBeActivated)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (!CanBeDeactivated)
+            {
+                return false;
+            }
+        }
+
         if (Lock != null)
         {
             Lock.Spin(toggleOn);
             if (!Lock.IsActivated) return false;
         }
+
         IsActivated = toggleOn;
         
         if (toggleOn)
@@ -77,5 +116,10 @@ public class Sc_Activateable : MonoBehaviour
     public bool ToggleActivation()
     {
         return Activate(!IsActivated);
+    }
+
+    public virtual void OnLockEngaged(bool engage)
+    {
+
     }
 }

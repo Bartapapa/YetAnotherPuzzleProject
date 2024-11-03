@@ -20,8 +20,10 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
     private bool _isBeingUsed = false;
     private float _deltaRotation = 0f;
     private float _lastRot = 0f;
-    public bool IsPositiveInput { get { return _deltaRotation >= 0 ? true : false; } }
+    private int _steps = 0;
+    public bool IsPositiveInput { get { return _steps >= 0; } }
 
+    private Vector3 _currentDir;
     private Vector3 _toDir = Vector3.zero;
     private Vector3 _seDir;
     private Vector3 _sDir;
@@ -47,6 +49,8 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
         _nDir = Quaternion.Euler(0, 225, 0) * transform.forward;
         _neDir = Quaternion.Euler(0, 270, 0) * transform.forward;
         _eDir = Quaternion.Euler(0, 315, 0) * transform.forward;
+
+        _currentDir = _seDir;
     }
 
     public void OnInteract(Sc_Character interactor)
@@ -70,28 +74,8 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
     {
         HandleRotation();
 
-        _deltaRotation = _lastRot - transform.eulerAngles.y;
-        _lastRot = transform.eulerAngles.y;
-
-        if (_deltaRotation > 50 || _deltaRotation < -50)
-        {
-            //Don't input, euler stuff going 360 degrees around itself.
-        }
-        else
-        {
-            if (_onlyAllowPositiveInput)
-            {
-                if (IsPositiveInput)
-                {
-                    ApplyInput();
-                }
-            }
-            else
-            {
-                ApplyInput();
-            }
-
-        }
+        //_deltaRotation = _lastRot - transform.eulerAngles.y;
+        //_lastRot = transform.eulerAngles.y;
     }
 
     private void HandleRotation()
@@ -132,15 +116,35 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
         reorientedInput = reorientedInput.normalized;
         _rectifiedInput = reorientedInput;
         _toDir = GetCardinalDirFromReorientedInput(reorientedInput);
+
+        _steps = GetStepsBetweenTwoDirs(_currentDir, _toDir);
+        ApplyInput();
+
+        _currentDir = _toDir;
     }
 
     protected override void ApplyInput()
     {
-        float adjustedInput = _deltaRotation * _inputRate * Time.deltaTime;
+        //I need applyinput to do (1/8)*_inputRate.
+        //It needs to be negative/positive depending on deltaRot
+        float adjustedInput = (1f / 8f) * _inputRate * _steps;
 
-        foreach (Sc_Gauge gauge in _gauges)
+        if (_onlyAllowPositiveInput)
         {
-            gauge.Input(adjustedInput);
+            if (IsPositiveInput)
+            {
+                foreach (Sc_Gauge gauge in _gauges)
+                {
+                    gauge.Input(adjustedInput);
+                }
+            }
+        }
+        else
+        {
+            foreach (Sc_Gauge gauge in _gauges)
+            {
+                gauge.Input(adjustedInput);
+            }
         }
     }
 
@@ -197,6 +201,291 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
         }
 
         return cardinalDir;
+    }
+    private int GetStepsBetweenTwoDirs(Vector3 fromDir, Vector3 toDir)
+    {
+        if (fromDir == _nDir)
+        {
+            if (toDir == _nDir)
+            {
+                return 0;
+            }
+            if (toDir == _neDir)
+            {
+                return -1;
+            }
+            if (toDir == _eDir)
+            {
+                return -2;
+            }
+            if (toDir == _seDir)
+            {
+                return -3;
+            }
+            if (toDir == _sDir)
+            {
+                return 0;
+            }
+            if (toDir == _swDir)
+            {
+                return 3;
+            }
+            if (toDir == _wDir)
+            {
+                return 2;
+            }
+            if (toDir == _nwDir)
+            {
+                return 1;
+            }
+        }
+        if (fromDir == _neDir)
+        {
+            if (toDir == _nDir)
+            {
+                return 1;
+            }
+            if (toDir == _neDir)
+            {
+                return 0;
+            }
+            if (toDir == _eDir)
+            {
+                return -1;
+            }
+            if (toDir == _seDir)
+            {
+                return -2;
+            }
+            if (toDir == _sDir)
+            {
+                return -3;
+            }
+            if (toDir == _swDir)
+            {
+                return 0;
+            }
+            if (toDir == _wDir)
+            {
+                return 3;
+            }
+            if (toDir == _nwDir)
+            {
+                return 2;
+            }
+        }
+        if (fromDir == _eDir)
+        {
+            if (toDir == _nDir)
+            {
+                return 2;
+            }
+            if (toDir == _neDir)
+            {
+                return 1;
+            }
+            if (toDir == _eDir)
+            {
+                return 0;
+            }
+            if (toDir == _seDir)
+            {
+                return -1;
+            }
+            if (toDir == _sDir)
+            {
+                return -2;
+            }
+            if (toDir == _swDir)
+            {
+                return -3;
+            }
+            if (toDir == _wDir)
+            {
+                return 0;
+            }
+            if (toDir == _nwDir)
+            {
+                return 3;
+            }
+        }
+        if (fromDir == _seDir)
+        {
+            if (toDir == _nDir)
+            {
+                return 3;
+            }
+            if (toDir == _neDir)
+            {
+                return 2;
+            }
+            if (toDir == _eDir)
+            {
+                return 1;
+            }
+            if (toDir == _seDir)
+            {
+                return 0;
+            }
+            if (toDir == _sDir)
+            {
+                return -1;
+            }
+            if (toDir == _swDir)
+            {
+                return -2;
+            }
+            if (toDir == _wDir)
+            {
+                return -3;
+            }
+            if (toDir == _nwDir)
+            {
+                return 0;
+            }
+        }
+        if (fromDir == _sDir)
+        {
+            if (toDir == _nDir)
+            {
+                return 0;
+            }
+            if (toDir == _neDir)
+            {
+                return 3;
+            }
+            if (toDir == _eDir)
+            {
+                return 2;
+            }
+            if (toDir == _seDir)
+            {
+                return 1;
+            }
+            if (toDir == _sDir)
+            {
+                return 0;
+            }
+            if (toDir == _swDir)
+            {
+                return -1;
+            }
+            if (toDir == _wDir)
+            {
+                return -2;
+            }
+            if (toDir == _nwDir)
+            {
+                return -3;
+            }
+        }
+        if (fromDir == _swDir)
+        {
+            if (toDir == _nDir)
+            {
+                return -3;
+            }
+            if (toDir == _neDir)
+            {
+                return 0;
+            }
+            if (toDir == _eDir)
+            {
+                return 3;
+            }
+            if (toDir == _seDir)
+            {
+                return 2;
+            }
+            if (toDir == _sDir)
+            {
+                return 1;
+            }
+            if (toDir == _swDir)
+            {
+                return 0;
+            }
+            if (toDir == _wDir)
+            {
+                return -1;
+            }
+            if (toDir == _nwDir)
+            {
+                return -2;
+            }
+        }
+        if (fromDir == _wDir)
+        {
+            if (toDir == _nDir)
+            {
+                return -2;
+            }
+            if (toDir == _neDir)
+            {
+                return -3;
+            }
+            if (toDir == _eDir)
+            {
+                return 0;
+            }
+            if (toDir == _seDir)
+            {
+                return 3;
+            }
+            if (toDir == _sDir)
+            {
+                return 2;
+            }
+            if (toDir == _swDir)
+            {
+                return 1;
+            }
+            if (toDir == _wDir)
+            {
+                return 0;
+            }
+            if (toDir == _nwDir)
+            {
+                return -1;
+            }
+        }
+        if (fromDir == _nwDir)
+        {
+            if (toDir == _nDir)
+            {
+                return -1;
+            }
+            if (toDir == _neDir)
+            {
+                return -2;
+            }
+            if (toDir == _eDir)
+            {
+                return -3;
+            }
+            if (toDir == _seDir)
+            {
+                return 0;
+            }
+            if (toDir == _sDir)
+            {
+                return 3;
+            }
+            if (toDir == _swDir)
+            {
+                return 2;
+            }
+            if (toDir == _wDir)
+            {
+                return 1;
+            }
+            if (toDir == _nwDir)
+            {
+                return 0;
+            }
+        }
+
+        return 0;
     }
 
     private void OnDrawGizmos()

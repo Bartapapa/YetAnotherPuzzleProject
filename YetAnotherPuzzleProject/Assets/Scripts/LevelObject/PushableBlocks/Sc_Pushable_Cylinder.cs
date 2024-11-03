@@ -43,9 +43,8 @@ public class Sc_Pushable_Cylinder : Sc_Pushable
         switch (blockElement)
         {
             case BlockElements.BatteryHole:
-                if (_activateable == null) return;
                 Sc_BatteryHole newBatteryHole = Instantiate<Sc_BatteryHole>(_batteryHolePrefab, spawnTransform.position, spawnTransform.rotation, spawnTransform);
-                //newBatteryHole._activateable.OnActivate.AddListener(_activateable.Activate);
+                newBatteryHole.Pushable = this;
                 break;
             case BlockElements.Handle:
                 break;
