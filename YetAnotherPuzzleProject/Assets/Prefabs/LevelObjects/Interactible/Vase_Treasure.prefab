@@ -396,7 +396,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
@@ -5326,6 +5326,8 @@ MonoBehaviour:
   - itemRewards:
     - {fileID: 463824126832822998, guid: 06f036ef42b30c24a908e7f4e28a537d, type: 3}
     weight: 10
+  IsReusable: 0
+  HasBeenSearchedThrough: 0
   _totalWeight: -1
 --- !u!136 &6005568088278556263
 CapsuleCollider:

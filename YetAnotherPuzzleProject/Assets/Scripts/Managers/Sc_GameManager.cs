@@ -226,7 +226,6 @@ public class Sc_GameManager : MonoBehaviour
         {
             CurrentData = CreateNewSaveData();
         }
-        Debug.Log(4);
         CurrentData.CreateLevelSaveProfile(level);
     }
 

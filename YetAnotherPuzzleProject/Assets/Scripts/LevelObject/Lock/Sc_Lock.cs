@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Sc_Lock : Sc_Activateable
 {
+    [Header("LOCK OBJECT REFS")]
+    public Animator Anim;
+
     [Header("SPIN PARAMETERS")]
     public float SpinDuration = 1f;
     public float SpinRotation = 360f;
@@ -64,12 +67,21 @@ public class Sc_Lock : Sc_Activateable
     {
         TopPivot.localPosition = new Vector3(0f, 0f, 0f);
         TopPivot.eulerAngles = BottomPivot.eulerAngles;
+
+        Anim.SetBool("Engaged", true);
     }
 
     public void Disengage()
     {
         TopPivot.localPosition = new Vector3(0f, .75f, 0f);
         TopPivot.eulerAngles = Vector3.zero;
+
+        Anim.SetBool("Engaged", false);
+    }
+
+    public void FailToEngage()
+    {
+        Anim.Play("FailToEngage");
     }
 
     public void Spin(bool activated)

@@ -5812,6 +5812,8 @@ MonoBehaviour:
   - itemRewards:
     - {fileID: 463824126832822998, guid: 06f036ef42b30c24a908e7f4e28a537d, type: 3}
     weight: 10
+  IsReusable: 0
+  HasBeenSearchedThrough: 0
   _totalWeight: -1
 --- !u!136 &6154199108644456345
 CapsuleCollider:

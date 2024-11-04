@@ -64,7 +64,10 @@ public class Sc_Level : MonoBehaviour
 
             SpawnAllPlayerCharacters();
             //Load all player character data
-            Sc_GameManager.instance.LoadPlayerCharacterData();
+            if (!IsLobby)
+            {
+                Sc_GameManager.instance.LoadPlayerCharacterData();
+            }           
             //Save all player character data
             Sc_GameManager.instance.SavePlayerCharacterData();
         }

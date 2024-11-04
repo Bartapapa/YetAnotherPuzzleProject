@@ -71,10 +71,11 @@ MonoBehaviour:
   Lock: {fileID: 0}
   StartActivated: 0
   IsActivated: 0
+  CanBeActivated: 1
+  CanBeDeactivated: 1
   PeriodicActivation: 0
   PeriodicActivationDuration: 5
   PeriodicActivationInitialDelay: 0
-  Gate: {fileID: 0}
   GateWayMesh: {fileID: 7915444477572214173}
   ClosedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
   OpenMat: {fileID: 2100000, guid: e7024044f09d1004db30b92ae5785978, type: 2}
@@ -238,7 +239,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710677, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.24999996, y: 1, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 0.5}
+  m_LocalScale: {x: 1.8, y: 1.9, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2429835025358650312}

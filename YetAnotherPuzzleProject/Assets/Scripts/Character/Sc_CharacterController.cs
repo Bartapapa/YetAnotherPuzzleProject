@@ -331,6 +331,10 @@ public class Sc_CharacterController : MonoBehaviour
                         Vector3 groundNormal = _groundHit.normal;
                         Vector3 inputRight = Vector3.Cross(_moveInputVector, Vector3.up);
                         Vector3 reorientedInput = Vector3.Cross(groundNormal, inputRight).normalized * _moveInputVector.magnitude;
+                        if (_isPushingBlock)
+                        {
+                            reorientedInput = _pushDirection;
+                        }
 
                         Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
                         targetMovementVelocity = targetMovementVelocity + InheritedVelocity;

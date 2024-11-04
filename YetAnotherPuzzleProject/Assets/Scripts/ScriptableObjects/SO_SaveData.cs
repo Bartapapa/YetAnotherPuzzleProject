@@ -91,7 +91,6 @@ public class SO_SaveData : ScriptableObject
     #region Level save
     public void CreateLevelSaveProfile(Sc_Level level)
     {
-        Debug.Log(1);
         LevelSaveProfile saveProfile = null;
         foreach (LevelSaveProfile lsp in LevelSaveProfiles)
         {
@@ -103,13 +102,11 @@ public class SO_SaveData : ScriptableObject
         }
         if (saveProfile == null)
         {
-            Debug.Log(2);
             saveProfile = new LevelSaveProfile(level);
             LevelSaveProfiles.Add(saveProfile);
         }
         else
         {
-            Debug.Log(3);
             saveProfile.OverwriteSave(level);
         }
     }
@@ -124,7 +121,6 @@ public class SO_SaveData : ScriptableObject
                 lsp = levelsave;
             }
         }
-        Debug.Log(lsp);
         return lsp;
     }
     #endregion

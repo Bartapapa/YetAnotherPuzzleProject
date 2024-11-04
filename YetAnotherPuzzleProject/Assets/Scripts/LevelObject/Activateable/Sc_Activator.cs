@@ -100,6 +100,31 @@ public class Sc_Activator : MonoBehaviour
         }
         return canActivate;
     }
+
+    protected List<Sc_Lock> GetUnactivateableLocks()
+    {
+        List<Sc_Lock> unactivateableLocks = new List<Sc_Lock>();
+        foreach(Sc_Activateable activateable in Activateables)
+        {
+            if (activateable.Lock != null)
+            {
+                if (!activateable.Lock.CanBeActivated)
+                {
+                    unactivateableLocks.Add(activateable.Lock);
+                }
+            }
+
+            Sc_Lock locked = activateable.GetComponent<Sc_Lock>();
+            if (locked)
+            {
+                if (!locked.CanBeActivated)
+                {
+                    unactivateableLocks.Add(locked);
+                }
+            }
+        }
+        return unactivateableLocks;
+    }
     public bool Activate()
     {
         if (!CanActivateAllActivateables(true))
@@ -148,6 +173,11 @@ public class Sc_Activator : MonoBehaviour
     protected virtual void FailedToActivate()
     {
         Debug.Log(this.gameObject.name + " failed to activate!");
+
+        foreach (Sc_Lock locks in GetUnactivateableLocks())
+        {
+            locks.FailToEngage();
+        }
     }
 
     protected bool DelayActivation()
