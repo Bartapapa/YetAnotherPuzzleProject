@@ -5393,10 +5393,10 @@ GameObject:
   - component: {fileID: 7148099319864107331}
   - component: {fileID: -516602080759757730}
   - component: {fileID: 7069857723681842973}
-  - component: {fileID: 178513672000665498}
   - component: {fileID: 3224877861351975070}
   - component: {fileID: 2161925395333028353}
   - component: {fileID: 3400845810517198304}
+  - component: {fileID: 5526729543854211091}
   m_Layer: 9
   m_Name: Effigy
   m_TagString: Untagged
@@ -5488,27 +5488,6 @@ MonoBehaviour:
   _priority: 0
   _usesKey: 0
   _keyIDs: 
---- !u!65 &178513672000665498
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6722241946343355045}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.4, y: 0.6, z: 0.4}
-  m_Center: {x: 0, y: 0.3, z: 0}
 --- !u!54 &3224877861351975070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5602,6 +5581,29 @@ MonoBehaviour:
     m_DissipationDistance: 1
     m_PropagationSpeed: 343
   m_DefaultVelocity: {x: 0, y: -1, z: 0}
+--- !u!136 &5526729543854211091
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6722241946343355045}
+  m_Material: {fileID: 13400000, guid: 9ca4e4c04b316164f84cf87c1d975f41, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.4
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &8309745171270017501
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,9 +9,14 @@ using UnityEngine;
 public class Sc_Pillar : Sc_Activateable
 {
     [Header("PARAMETERS")]
-    public float _travelDistance = 2f;
-    public float _overTime = 1f;
-    public AnimationCurve _movementCurve;
+    public float TravelDistance = 2f;
+    public float OverTime = 1f;
+    public AnimationCurve MovementCurve;
+    public float BrokenTravelOrigin = 0f;
+    public float BrokenTravelDistance = 0f;
+    public float BreakTime = 1f;
+    public AnimationCurve BreakMovementCurve;
+    public CinemachineImpulseSource ImpulseSource;
 
     [Header("SOUND")]
     public AudioSource Source;
@@ -21,6 +27,7 @@ public class Sc_Pillar : Sc_Activateable
     protected List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
     protected List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
 
+    protected bool _isBroken = false;
     protected Rigidbody _rb;
     private Coroutine _movementCo;
     private Vector3 _originPos;
@@ -46,7 +53,7 @@ public class Sc_Pillar : Sc_Activateable
         }
 
         _originPos = transform.position;
-        _destinationPos = _originPos + (transform.up * _travelDistance);
+        _destinationPos = _originPos + (transform.up * TravelDistance);
         _cachedPos = transform.position;
     }
 
@@ -101,6 +108,11 @@ public class Sc_Pillar : Sc_Activateable
             StopMoving();
         }
     }
+
+    public override void OnLockDestroyed()
+    {
+        PillarBreak();
+    }
     #endregion
 
     private void TransmitVelocity(Vector3 toVel)
@@ -136,7 +148,7 @@ public class Sc_Pillar : Sc_Activateable
         if (gauge > 1f) gauge = 1f;
         if (gauge < 0f) gauge = 0f;
 
-        float alpha = _movementCurve.Evaluate(gauge);
+        float alpha = MovementCurve.Evaluate(gauge);
         Vector3 newPos = GetPosFromAlpha(alpha);
         _rb.Move(newPos, _rb.rotation);
         Vector3 transmittedVel = (transform.position - _cachedPos)/Time.fixedDeltaTime;
@@ -206,13 +218,14 @@ public class Sc_Pillar : Sc_Activateable
         Vector3 fromPos = transform.position;
         Vector3 toPos = up ? _destinationPos : _originPos;
         Vector3 transmittedVel = Vector3.zero;
+        float travelDistance = _isBroken ? BrokenTravelDistance : TravelDistance;
         float time = 0f;
-        while (time < _overTime)
+        while (time < OverTime)
         {
             ContinuousStoneScrape(up);
 
-            float alpha = _movementCurve.Evaluate(time / _overTime);
-            Vector3 newPos = Vector3.MoveTowards(fromPos, toPos, alpha * _travelDistance);
+            float alpha = MovementCurve.Evaluate(time / OverTime);
+            Vector3 newPos = Vector3.MoveTowards(fromPos, toPos, alpha * travelDistance);
             //transform.position = newPos;
             _rb.Move(newPos, _rb.rotation);
             transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
@@ -255,6 +268,62 @@ public class Sc_Pillar : Sc_Activateable
         _movementCo = null;
     }
 
+    private void PillarBreak()
+    {
+        StopMoving();
+        Lock = null;
+        _isBroken = true;
+        _originPos = _originPos+(transform.up * BrokenTravelOrigin);
+        _destinationPos = _originPos + (transform.up * BrokenTravelDistance);
+
+        _movementCo = StartCoroutine(PillarBreakCoroutine());
+    }
+
+    private IEnumerator PillarBreakCoroutine()
+    {
+        Vector3 fromPos = transform.position;
+        Vector3 toPos = _originPos;
+        Vector3 transmittedVel = Vector3.zero;
+        float time = 0f;
+        while (time < BreakTime)
+        {
+            ContinuousStoneScrape(false);
+
+            float alpha = BreakMovementCurve.Evaluate(time / BreakTime);
+            Vector3 newPos = Vector3.MoveTowards(fromPos, toPos, alpha * BrokenTravelDistance);
+            _rb.Move(newPos, _rb.rotation);
+            transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
+            TransmitVelocity(transmittedVel);
+            time += Time.deltaTime;
+
+            RebuildNavMesh();
+
+            _cachedPos = transform.position;
+            _alphaPos = GetAlphaPosFromCachedPos();
+
+            _activationTimer = 0f;
+
+            if (_alphaPos == 0)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+        _rb.Move(toPos, _rb.rotation);
+        transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
+        TransmitVelocity(transmittedVel);
+
+        RebuildNavMesh();
+
+        _cachedPos = transform.position;
+        _alphaPos = GetAlphaPosFromCachedPos();
+
+        OnBreakReachBottom();
+
+        _movementCo = null;
+    }
+
     protected virtual void OnReachedTop()
     {
         _reachedDestination = true;
@@ -265,6 +334,16 @@ public class Sc_Pillar : Sc_Activateable
     {
         _reachedOrigin = true;
         ReachedEnd();
+    }
+
+    protected virtual void OnBreakReachBottom()
+    {
+        //Settle, camera shake, loud noise
+        _activationTimer = PeriodicActivationDuration*.2f;
+        if (Sc_CameraManager.instance != null)
+        {
+            Sc_CameraManager.instance.CameraShake(ImpulseSource, .2f);
+        }
     }
 
     protected void ReachedEnd()
@@ -404,7 +483,16 @@ public class Sc_Pillar : Sc_Activateable
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + (transform.up * _travelDistance));
-        Gizmos.DrawSphere(transform.position + (transform.up * _travelDistance), .1f);
+        Gizmos.DrawLine(transform.position, transform.position + (transform.up * TravelDistance));
+        Gizmos.DrawSphere(transform.position + (transform.up * TravelDistance), .1f);
+
+        if (BrokenTravelDistance != 0f && BrokenTravelOrigin != 0f)
+        {
+            Gizmos.color = Color.yellow;
+            Vector3 offset = transform.right * 0.05f;
+            Vector3 brokenOrigin = transform.position + (transform.up * BrokenTravelOrigin);
+            Gizmos.DrawLine(brokenOrigin + offset, brokenOrigin + (transform.up * BrokenTravelDistance) + offset);
+            Gizmos.DrawSphere(brokenOrigin + (transform.up * BrokenTravelDistance) + offset, .1f);
+        }
     }
 }

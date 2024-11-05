@@ -6,6 +6,10 @@ public class Sc_Lock : Sc_Activateable
 {
     [Header("LOCK OBJECT REFS")]
     public Animator Anim;
+    public Sc_Destructible Destructible;
+
+    [Header("LOCK PARAMETERS")]
+    public int DestroyWeightThreshold = 50;
 
     [Header("SPIN PARAMETERS")]
     public float SpinDuration = 1f;
@@ -18,7 +22,9 @@ public class Sc_Lock : Sc_Activateable
     private Coroutine _spinCo;
     private float _input = 0f;
 
+    public delegate void DefaultEvent();
     public delegate void BoolEvent(bool on);
+    public DefaultEvent LockDestroyed;
     public BoolEvent LockEngaged;
 
     #region Activateable implementation
@@ -42,6 +48,13 @@ public class Sc_Lock : Sc_Activateable
         ForceEngage(toggleOn);
     }
     #endregion
+
+    public void LockWasDestroyed()
+    {
+        ForceActivate(false);
+        LockDestroyed?.Invoke();
+        Destructible.DestructibleDestroy(null);
+    }
 
     public void ForceEngage(bool engage)
     {
@@ -163,5 +176,22 @@ public class Sc_Lock : Sc_Activateable
 
         TopPivot.eulerAngles = Vector3.zero;
         BottomPivot.eulerAngles = Vector3.zero;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (Destructible.Destroyed) return;
+
+        Sc_WeightedObject wObject = other.GetComponent<Sc_WeightedObject>();
+        if (wObject)
+        {
+            if (wObject._weight >= DestroyWeightThreshold)
+            {
+                if (wObject.RBVelocity.y <= -3f)
+                {
+                    LockWasDestroyed();
+                }
+            }
+        }
     }
 }

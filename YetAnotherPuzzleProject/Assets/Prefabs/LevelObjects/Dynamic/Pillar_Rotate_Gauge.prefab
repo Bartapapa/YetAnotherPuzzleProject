@@ -168,11 +168,14 @@ MonoBehaviour:
   Lock: {fileID: 0}
   StartActivated: 0
   IsActivated: 0
+  CanBeActivated: 1
+  CanBeDeactivated: 1
   PeriodicActivation: 0
   PeriodicActivationDuration: 5
-  _travelDistance: 4
-  _overTime: 4
-  _movementCurve:
+  PeriodicActivationInitialDelay: 0
+  TravelDistance: 2
+  OverTime: 1
+  MovementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -193,6 +196,15 @@ MonoBehaviour:
       weightedMode: 0
       inWeight: 0
       outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  BrokenTravelOrigin: 0
+  BrokenTravelDistance: 0
+  BreakTime: 1
+  BreakMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

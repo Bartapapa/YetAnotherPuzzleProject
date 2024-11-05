@@ -218,6 +218,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Generator: {fileID: 2053105722028253018}
+  WObject: {fileID: 253775003874132503}
   ImpulseSource: {fileID: 2336233342582731759}
   Dust: {fileID: 8082810741560646125}
   _maxSpeed: 2
@@ -274,8 +275,11 @@ MonoBehaviour:
   Lock: {fileID: 0}
   StartActivated: 0
   IsActivated: 0
+  CanBeActivated: 1
+  CanBeDeactivated: 1
   PeriodicActivation: 0
   PeriodicActivationDuration: 5
+  PeriodicActivationInitialDelay: 0
 --- !u!114 &2053105722028253018
 MonoBehaviour:
   m_ObjectHideFlags: 0

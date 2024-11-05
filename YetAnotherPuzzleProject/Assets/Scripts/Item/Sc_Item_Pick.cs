@@ -17,7 +17,13 @@ public class Sc_Item_Pick : Sc_Item
             Sc_Destructible destructible = collider.GetComponent<Sc_Destructible>();
             if (destructible)
             {
-                destructible.DestructibleDestroy(_inInventory.Character);
+                if (!destructible.Destroyed)
+                {
+                    if (destructible.DestroyedByPick)
+                    {
+                        destructible.DestructibleDestroy(_inInventory.Character);
+                    }
+                }
             }
         }
     }

@@ -2034,6 +2034,11 @@ PrefabInstance:
       objectReference: {fileID: 1042995935}
     - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
+      propertyPath: OverTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
       propertyPath: _overTime
       value: 4
       objectReference: {fileID: 0}
@@ -2041,6 +2046,11 @@ PrefabInstance:
         type: 3}
       propertyPath: StartActivated
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: TravelDistance
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
@@ -2056,6 +2066,21 @@ PrefabInstance:
         type: 3}
       propertyPath: PeriodicActivationDuration
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6606553627904658578, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
@@ -9052,8 +9077,18 @@ PrefabInstance:
       objectReference: {fileID: 626413921}
     - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
+      propertyPath: OverTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
       propertyPath: _overTime
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: TravelDistance
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
@@ -9069,6 +9104,21 @@ PrefabInstance:
         type: 3}
       propertyPath: PeriodicActivationDuration
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6606553627904658578, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
@@ -16044,8 +16094,18 @@ PrefabInstance:
       objectReference: {fileID: 826771631}
     - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
+      propertyPath: OverTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
       propertyPath: _overTime
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: TravelDistance
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}
@@ -16061,6 +16121,21 @@ PrefabInstance:
         type: 3}
       propertyPath: PeriodicActivationDuration
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2956683885823471163, guid: 48da19b89006b96478515b16bb9f2a3f,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6606553627904658578, guid: 48da19b89006b96478515b16bb9f2a3f,
         type: 3}

@@ -549,6 +549,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Generator: {fileID: 2053105722028253018}
+  WObject: {fileID: 253775003874132503}
   ImpulseSource: {fileID: 6021333761695582610}
   Dust: {fileID: 2827861662605459050}
   _maxSpeed: 2

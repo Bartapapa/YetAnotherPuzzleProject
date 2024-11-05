@@ -161,7 +161,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         {
             ContinuousStoneScrape(true);
 
-            float alpha = _movementCurve.Evaluate(time / _rotateOverTime);
+            float alpha = MovementCurve.Evaluate(time / _rotateOverTime);
             Quaternion toRot = Quaternion.Lerp(originalRot, destRot, alpha);
             angle = Quaternion.Angle(_rb.rotation, toRot);
             difference = Quaternion.Inverse(transform.rotation) * toRot;

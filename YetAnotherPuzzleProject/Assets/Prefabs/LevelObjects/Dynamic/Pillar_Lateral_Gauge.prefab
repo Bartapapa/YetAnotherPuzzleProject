@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 4700189864224967415}
   - component: {fileID: 5629576868800558927}
   - component: {fileID: 392467114094954280}
+  - component: {fileID: 7576882468364034317}
   m_Layer: 0
   m_Name: Pillar_Lateral_Gauge
   m_TagString: Untagged
@@ -133,11 +134,14 @@ MonoBehaviour:
   Lock: {fileID: 0}
   StartActivated: 0
   IsActivated: 0
+  CanBeActivated: 1
+  CanBeDeactivated: 1
   PeriodicActivation: 0
   PeriodicActivationDuration: 5
-  _travelDistance: 2
-  _overTime: 2
-  _movementCurve:
+  PeriodicActivationInitialDelay: 0
+  TravelDistance: 2
+  OverTime: 1
+  MovementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -161,6 +165,34 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  BrokenTravelOrigin: 0
+  BrokenTravelDistance: 0
+  BreakTime: 1
+  BreakMovementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ImpulseSource: {fileID: 7576882468364034317}
   Source: {fileID: 5629576868800558927}
   Loop: {fileID: 8300000, guid: 8169117627c692f42884db165fee3131, type: 3}
   MinMaxLoopPitch: {x: 0.45, y: 0.55}
@@ -318,6 +350,59 @@ MonoBehaviour:
   _depletionRate: 0
   _maxCompletion: 1
   _looping: 0
+--- !u!114 &7576882468364034317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4774424480704638078}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 3
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.4
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: -1, y: -1, z: 0}
 --- !u!1 &8634641856756180821
 GameObject:
   m_ObjectHideFlags: 0

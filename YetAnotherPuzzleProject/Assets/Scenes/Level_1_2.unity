@@ -2749,6 +2749,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
         type: 3}
+      propertyPath: OverTime
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
       propertyPath: _overTime
       value: 4
       objectReference: {fileID: 0}
@@ -2759,8 +2764,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
         type: 3}
+      propertyPath: TravelDistance
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
       propertyPath: _travelDistance
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
         type: 3}
@@ -7844,6 +7869,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
         type: 3}
+      propertyPath: OverTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
       propertyPath: _overTime
       value: 2
       objectReference: {fileID: 0}
@@ -7856,6 +7886,21 @@ PrefabInstance:
         type: 3}
       propertyPath: _travelDistance
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
+        type: 3}
+      propertyPath: MovementCurve.m_Curve.Array.data[1].value
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2058895292361730790, guid: e7eb68afcce870f46ae356de2f608217,
         type: 3}

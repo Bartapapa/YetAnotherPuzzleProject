@@ -374,7 +374,7 @@ MonoBehaviour:
   _continuous: 1
   _interactible: {fileID: 7894549942416578300}
   _anchor: {fileID: 8473260135502465196}
-  _rotationSharpness: 0.3
+  RotationSpeed: 2
   _onlyAllowPositiveInput: 0
 --- !u!114 &7894549942416578300
 MonoBehaviour:
@@ -403,6 +403,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnThrownInteraction:
+    m_PersistentCalls:
+      m_Calls: []
   _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
   _debugUnselectedMat: {fileID: 2100000, guid: f59c6e9ce19ff3249860e0e99d100f77, type: 2}
   _mesh: {fileID: 1336168580032465388}

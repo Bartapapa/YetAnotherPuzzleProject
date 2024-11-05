@@ -228,6 +228,7 @@ public class Sc_Player : MonoBehaviour
             }
             else
             {
+                _restartRequested = false;
                 Sc_GameManager.instance.ReloadCurrentLevel();
                 PlayerCharacter.RestartCircle.Anim.Play("FadeOut");
             }

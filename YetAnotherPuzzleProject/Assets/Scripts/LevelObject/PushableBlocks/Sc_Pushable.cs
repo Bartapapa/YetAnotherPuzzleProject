@@ -8,6 +8,7 @@ public class Sc_Pushable : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Sc_PowerGenerator Generator;
+    public Sc_WeightedObject WObject;
     public CinemachineImpulseSource ImpulseSource;
     public ParticleSystem Dust;
 
@@ -162,10 +163,19 @@ public class Sc_Pushable : MonoBehaviour
     private bool Grounded()
     {
         bool localIsGrounded = Physics.Raycast(transform.position + (Vector3.up * .2f), Vector3.down, out _groundHit, .5f, _groundLayers, QueryTriggerInteraction.Ignore);
-        if (localIsGrounded && !_isGrounded)
+        if (!_isGrounded)
         {
-            OnLand();
+            if (localIsGrounded && _rb.velocity.y <= -5f)
+            {
+                OnLand();
+            }
+            WObject.RBVelocity = _rb.velocity;
         }
+        else
+        {
+            WObject.RBVelocity = Vector3.zero;
+        }
+
         return localIsGrounded;
     }
 

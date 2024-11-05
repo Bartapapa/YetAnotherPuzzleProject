@@ -13,21 +13,31 @@ public class Sc_Destructible : MonoBehaviour
     public Collider FullMeshCollider;
     public Collider DestroyedMeshCollider;
 
+    [Header("STATE")]
+    [ReadOnly] public bool Destroyed = false;
+
+    [Header("PARAMETERS")]
+    public bool DestroyedByPick = false;
+
     private void Start()
     {
         ToggleFullMesh(true);
-        ToggleDestroyedMesh(false);
-        
+        ToggleDestroyedMesh(false);       
     }
 
     public void DestructibleDestroy(Sc_Character destroyer)
     {
-        OnDestructibleDestroy?.Invoke(destroyer);
+        if (destroyer != null)
+        {
+            OnDestructibleDestroy?.Invoke(destroyer);
+        }
         OnDestroyEvent(destroyer);
     }
 
     protected virtual void OnDestroyEvent(Sc_Character character)
     {
+        Destroyed = true;
+
         ToggleFullMesh(false);
         ToggleDestroyedMesh(true);
     }

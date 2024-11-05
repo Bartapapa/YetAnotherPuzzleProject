@@ -18,8 +18,8 @@ public class Sc_Activateable : MonoBehaviour
     public bool PeriodicActivation = false;
     public float PeriodicActivationDuration = 5f;
     public float PeriodicActivationInitialDelay = 0f;
-    private float _activationTimer = 0f;
-    private float _periodicActivationInitialDelayTimer = 0f;
+    protected float _activationTimer = 0f;
+    protected float _periodicActivationInitialDelayTimer = 0f;
 
     private void Start()
     {
@@ -27,6 +27,9 @@ public class Sc_Activateable : MonoBehaviour
         {
             Lock.LockEngaged -= OnLockEngaged;
             Lock.LockEngaged += OnLockEngaged;
+
+            Lock.LockDestroyed -= OnLockDestroyed;
+            Lock.LockDestroyed += OnLockDestroyed;
         }
 
         ForceActivate(StartActivated);
@@ -119,6 +122,11 @@ public class Sc_Activateable : MonoBehaviour
     }
 
     public virtual void OnLockEngaged(bool engage)
+    {
+
+    }
+
+    public virtual void OnLockDestroyed()
     {
 
     }

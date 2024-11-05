@@ -5322,6 +5322,7 @@ MonoBehaviour:
   DestroyedMesh: {fileID: 1146133863626875686}
   FullMeshCollider: {fileID: 2792268921376408583}
   DestroyedMeshCollider: {fileID: 0}
+  DestroyedByPick: 1
   Vase: {fileID: 4388854997719810883}
   NMObstacle: {fileID: 2459031646720042302}
 --- !u!65 &2792268921376408583
@@ -5364,6 +5365,8 @@ MonoBehaviour:
   - itemRewards:
     - {fileID: 4984712357661588465, guid: af64bb26c2f78a74b9819205e7eaf1d1, type: 3}
     weight: 10
+  IsReusable: 0
+  HasBeenSearchedThrough: 0
   _totalWeight: -1
 --- !u!208 &2459031646720042302
 NavMeshObstacle:

@@ -27,7 +27,16 @@ public class Sc_Item_Effigy : Sc_Item
 
     private bool HasLanded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, .1f, Ground, QueryTriggerInteraction.Ignore);
+        bool hasLanded = Physics.Raycast(transform.position, Vector3.down, .1f, Ground, QueryTriggerInteraction.Ignore);
+        if (!hasLanded)
+        {
+            WeightedObject.RBVelocity = _rb.velocity;
+        }
+        else
+        {
+            WeightedObject.RBVelocity = Vector3.zero;
+        }
+        return hasLanded;
     }
 
     public override void UseItem()
