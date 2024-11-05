@@ -21,12 +21,18 @@ public class Sc_Player : MonoBehaviour
     
     private Vector2 _movement;
 
+    private bool _restartRequested = false;
+    private float _restartConfirmationDuration = .75f;
+    private float _restartConfirmationTimer = 0f;
+
     void Update()
     {
         if (_playerCharacter != null)
         {
             HandlePlayerInputs();
         }
+
+        HandleRestartRequest();
     }
 
 
@@ -134,15 +140,6 @@ public class Sc_Player : MonoBehaviour
             }
         }
     }
-
-    public void OnQuack(InputAction.CallbackContext context)
-    {
-        //if (context.performed)
-        //{
-        //    _playerCharacter.SoundHandler.Quack();
-        //}
-    }
-
     public void OnThrow(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -208,8 +205,38 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            Sc_GameManager.instance.ReloadCurrentLevel();
+            _restartConfirmationTimer = 0f;
+            _restartRequested = true;
+            PlayerCharacter.RestartCircle.Anim.Play("FadeIn");
         }
+
+        if (context.canceled)
+        {
+            _restartRequested = false;
+            PlayerCharacter.RestartCircle.Anim.Play("FadeOut");
+        }
+    }
+
+    private void HandleRestartRequest()
+    {
+        if (_restartRequested)
+        {
+            if (_restartConfirmationTimer < _restartConfirmationDuration)
+            {
+                _restartConfirmationTimer += Time.deltaTime;
+                PlayerCharacter.RestartCircle.FillCircle(_restartConfirmationTimer / _restartConfirmationDuration);
+            }
+            else
+            {
+                Sc_GameManager.instance.ReloadCurrentLevel();
+                PlayerCharacter.RestartCircle.Anim.Play("FadeOut");
+            }
+        }
+    }
+
+    private void OnRestartLevelConfirmed()
+    {
+
     }
 
     private void HandlePlayerInputs()

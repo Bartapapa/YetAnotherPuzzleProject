@@ -8,6 +8,7 @@ public class Sc_Character_Player : Sc_Character
     public Sc_Interactor Interactor;
     public Sc_Inventory Inventory;
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
+    public Sc_RestartCircle RestartCircle;
 
     [Header("PLAYER CHARACTER SKINS")]
     public List<GameObject> Skins = new List<GameObject>();
