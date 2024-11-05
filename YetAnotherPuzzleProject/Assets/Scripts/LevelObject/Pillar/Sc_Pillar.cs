@@ -12,22 +12,29 @@ public class Sc_Pillar : Sc_Activateable
     public float TravelDistance = 2f;
     public float OverTime = 1f;
     public AnimationCurve MovementCurve;
+
+    [Header("BREAKING")]
     public float BrokenTravelOrigin = 0f;
     public float BrokenTravelDistance = 0f;
     public float BreakTime = 1f;
     public AnimationCurve BreakMovementCurve;
     public CinemachineImpulseSource ImpulseSource;
+    public List<ParticleSystem> BreakingSparks;
 
     [Header("SOUND")]
     public AudioSource Source;
     public AudioClip Loop;
     public Vector2 MinMaxLoopPitch = new Vector2(.45f, .55f);
     public float LoopVolume = .5f;
+    public AudioClip BreakLoop;
+    public AudioClip BreakDescent;
+    public AudioClip BreakEnd;
 
     protected List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
     protected List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
 
     protected bool _isBroken = false;
+    protected bool _isBrokenFalling = false;
     protected Rigidbody _rb;
     private Coroutine _movementCo;
     private Vector3 _originPos;
@@ -271,8 +278,10 @@ public class Sc_Pillar : Sc_Activateable
     private void PillarBreak()
     {
         StopMoving();
+        StopContinuousStoneScrape();
         Lock = null;
         _isBroken = true;
+        _isBrokenFalling = true;
         _originPos = _originPos+(transform.up * BrokenTravelOrigin);
         _destinationPos = _originPos + (transform.up * BrokenTravelDistance);
 
@@ -284,6 +293,12 @@ public class Sc_Pillar : Sc_Activateable
         Vector3 fromPos = transform.position;
         Vector3 toPos = _originPos;
         Vector3 transmittedVel = Vector3.zero;
+
+        foreach(ParticleSystem particle in BreakingSparks)
+        {
+            particle.Play();
+        }
+
         float time = 0f;
         while (time < BreakTime)
         {
@@ -319,6 +334,11 @@ public class Sc_Pillar : Sc_Activateable
         _cachedPos = transform.position;
         _alphaPos = GetAlphaPosFromCachedPos();
 
+        foreach (ParticleSystem particle in BreakingSparks)
+        {
+            particle.Stop();
+        }
+
         OnBreakReachBottom();
 
         _movementCo = null;
@@ -340,6 +360,8 @@ public class Sc_Pillar : Sc_Activateable
     {
         //Settle, camera shake, loud noise
         _activationTimer = PeriodicActivationDuration*.2f;
+        _isBrokenFalling = false;
+        Sc_GameManager.instance.SoundManager.CreateAudioSourceObject(BreakEnd, transform.position, 1f);
         if (Sc_CameraManager.instance != null)
         {
             Sc_CameraManager.instance.CameraShake(ImpulseSource, .2f);
@@ -359,9 +381,29 @@ public class Sc_Pillar : Sc_Activateable
         {
             if (Sc_GameManager.instance != null)
             {
+                AudioClip loop = null;
+                float loopVolume = 1f;
+                if (_isBroken)
+                {
+                    if (_isBrokenFalling)
+                    {
+                        loop = BreakDescent;
+                        loopVolume = 1f;
+                    }
+                    else
+                    {
+                        loop = BreakLoop;
+                        loopVolume = LoopVolume;
+                    }
+                }
+                else
+                {
+                    loop = Loop;
+                    loopVolume = LoopVolume;
+                }
                 float scrapePitch = up ? MinMaxLoopPitch.y : MinMaxLoopPitch.x;
-                Sc_GameManager.instance.SoundManager.PlayLoopingSFX(Source, Loop, new Vector2(scrapePitch, scrapePitch));
-                Sc_GameManager.instance.SoundManager.FadeIn(Source, .2f, LoopVolume);
+                Sc_GameManager.instance.SoundManager.PlayLoopingSFX(Source, loop, new Vector2(scrapePitch, scrapePitch));
+                Sc_GameManager.instance.SoundManager.FadeIn(Source, .2f, loopVolume);
             }
         }
         _continuousScrapeTimer = 0f;
