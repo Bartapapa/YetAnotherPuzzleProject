@@ -12,18 +12,19 @@ public class Sc_Inventory : MonoBehaviour
 
     [Header("ITEMS")]
     public Sc_Item[] _items = new Sc_Item[2];
-    [ReadOnly] public Sc_Item _currentlyHeldItem;
+    [ReadOnly] public Sc_Item CurrentlyHeldItem;
     private int _maximumItemCount = 3;
     public int MaximumItemCount { get { return _maximumItemCount; } }
-    public bool IsCurrentlyHoldingItem { get { return _currentlyHeldItem != null; } }
-    public bool CanUseItem { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || IsAiming || _currentlyHeldItem == null ? false : true; } }
+    public bool IsCurrentlyHoldingItem { get { return CurrentlyHeldItem != null; } }
+    public bool CanUseItem { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || IsAiming || CurrentlyHeldItem == null ? false : true; } }
+    [ReadOnly] public bool IsUsingItem = false;
 
     [Header("THROWING")]
     public LayerMask ThrownObjectCollisionLayers;
     public LineRenderer TrajectoryLine;
     public GameObject ImpactSphere;
     private Vector3 _actualAimDir;
-    public bool CanAim { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || _currentlyHeldItem == null? false : true; } }
+    public bool CanAim { get { return IsUsingItem || Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || CurrentlyHeldItem == null? false : true; } }
     [ReadOnly] public bool IsAiming = false;
 
     public delegate void ItemEvent(Sc_Item item);
@@ -38,7 +39,7 @@ public class Sc_Inventory : MonoBehaviour
 
     public void ResetInventory()
     {
-        _currentlyHeldItem = null;
+        CurrentlyHeldItem = null;
 
         for (int i = 0; i < _items.Length; i++)
         {
@@ -70,11 +71,11 @@ public class Sc_Inventory : MonoBehaviour
 
     public int GetInventoryIndexOfCurrentlyHeldItem()
     {
-        if (_currentlyHeldItem != null)
+        if (CurrentlyHeldItem != null)
         {
             for (int i = 0; i < _items.Length; i++)
             {
-                if (_currentlyHeldItem == _items[i])
+                if (CurrentlyHeldItem == _items[i])
                 {
                     return i;
                 }
@@ -86,7 +87,7 @@ public class Sc_Inventory : MonoBehaviour
     private void HandleAiming()
     {
         if (!IsAiming) return;
-        DrawAimingTrajectory(_itemThrowPoint.position, _itemThrowPoint.forward * _currentlyHeldItem._itemData.ThrowForce);
+        DrawAimingTrajectory(_itemThrowPoint.position, _itemThrowPoint.forward * CurrentlyHeldItem._itemData.ThrowForce);
         //DrawTrajectory(_itemThrowPoint.position, _currentlyHeldItem._itemData.ThrowForce);
     }
 
@@ -211,7 +212,7 @@ public class Sc_Inventory : MonoBehaviour
 
     public void DropItem(Sc_Item item)
     {
-        if (item == _currentlyHeldItem)
+        if (item == CurrentlyHeldItem)
         {
             DropCurrentItem();
             return;
@@ -279,12 +280,13 @@ public class Sc_Inventory : MonoBehaviour
 
     public void DropCurrentItem()
     {
-        if (_currentlyHeldItem == null) return;
+        if (CurrentlyHeldItem == null) return;
         else
         {
-            Sc_Item itemToDrop = _currentlyHeldItem;
-            _currentlyHeldItem = null;
-
+            Sc_Item itemToDrop = CurrentlyHeldItem;
+            itemToDrop.StopUsingItem();
+            CurrentlyHeldItem = null;
+            
             DropItem(itemToDrop);
         }
     }
@@ -294,9 +296,10 @@ public class Sc_Inventory : MonoBehaviour
         if (IsCurrentlyStoredItem(item))
         {
             canStore = true;
-            if (item == _currentlyHeldItem)
+            if (item == CurrentlyHeldItem)
             {
-                _currentlyHeldItem = null;
+                CurrentlyHeldItem.StopUsingItem();
+                CurrentlyHeldItem = null;               
             }
 
             item.OnItemStore();
@@ -356,7 +359,7 @@ public class Sc_Inventory : MonoBehaviour
 
     public void Equip(Sc_Item item)
     {
-        _currentlyHeldItem = item;
+        CurrentlyHeldItem = item;
 
         item.gameObject.SetActive(true);
         item.IsEquipped = true;
@@ -371,15 +374,15 @@ public class Sc_Inventory : MonoBehaviour
     public void EquipFromInventory(int index)
     {
         Sc_Item itemToEquip = GetItemFromIndex(index);
-        if (_currentlyHeldItem != null)
+        if (CurrentlyHeldItem != null)
         {
-            if (itemToEquip == _currentlyHeldItem)
+            if (itemToEquip == CurrentlyHeldItem)
             {
                 return;
             }
             else
             {
-                Store(_currentlyHeldItem);
+                Store(CurrentlyHeldItem);
             }
         }
 
@@ -393,14 +396,14 @@ public class Sc_Inventory : MonoBehaviour
     {
         if (!CanUseItem) return;
 
-        _currentlyHeldItem.UseItem();
+        CurrentlyHeldItem.UseItem();
     }
 
     public void ThrowItem(Sc_Item item)
     {
         if (GetIndexFromItem(item) >= 0)
         {
-            _currentlyHeldItem = null;
+            CurrentlyHeldItem = null;
             SetForThrow(item);
             item.ThrowItem(Character, _itemThrowPoint.forward);
             ItemThrown?.Invoke(item);
@@ -430,8 +433,8 @@ public class Sc_Inventory : MonoBehaviour
 
     public void ThrowCurrentItem()
     {
-        if (_currentlyHeldItem == null) return;
-        ThrowItem(_currentlyHeldItem);
+        if (CurrentlyHeldItem == null) return;
+        ThrowItem(CurrentlyHeldItem);
     }
 
     public void AimThrow()

@@ -173,7 +173,15 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            _playerCharacter.Inventory.EquipFromInventory(0);
+            if (_playerCharacter.Inventory.IsUsingItem)
+            {
+                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(0);
+            }
+            else
+            {
+                _playerCharacter.Inventory.EquipFromInventory(0);
+            }
+
         }
     }
 
@@ -181,7 +189,15 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            _playerCharacter.Inventory.EquipFromInventory(1);
+            if (_playerCharacter.Inventory.IsUsingItem)
+            {
+                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(1);
+            }
+            else
+            {
+                _playerCharacter.Inventory.EquipFromInventory(1);
+            }
+
         }
     }
 
@@ -189,7 +205,15 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            _playerCharacter.Inventory.EquipFromInventory(2);
+            if (_playerCharacter.Inventory.IsUsingItem)
+            {
+                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(2);
+            }
+            else
+            {
+                _playerCharacter.Inventory.EquipFromInventory(2);
+            }
+
         }
     }
 
@@ -197,7 +221,16 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            _playerCharacter.Inventory.DropCurrentItem();
+            if (_playerCharacter.Inventory.IsUsingItem)
+            {
+                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(3);
+            }
+            else
+            {
+                _playerCharacter.Inventory.DropCurrentItem();
+
+            }
+
         }
     }
 

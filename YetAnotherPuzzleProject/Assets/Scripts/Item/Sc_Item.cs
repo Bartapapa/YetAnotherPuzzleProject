@@ -70,6 +70,16 @@ public class Sc_Item : MonoBehaviour
         DestroyItem();
     }
 
+    public virtual void UseItemSpecial(int index)
+    {
+
+    }
+
+    public virtual void StopUsingItem()
+    {
+        if (!_inInventory.IsUsingItem) return;
+    }
+
     public virtual bool UseItemAsKey()
     {
         DestroyItem();

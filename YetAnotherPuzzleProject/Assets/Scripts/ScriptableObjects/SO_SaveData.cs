@@ -28,7 +28,7 @@ public class PlayerCharacterSaveProfile
                 PlayerCharacterInventoryIDs[i] = -1;
             }
         }
-        if (playerInventory._currentlyHeldItem != null)
+        if (playerInventory.CurrentlyHeldItem != null)
         {
             CurrentHeldItemIndex = playerInventory.GetInventoryIndexOfCurrentlyHeldItem();
         }
