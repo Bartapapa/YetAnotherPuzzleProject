@@ -223,7 +223,6 @@ public class Sc_Player : MonoBehaviour
         {
             if (_playerCharacter.Inventory.IsUsingItem)
             {
-                Debug.Log(1);
                 _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(3);
             }
             else

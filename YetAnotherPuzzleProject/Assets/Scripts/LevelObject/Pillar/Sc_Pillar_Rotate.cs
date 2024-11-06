@@ -159,8 +159,10 @@ public class Sc_Pillar_Rotate : Sc_Pillar
 
         while (time < _rotateOverTime)
         {
+            //Pillar sound
             ContinuousStoneScrape(true);
 
+            //Find angle values to parse into TransmitRotation()
             float alpha = MovementCurve.Evaluate(time / _rotateOverTime);
             Quaternion toRot = Quaternion.Lerp(originalRot, destRot, alpha);
             angle = Quaternion.Angle(_rb.rotation, toRot);

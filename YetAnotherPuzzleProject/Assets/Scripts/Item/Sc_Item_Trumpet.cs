@@ -39,7 +39,6 @@ public class Sc_Item_Trumpet : Sc_Item
 
     public override void UseItemSpecial(int index)
     {
-        Debug.Log(2);
         if (index == 0)
         {
             Sc_GameManager.instance.SoundManager.PlaySFX(Source, TrumpetHigh);

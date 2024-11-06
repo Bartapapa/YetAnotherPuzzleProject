@@ -244,6 +244,7 @@ public class Sc_CharacterController : MonoBehaviour
     {
         if (_isClimbing) return;
 
+        //Make RB float above ground, giving a force that 'attaches' it to the ground if too far away, and pushes it back if too close
         float distanceToGround = _groundHit.distance;
         float alpha = distanceToGround / _groundCheckDistance;
         float strength = Mathf.Lerp(_maxVerticalBalancingForce, -_maxVerticalBalancingForce, alpha);
@@ -328,6 +329,7 @@ public class Sc_CharacterController : MonoBehaviour
                 {
                     if (IsGrounded)
                     {
+                        //Find reoriented input depending on groundhit normal, for moving on slopes.
                         Vector3 groundNormal = _groundHit.normal;
                         Vector3 inputRight = Vector3.Cross(_moveInputVector, Vector3.up);
                         Vector3 reorientedInput = Vector3.Cross(groundNormal, inputRight).normalized * _moveInputVector.magnitude;
@@ -336,10 +338,11 @@ public class Sc_CharacterController : MonoBehaviour
                             reorientedInput = _pushDirection;
                         }
 
+                        //Set velocity, add inheritedVelocity given by pushes and moving pillars.
                         Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
+                        if (!_canMove) targetMovementVelocity = Vector3.zero;
                         targetMovementVelocity = targetMovementVelocity + InheritedVelocity;
                         InheritedVelocity = Vector3.zero;
-                        if (!_canMove) targetMovementVelocity = Vector3.zero;
                         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_groundedMovementSharpness * Time.fixedDeltaTime));
 
                         OnGroundedMovement?.Invoke(_rb);
