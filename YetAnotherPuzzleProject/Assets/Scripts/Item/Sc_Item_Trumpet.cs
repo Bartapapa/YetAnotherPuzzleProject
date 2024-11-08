@@ -101,7 +101,7 @@ public class Sc_Item_Trumpet : Sc_Item
 
         foreach(Sc_Trumpet_Listener listener in listeners)
         {
-            listener.OnHearTrumpet(trumpetSound);
+            listener.OnHearTrumpet(trumpetSound, _inInventory.Character);
         }
     }
 }

@@ -336,6 +336,51 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1181138262631821705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7143784469897326791}
+  - component: {fileID: 3511729580475614047}
+  m_Layer: 6
+  m_Name: SpiritGuide
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7143784469897326791
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181138262631821705}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5079145290483917903}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3511729580475614047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1181138262631821705}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7ac933c58e8b0740810c99187426042, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GuidedSpirits: []
 --- !u!1 &1254770008173087859
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,6 +624,7 @@ Transform:
   - {fileID: 3220536276634020308}
   - {fileID: 8898206127385556764}
   - {fileID: 3392318885046694758}
+  - {fileID: 7143784469897326791}
   m_Father: {fileID: 6071288817715316388}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3131302744962042065
@@ -5720,7 +5766,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _currentlyHeldItem: {fileID: 0}
+  CurrentlyHeldItem: {fileID: 0}
+  IsUsingItem: 0
   ThrownObjectCollisionLayers:
     serializedVersion: 2
     m_Bits: 449
@@ -6099,6 +6146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Controller: {fileID: 7095921624226034130}
+  SpiritGuide: {fileID: 3511729580475614047}
   CanBeHurt: 1
   HurtFX: {fileID: 7005478335282851330, guid: a11d910b504d9a0429a07cce0e8d1941, type: 3}
   HeadPoint: {fileID: 320353208800396480}

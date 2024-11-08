@@ -1,9 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Sc_Spirit : MonoBehaviour
 {
+    [Header("OBJECT REFS")]
+    public Sc_Trumpet_Listener TrumpetListener;
+    [ReadOnly] public Sc_SpiritGuide CurrentGuide;
+
+    [Header("FOLLOW")]
+    public float FollowSpeed = 2f;
+    private float _cachedFollowDistance = 0f;
+    private float _cachedUpwardsAngle = 0f;
+    private float _cachedOrbitSpeed = 0f;
+    private Vector3 _guideOffset = Vector3.zero;
+
     [Header("INVISIBILITY")]
     public Transform Mesh;
     public Vector2 MinMaxInvisiblityDistance = new Vector2(1.5f, 4f);
@@ -11,7 +23,7 @@ public class Sc_Spirit : MonoBehaviour
     private Renderer[] rend;
     private float _desiredAlpha = 0f;
     private float _currentAlpha = 0f;
-    private float _alphaInterpolationSpeed = .25f;
+    private float _alphaInterpolationSpeed = .5f;
 
     [Header("REVEALERS")]
     [ReadOnly] public List<Sc_SpiritRevealer> Revealers = new List<Sc_SpiritRevealer>();
@@ -19,12 +31,24 @@ public class Sc_Spirit : MonoBehaviour
     private void Start()
     {
         rend = GetComponentsInChildren<Renderer>();
+
+        TrumpetListener.HearCharacterPlayTrumpet -= OnHearCharacterPlayTrumpet;
+        TrumpetListener.HearCharacterPlayTrumpet += OnHearCharacterPlayTrumpet;
     }
 
     private void Update()
     {
         HandleInvisibility();
+        HandleFollowGuide();
     }
+
+    private void HandleFollowGuide()
+    {
+        if (CurrentGuide == null) return;
+        _guideOffset = Quaternion.Euler(0f, _cachedOrbitSpeed * Time.deltaTime, 0f) * _guideOffset;
+        transform.position = Vector3.MoveTowards(transform.position, CurrentGuide.transform.position + _guideOffset, FollowSpeed * Time.deltaTime);
+    }
+
     private void HandleInvisibility()
     {
         //_desiredAlpha = Mathf.Abs(Mathf.Sin(Time.time));
@@ -64,6 +88,41 @@ public class Sc_Spirit : MonoBehaviour
     private void OnRevealerStateChanged(Sc_SpiritRevealer revealer)
     {
         UnRegisterRevealer(revealer);
+    }
+
+    private void OnHearCharacterPlayTrumpet(Sc_Character character)
+    {
+        if (character.CanGuideSpirits)
+        {
+            FollowGuide(character.SpiritGuide);
+        }
+    }
+
+    private void CacheFollowValues(Sc_SpiritGuide guide)
+    {
+        _cachedFollowDistance = UnityEngine.Random.Range(guide.MinMaxFollowDistance.x, guide.MinMaxFollowDistance.y);
+        _cachedUpwardsAngle = UnityEngine.Random.Range(guide.MinMaxUpwardsAngle.x, guide.MinMaxUpwardsAngle.y);
+        _cachedOrbitSpeed = UnityEngine.Random.Range(guide.MinMaxOrbitSpeed.x, guide.MinMaxOrbitSpeed.y);
+
+        Vector3 guideForward = guide.transform.forward;
+        float randomStartAngle = UnityEngine.Random.Range(0, 359f);
+        guideForward = Quaternion.Euler(_cachedUpwardsAngle, randomStartAngle, 0f) * guideForward;
+        _guideOffset = guideForward * _cachedFollowDistance;
+    }
+
+    public void FollowGuide(Sc_SpiritGuide guide)
+    {
+        StopFollowCurrentGuide();
+        CurrentGuide = guide;
+        CurrentGuide.AddSpirit(this);
+        CacheFollowValues(guide);
+    }
+
+    public void StopFollowCurrentGuide()
+    {
+        if (CurrentGuide == null) return;
+        CurrentGuide.RemoveSpirit(this);
+        CurrentGuide = null;
     }
 
     public void RegisterRevealer(Sc_SpiritRevealer revealer)

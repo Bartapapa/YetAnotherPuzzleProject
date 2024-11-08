@@ -10,15 +10,41 @@ public class Sc_Trumpet_Listener : MonoBehaviour
     public UnityEvent OnCodeFalse;
 
     [Header("LISTENER PARAMETERS")]
+    public float CodePunchTime = 5f;
     public List<TrumpetSoundType> TrumpetCode = new List<TrumpetSoundType>();
     [ReadOnly] public List<TrumpetSoundType> CurrentCode = new List<TrumpetSoundType>();
+    private float _codePunchTimer = 0f;
 
     public delegate void DefaultEvent();
+    public delegate void CharacterEvent(Sc_Character character);
     public DefaultEvent HearTrumpet;
+    public CharacterEvent HearCharacterPlayTrumpet;
 
-    public void OnHearTrumpet(TrumpetSoundType trumpetSound)
+    private void Update()
+    {
+        if (CurrentCode.Count >= 1)
+        {
+            if (_codePunchTimer >= CodePunchTime)
+            {
+                OnCodeFalse?.Invoke();
+                CurrentCode.Clear();
+                _codePunchTimer = 0f;
+            }
+            _codePunchTimer += Time.deltaTime;
+        }
+        else
+        {
+            _codePunchTimer = 0f;
+        }
+    }
+
+    public void OnHearTrumpet(TrumpetSoundType trumpetSound, Sc_Character character = null)
     {
         ParseCode(trumpetSound);
+        if (character != null)
+        {
+            HearCharacterPlayTrumpet?.Invoke(character);
+        }
     }
 
     private void ParseCode(TrumpetSoundType trumpetSound)
@@ -54,6 +80,7 @@ public class Sc_Trumpet_Listener : MonoBehaviour
                     }
                 }
                 OnCodeCorrect?.Invoke(CurrentCode.Count);
+                _codePunchTimer = 0f;
             }
         }
     }
