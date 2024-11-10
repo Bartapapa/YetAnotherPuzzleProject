@@ -20,13 +20,11 @@ public class Sc_Item_Torch : Sc_Item
     public override void OnItemStore()
     {
         base.OnItemStore();
-        Debug.Log(Revealer);
         Revealer.StateChange();
     }
 
     private void OnDestroy()
     {
-        Debug.Log(Revealer);
         Revealer.StateChange();
     }
 

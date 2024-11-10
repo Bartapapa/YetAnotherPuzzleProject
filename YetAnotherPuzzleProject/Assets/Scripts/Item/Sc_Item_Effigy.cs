@@ -52,7 +52,7 @@ public class Sc_Item_Effigy : Sc_Item
 
     public override void OnItemStore()
     {
-        base.OnItemEquip();
+        base.OnItemStore();
         WeightedObject.StateChange();
     }
 

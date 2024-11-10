@@ -75,12 +75,17 @@ public class Sc_Item : MonoBehaviour
 
     }
 
+    public virtual bool OnBeforeItemStore()
+    {
+        return true;
+    }
+
     public virtual void StopUsingItem()
     {
         if (!_inInventory.IsUsingItem) return;
     }
 
-    public virtual bool UseItemAsKey()
+    public virtual bool UseItemAsKey(Sc_Interactible lockedInteractible)
     {
         DestroyItem();
         return true;

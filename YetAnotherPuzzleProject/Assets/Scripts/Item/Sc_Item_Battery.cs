@@ -9,7 +9,7 @@ public class Sc_Item_Battery : Sc_Item
         
     }
 
-    public override bool UseItemAsKey()
+    public override bool UseItemAsKey(Sc_Interactible lockedInteractible)
     {
         if (_inInventory != null)
         {

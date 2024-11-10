@@ -262,6 +262,7 @@ public class Sc_SoundManager : MonoBehaviour
     public Sc_AudioSourceObject CreateAudioSourceObject(AudioClip clip, Vector3 position, float volume = 1f)
     {
         if (Sc_GameManager.instance.CurrentLevel == null) return null;
+        if (clip == null) return null;
 
         Transform parent = Sc_GameManager.instance.CurrentLevel.transform;
 

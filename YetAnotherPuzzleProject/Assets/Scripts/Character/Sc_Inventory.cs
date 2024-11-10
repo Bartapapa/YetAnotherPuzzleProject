@@ -65,7 +65,15 @@ public class Sc_Inventory : MonoBehaviour
         }
         if (currentlyHeldItemIndex >= 0)
         {
-            Equip(_items[currentlyHeldItemIndex]);
+            if (currentlyHeldItemIndex == 3)
+            {
+                //CurrentlyHeldItem isn't kept in one's storage, such as a Blue Flame. Instantiate it, then equip it.
+                Debug.LogWarning("Couldn't instantiate blue flame or other object not in inventory!");
+            }
+            else
+            {
+                Equip(_items[currentlyHeldItemIndex]);
+            }          
         }
     }
 
@@ -80,6 +88,7 @@ public class Sc_Inventory : MonoBehaviour
                     return i;
                 }
             }
+            return 3;
         }
         return -1;
     }
@@ -235,7 +244,10 @@ public class Sc_Inventory : MonoBehaviour
         item.OnItemDrop();
         ItemDropped?.Invoke(item);
 
-        _items[GetIndexFromItem(item)] = null;
+        if (GetIndexFromItem(item) >= 0)
+        {
+            _items[GetIndexFromItem(item)] = null;
+        }
         item._inInventory = null;
     }
 
@@ -301,7 +313,7 @@ public class Sc_Inventory : MonoBehaviour
                 CurrentlyHeldItem.StopUsingItem();
                 CurrentlyHeldItem = null;               
             }
-
+            if (!item.OnBeforeItemStore()) return false;
             item.OnItemStore();
 
             item._interactible.CanBeInteractedWith = false;
@@ -315,6 +327,9 @@ public class Sc_Inventory : MonoBehaviour
 
             if (canStore)
             {
+                if (!item.OnBeforeItemStore()) return false;
+                item.OnItemStore();
+
                 item._interactible.CanBeInteractedWith = false;
                 item.IsEquipped = false;
 
@@ -326,7 +341,6 @@ public class Sc_Inventory : MonoBehaviour
                 {
                     _items[GetNextItemIndex()] = item;
                 }
-                item.OnItemStore();
 
                 item._inInventory = this;
                 item.transform.parent = _itemHoldAnchor;
@@ -401,13 +415,16 @@ public class Sc_Inventory : MonoBehaviour
 
     public void ThrowItem(Sc_Item item)
     {
-        if (GetIndexFromItem(item) >= 0)
-        {
-            CurrentlyHeldItem = null;
-            SetForThrow(item);
-            item.ThrowItem(Character, _itemThrowPoint.forward);
-            ItemThrown?.Invoke(item);
-        }
+        SetForThrow(item);
+        item.ThrowItem(Character, _itemThrowPoint.forward);
+        ItemThrown?.Invoke(item);
+
+        CurrentlyHeldItem = null;
+
+        //if (GetIndexFromItem(item) >= 0)
+        //{
+
+        //}
     }
 
     private void SetForThrow(Sc_Item item)
@@ -427,7 +444,10 @@ public class Sc_Inventory : MonoBehaviour
         item.transform.position = _itemThrowPoint.position;
         item.transform.rotation = _itemThrowPoint.rotation;
 
-        _items[GetIndexFromItem(item)] = null;
+        if (GetIndexFromItem(item) >= 0)
+        {
+            _items[GetIndexFromItem(item)] = null;
+        }
         item._inInventory = null;
     }
 
