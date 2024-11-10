@@ -230,6 +230,7 @@ MonoBehaviour:
   _debugUnselectedMat: {fileID: 2100000, guid: f59c6e9ce19ff3249860e0e99d100f77, type: 2}
   _mesh: {fileID: 8261293789251523800}
   _priority: 0
+  CanBeInteractedWithOnThrow: 1
   _usesKey: 0
   _keyIDs: 
 --- !u!114 &5304554075056151099

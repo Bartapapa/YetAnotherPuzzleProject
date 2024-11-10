@@ -17,6 +17,7 @@ public class Sc_Interactible : MonoBehaviour
 
     [Header("PARAMETERS")]
     public int _priority = 0;
+    public bool CanBeInteractedWithOnThrow = false;
 
     [Header("KEY")]
     public bool _usesKey = false;

@@ -106,16 +106,48 @@ public class Sc_Inventory : MonoBehaviour
         Vector3 vel = initialVel;
         Vector3 gravity = Physics.gravity;
         Vector3 aimDirection = initialVel;
+        _actualAimDir = transform.forward;
+        int contactIndex = -1;
+
+        for (int i = 0; i < TrajectoryLine.positionCount; i++)
+        {
+            if (MakesContact(pos))
+            {
+                Vector3 contactPos = pos;
+                if (CurrentlyHeldItem._itemData.InteractsOnThrow)
+                {
+                    Sc_Interactible contactedInteractible = GetClosestContactedInteractible(pos, CurrentlyHeldItem._itemData.OnContactAffectRange);
+                    if (contactedInteractible != null)
+                    {
+                        contactPos = contactedInteractible.transform.position;
+                    }
+                }
+                Vector3 posIgnoreY = new Vector3(_itemThrowPoint.position.x, 0f, _itemThrowPoint.position.z);
+                Vector3 contactPosIgnoreY = new Vector3(contactPos.x, 0f, contactPos.z);
+                Vector3 dir = (contactPosIgnoreY - posIgnoreY).normalized;
+                //float angle = GetAngleToHitPoint(_itemThrowPoint.position, contactPos, initialVel);
+                //_actualAimDir = Quaternion.AngleAxis(angle, Vector3.Cross(dir, Vector3.up)) * dir;
+                _actualAimDir = dir;
+                //Debug.Log(GetAngleToHitPoint(_itemThrowPoint.position, contactPos, initialVel));
+                contactIndex = i;
+                break;
+            }
+
+            vel = vel + gravity * Time.fixedDeltaTime;
+            pos = pos + vel * Time.fixedDeltaTime;
+        }
+
+        pos = initialPos;
+        vel = _actualAimDir * CurrentlyHeldItem._itemData.ThrowForce;
 
         for (int i = 0; i < TrajectoryLine.positionCount; i++)
         {
             TrajectoryLine.SetPosition(i, pos);
 
-            if (MakesContact(pos))
+            if (i >= contactIndex)
             {
                 ImpactSphere.SetActive(true);
                 ImpactSphere.transform.position = pos;
-
                 for (int j = i; j < TrajectoryLine.positionCount; j++)
                 {
                     TrajectoryLine.SetPosition(j, pos);
@@ -126,15 +158,29 @@ public class Sc_Inventory : MonoBehaviour
             {
                 ImpactSphere.SetActive(false);
             }
-
             vel = vel + gravity * Time.fixedDeltaTime;
             pos = pos + vel * Time.fixedDeltaTime;
         }
     }
 
+    private float GetAngleToHitPoint(Vector3 throwFromPoint, Vector3 targetPoint, Vector3 initialVel)
+    {
+        Vector3 throwIgnoreY = new Vector3(throwFromPoint.x, 0f, throwFromPoint.z);
+        Vector3 targetIgnoreY = new Vector3(targetPoint.x, 0f, targetPoint.z);
+        Vector3 v = initialVel;
+        float y = targetPoint.y - throwFromPoint.y;
+        float x = Vector3.Distance(throwIgnoreY, targetIgnoreY);
+        return Mathf.Rad2Deg*(Mathf.Atan(y / x + Mathf.Sqrt((y * y) / (x * x) + 1)));
+    }
+
     private bool MakesContact(Vector3 position)
     {
-        return Physics.OverlapSphere(position, .3f, ThrownObjectCollisionLayers, QueryTriggerInteraction.Ignore).Length > 0;
+        Collider[] coll = Physics.OverlapSphere(position, .3f, ThrownObjectCollisionLayers, QueryTriggerInteraction.Ignore);
+        //foreach(Collider colli in coll)
+        //{
+        //    Debug.Log(colli.gameObject.name);
+        //}
+        return coll.Length > 0;
     }
 
     private Sc_Interactible GetClosestContactedInteractible(Vector3 position, float contactAffectRange)
@@ -148,9 +194,12 @@ public class Sc_Inventory : MonoBehaviour
             Sc_Interactible interactible = coll.GetComponent<Sc_Interactible>();
             if (interactible)
             {
-                if (!contactedInteractibles.Contains(interactible))
+                if (interactible.CanBeInteractedWithOnThrow)
                 {
-                    contactedInteractibles.Add(interactible);
+                    if (!contactedInteractibles.Contains(interactible))
+                    {
+                        contactedInteractibles.Add(interactible);
+                    }
                 }
             }
         }
@@ -416,7 +465,7 @@ public class Sc_Inventory : MonoBehaviour
     public void ThrowItem(Sc_Item item)
     {
         SetForThrow(item);
-        item.ThrowItem(Character, _itemThrowPoint.forward);
+        item.ThrowItem(Character, _actualAimDir);
         ItemThrown?.Invoke(item);
 
         CurrentlyHeldItem = null;

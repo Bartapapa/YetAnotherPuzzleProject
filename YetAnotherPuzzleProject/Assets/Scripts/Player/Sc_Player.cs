@@ -116,6 +116,7 @@ public class Sc_Player : MonoBehaviour
     public void OnMovement(InputAction.CallbackContext context)
     {
         _movement = context.ReadValue<Vector2>();
+
     }
 
     public void OnInteraction(InputAction.CallbackContext context)
@@ -142,20 +143,30 @@ public class Sc_Player : MonoBehaviour
     }
     public void OnThrow(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        {
-            //Should have aiming stance first, then on release have the throw. Draw a trajectory line during this period.
-            
-        }
+        //Should have aiming stance first, then on release have the throw. Draw a trajectory line during this period.
 
         if (context.performed)
         {
             if (!_playerCharacter.Inventory.CanAim) return;
+
+            if (context.action.activeControl.device.displayName == "Keyboard" || context.action.activeControl.device.displayName == "Mouse")
+            {
+                //Change character rotationSpeed
+                _playerCharacter.Controller._rotationSharpness = _playerCharacter.AimingRotationSpeed;
+            }
+
             _playerCharacter.Inventory.AimThrow();
         }
         if (context.canceled)
         {
             if (!_playerCharacter.Inventory.IsAiming) return;
+
+            if (context.action.activeControl.device.displayName == "Keyboard" || context.action.activeControl.device.displayName == "Mouse")
+            {
+                //Change character rotationSpeed
+                _playerCharacter.Controller._rotationSharpness = _playerCharacter.BaseRotationSpeed;
+            }
+
             _playerCharacter.Inventory.StopAiming();
             _playerCharacter.Inventory.ThrowCurrentItem();
         }
