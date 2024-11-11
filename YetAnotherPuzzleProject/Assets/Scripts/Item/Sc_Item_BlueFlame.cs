@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.Progress;
 
 public class Sc_Item_BlueFlame : Sc_Item
@@ -9,9 +10,10 @@ public class Sc_Item_BlueFlame : Sc_Item
     public Transform BowlAnchor;
 
     [Header("RETURN")]
-    public AnimationCurve HeightCurve;
-    public float HeightApex = 2f;
-    public float ReturnDuration = 3f;
+    public AnimationCurve FlameFlickerCurve;
+    public AnimationCurve FlameSpawnCurve;
+    public float DieOutTime = 3f;
+    public float SpawnTime = 3f;
 
     [Header("TORCH")]
     public AnimationCurve TorchHeightCurve;
@@ -31,13 +33,14 @@ public class Sc_Item_BlueFlame : Sc_Item
         Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
         if (player)
         {
+            if (!player.Inventory.CanStoreNewItem) return;
+
             if (player.Inventory.IsCurrentlyHoldingItem)
             {
-                player.Inventory.Store(player.Inventory.CurrentlyHeldItem);
+                if (!player.Inventory.Store(player.Inventory.CurrentlyHeldItem)) return;
             }
-            _inInventory = player.Inventory;
-            player.Inventory.Equip(this);
-            _interactible.CanBeInteractedWith = false;
+
+            player.Inventory.PickUpItemAndEquip(this);
         }
     }
 
@@ -71,8 +74,8 @@ public class Sc_Item_BlueFlame : Sc_Item
 
     public override bool OnBeforeItemStore()
     {
-        ReturnToBowl();
-        return false;
+        //ReturnToBowl();
+        return true;
         //Flame goes back to origin spot. Flame needs to be gameobject active for this to work, and set gameobject to inactive happens after this call. Find a workaround.
     }
 
@@ -130,29 +133,32 @@ public class Sc_Item_BlueFlame : Sc_Item
         }
 
         float timer = 0f;
-        float fromHeight = transform.position.y;
-        float destinationHeight = BowlAnchor.position.y;
-        Vector3 fromPos = transform.position;
-        Vector3 destinationPos = BowlAnchor.position;
-        Quaternion fromRot = transform.rotation;
-        Quaternion destinationRot = BowlAnchor.rotation;
-        Vector3 toPos = Vector3.zero;
-        Quaternion toRot = Quaternion.identity;
-        float heightAdjust = 0f;
-        while (timer <= ReturnDuration)
+        while (timer <= DieOutTime)
         {
-            heightAdjust = HeightCurve.Evaluate(timer / ReturnDuration) * HeightApex;
-            toPos = Vector3.Lerp(fromPos, destinationPos, timer / ReturnDuration);
-            toPos = toPos + new Vector3(0f, heightAdjust, 0f);
-            toRot = Quaternion.Slerp(fromRot, destinationRot, timer / ReturnDuration);
-            transform.position = toPos;
-            transform.rotation = toRot;
+            Vector3 toScale = Vector3.one * FlameFlickerCurve.Evaluate(timer / DieOutTime);
+            transform.localScale = toScale;
             timer += Time.deltaTime;
             yield return null;
         }
-
-        transform.position = destinationPos;
-        transform.rotation = destinationRot;
+        transform.localScale = Vector3.zero;
+        if (BowlAnchor != null)
+        {
+            transform.position = BowlAnchor.position;
+            transform.rotation = BowlAnchor.rotation;
+            timer = 0f;
+            while (timer <= SpawnTime)
+            {
+                Vector3 toScale = Vector3.one * FlameSpawnCurve.Evaluate(timer / DieOutTime);
+                transform.localScale = toScale;
+                timer += Time.deltaTime;
+                yield return null;
+            }
+            transform.localScale = Vector3.one;
+        }
+        else
+        {
+            OnItemDestroyed();
+        }
 
         _interactible.CanBeInteractedWith = true;
         _returnToBowlCo = null;

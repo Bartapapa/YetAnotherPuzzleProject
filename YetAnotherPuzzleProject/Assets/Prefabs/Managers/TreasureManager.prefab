@@ -56,6 +56,11 @@ MonoBehaviour:
   - {fileID: 463824126832822998, guid: c4e1c1a4b9730194ab6e188947e1658d, type: 3}
   - {fileID: 463824126832822998, guid: 2b87621f20610fd4987b3481cec52e58, type: 3}
   - {fileID: 463824126832822998, guid: 84d37d282a1361048923c82afe7b0236, type: 3}
+  - {fileID: 463824126832822998, guid: ac9b78d7855bedd4aa80e8faecbf9ff4, type: 3}
+  - {fileID: 463824126832822998, guid: 67dfe6f354d66ea45b987248e1b8f586, type: 3}
+  - {fileID: 463824126832822998, guid: 0e3d4c6fa4093b14886cf8469072be4b, type: 3}
+  - {fileID: 463824126832822998, guid: d85aae46a4cbcb749ad2232542565aba, type: 3}
+  - {fileID: 463824126832822998, guid: 757de8641ed9d084ab618d908b2c6ff9, type: 3}
   _foundTreasures: []
   CommonParticles: {fileID: 4648991780238432369, guid: 3ffad891efbac7b459afb3e6b3da764d,
     type: 3}

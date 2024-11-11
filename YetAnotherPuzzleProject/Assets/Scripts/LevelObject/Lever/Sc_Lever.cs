@@ -45,7 +45,11 @@ public class Sc_Lever : Sc_Activator
     {
         if (!StopDelayedActivation())
         {
-            if (!ToggleActivate())
+            //if (!ToggleActivate())
+            //{
+            //    return;
+            //}
+            if (!DelayActivation())
             {
                 return;
             }
@@ -59,10 +63,21 @@ public class Sc_Lever : Sc_Activator
 
     private void LowerLever()
     {
-        if (!DelayActivation())
+        if (!StopDelayedActivation())
         {
-            return;
+            //if (!ToggleActivate())
+            //{
+            //    return;
+            //}
+            if (!DelayActivation())
+            {
+                return;
+            }
         }
+        //if (!DelayActivation())
+        //{
+        //    return;
+        //}
 
         _axlePivot.localEulerAngles = new Vector3(40f, 0f, 0f);
         _leverLowered = true;

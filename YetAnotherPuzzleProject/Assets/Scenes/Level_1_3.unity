@@ -6176,7 +6176,7 @@ PrefabInstance:
     - target: {fileID: 4894945941057055218, guid: b752acba7f7a51044ac538fff5437cdd,
         type: 3}
       propertyPath: SpinDuration
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4894945941057055218, guid: b752acba7f7a51044ac538fff5437cdd,
         type: 3}
@@ -11968,7 +11968,7 @@ PrefabInstance:
     - target: {fileID: 4894945941057055218, guid: b752acba7f7a51044ac538fff5437cdd,
         type: 3}
       propertyPath: SpinDuration
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4894945941057055218, guid: b752acba7f7a51044ac538fff5437cdd,
         type: 3}

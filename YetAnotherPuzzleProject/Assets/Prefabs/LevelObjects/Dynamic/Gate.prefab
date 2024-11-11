@@ -385,9 +385,9 @@ MonoBehaviour:
   PeriodicActivation: 0
   PeriodicActivationDuration: 5
   PeriodicActivationInitialDelay: 0
-  _travelDistance: 2.1
-  _overTime: 2
-  _movementCurve:
+  TravelDistance: 2
+  OverTime: 1
+  MovementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
@@ -411,10 +411,24 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  BrokenTravelOrigin: 0
+  BrokenTravelDistance: 0
+  BreakTime: 1
+  BreakMovementCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ImpulseSource: {fileID: 0}
+  BreakingSparks: []
   Source: {fileID: 360683749868590404}
   Loop: {fileID: 8300000, guid: 8169117627c692f42884db165fee3131, type: 3}
   MinMaxLoopPitch: {x: 0.45, y: 0.55}
   LoopVolume: 0.3
+  BreakLoop: {fileID: 0}
+  BreakDescent: {fileID: 0}
+  BreakEnd: {fileID: 0}
 --- !u!82 &360683749868590404
 AudioSource:
   m_ObjectHideFlags: 0

@@ -79,7 +79,8 @@ public class Sc_Lock : Sc_Activateable
     public void Engage()
     {
         TopPivot.localPosition = new Vector3(0f, 0f, 0f);
-        TopPivot.eulerAngles = BottomPivot.eulerAngles;
+        TopPivot.localEulerAngles = BottomPivot.localEulerAngles;
+
 
         Anim.SetBool("Engaged", true);
     }
@@ -87,7 +88,7 @@ public class Sc_Lock : Sc_Activateable
     public void Disengage()
     {
         TopPivot.localPosition = new Vector3(0f, .75f, 0f);
-        TopPivot.eulerAngles = Vector3.zero;
+        TopPivot.localEulerAngles = Vector3.zero;
 
         Anim.SetBool("Engaged", false);
     }
@@ -122,13 +123,13 @@ public class Sc_Lock : Sc_Activateable
 
         if (IsActivated)
         {
-            TopPivot.eulerAngles = euler;
-            BottomPivot.eulerAngles = euler;
+            TopPivot.localEulerAngles = euler;
+            BottomPivot.localEulerAngles = euler;
         }
         else
         {
-            TopPivot.eulerAngles = Vector3.zero;
-            BottomPivot.eulerAngles = euler;
+            TopPivot.localEulerAngles = Vector3.zero;
+            BottomPivot.localEulerAngles = euler;
         }
     }
 
@@ -149,8 +150,8 @@ public class Sc_Lock : Sc_Activateable
     private IEnumerator SpinCoroutine(bool activated)
     {
         float timer = 0f;
-        TopPivot.eulerAngles = Vector3.zero;
-        BottomPivot.eulerAngles = Vector3.zero;
+        TopPivot.localEulerAngles = Vector3.zero;
+        BottomPivot.localEulerAngles = Vector3.zero;
 
         CanBeActivated = false;
 
@@ -174,8 +175,8 @@ public class Sc_Lock : Sc_Activateable
 
         CanBeActivated = true;
 
-        TopPivot.eulerAngles = Vector3.zero;
-        BottomPivot.eulerAngles = Vector3.zero;
+        TopPivot.localEulerAngles = Vector3.zero;
+        BottomPivot.localEulerAngles = Vector3.zero;
     }
 
     private void OnTriggerEnter(Collider other)

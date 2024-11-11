@@ -4932,43 +4932,112 @@ MonoBehaviour:
   Store: {fileID: 0}
   Equip: {fileID: 8300000, guid: ae58e0eecce28f543beb56195277d700, type: 3}
   Drop: {fileID: 0}
-  Break: {fileID: 0}
+  Break: {fileID: 8300000, guid: 694c58a77efd99945be8f13b7f291b4d, type: 3}
   BowlAnchor: {fileID: 0}
-  HeightCurve:
+  FlameFlickerCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: 3.27044
-      outSlope: 3.27044
-      tangentMode: 0
+      value: 1
+      inSlope: -2.2705317
+      outSlope: -2.2705317
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2208321
+      value: 0.49859375
+      inSlope: -0.38198644
+      outSlope: -0.38198644
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.075
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.5
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 136
+      time: 0.31972787
+      value: 0.64758605
+      inSlope: -0.1840123
+      outSlope: -0.1840123
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5826051
+      value: 0.15480073
+      inSlope: -0.119389
+      outSlope: -0.119389
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.6501039
+      value: 0.26521564
+      inSlope: 0.29695618
+      outSlope: 0.29695618
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7242878
+      value: 0.18792397
+      inSlope: -0.38883466
+      outSlope: -0.38883466
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7932532
+      value: 0.20614626
+      inSlope: -0.36643574
+      outSlope: -0.36643574
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -2.7594318
-      outSlope: -2.7594318
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.06666672
-      outWeight: 0.33333334
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  HeightApex: 2
-  ReturnDuration: 3
+  FlameSpawnCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  DieOutTime: 3
+  SpawnTime: 3
   TorchHeightCurve:
     serializedVersion: 2
     m_Curve:
@@ -5039,6 +5108,7 @@ MonoBehaviour:
   _debugUnselectedMat: {fileID: 2100000, guid: c77647f841bb96a46ae1255b26a47b93, type: 2}
   _mesh: {fileID: 4766589401290312935}
   _priority: 0
+  CanBeInteractedWithOnThrow: 0
   _usesKey: 0
   _keyIDs: 
 --- !u!65 &6909464459272661829

@@ -17,6 +17,7 @@ public class Sc_Inventory : MonoBehaviour
     public int MaximumItemCount { get { return _maximumItemCount; } }
     public bool IsCurrentlyHoldingItem { get { return CurrentlyHeldItem != null; } }
     public bool CanUseItem { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || IsAiming || CurrentlyHeldItem == null ? false : true; } }
+    public bool CanStoreNewItem { get { return CheckIfCanStoreNewItem(); } }
     [ReadOnly] public bool IsUsingItem = false;
 
     [Header("THROWING")]
@@ -303,6 +304,7 @@ public class Sc_Inventory : MonoBehaviour
     private int GetIndexFromItem(Sc_Item item)
     {
         int index = -1;
+        if (item == null) return index;
         for (int i = 0; i < _items.Length; i++)
         {
             if (_items[i] == item)
@@ -351,6 +353,21 @@ public class Sc_Inventory : MonoBehaviour
             DropItem(itemToDrop);
         }
     }
+
+    private bool CheckIfCanStoreNewItem()
+    {
+        int storedItems = 0;
+        for (int i = 0; i < _items.Length; i++)
+        {
+            if (GetIndexFromItem(_items[i]) >= 0)
+            {
+                storedItems++;
+            }
+        }
+        Debug.Log(storedItems);
+        return storedItems < MaximumItemCount;
+    }
+
     public bool Store(Sc_Item item, int forceIndex = -1)
     {
         bool canStore = false;

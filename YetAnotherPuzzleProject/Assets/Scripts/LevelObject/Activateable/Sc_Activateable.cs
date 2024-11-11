@@ -21,7 +21,7 @@ public class Sc_Activateable : MonoBehaviour
     protected float _activationTimer = 0f;
     protected float _periodicActivationInitialDelayTimer = 0f;
 
-    private void Start()
+    protected virtual void Start()
     {
         if (Lock)
         {
