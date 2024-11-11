@@ -68,6 +68,14 @@ public class Sc_CameraManager : MonoBehaviour
 
     #endregion
 
+    #region CAMERALOOK
+    public void AimCamera(CharacterInput input)
+    {
+        Vector2 alteredInput = Vector2.ClampMagnitude(new Vector2(input.aimX, input.aimY), 1f);
+        _defaultCameraFocus.AddAimInput(alteredInput);
+    }
+    #endregion
+
     #region CAMERACOMMANDS
 
     public void RotateDefaultCamera(float degreesEuler, float overTime)

@@ -14,6 +14,9 @@ public class Sc_Level : MonoBehaviour
     public bool IsLobby = false;
     public bool IsDebugLevel = false;
 
+    [Header("WALKWAY")]
+    public Sc_Walkway WalkWay;
+
     [Header("TREASURE VASES")]
     public List<Sc_Vase> TreasureVases = new List<Sc_Vase>();
 
@@ -52,7 +55,7 @@ public class Sc_Level : MonoBehaviour
         if (Sc_GameManager.instance != null)
         {
             Sc_GameManager.instance.CurrentLevel = this;
-            Sc_UIManager.instance.Transitioner.Reveal();
+            Sc_UIManager.instance.Transitioner.Reveal(() => OnTransitionFinishReveal());
 
             Sc_GameManager.instance.PlayerManager.AssignEventsToLevelManager();
 
@@ -164,6 +167,14 @@ public class Sc_Level : MonoBehaviour
     #endregion
 
     #region UNIVERSALLEVELFUNCTIONS
+
+    private void OnTransitionFinishReveal()
+    {
+        if (WalkWay)
+        {
+            WalkWay.BreakWalkway();
+        }
+    }
 
     public void RequestRebuildNavmesh()
     {

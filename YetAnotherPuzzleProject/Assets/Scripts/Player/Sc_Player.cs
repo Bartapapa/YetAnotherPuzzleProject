@@ -9,6 +9,8 @@ public struct CharacterInput
 {
     public float moveX;
     public float moveY;
+    public float aimX;
+    public float aimY;
     public Camera cameraRef;
 }
 
@@ -20,6 +22,7 @@ public class Sc_Player : MonoBehaviour
     public Sc_Character_Player PlayerCharacter { get { return _playerCharacter; } }
     
     private Vector2 _movement;
+    private Vector2 _cameraAim;
 
     private bool _restartRequested = false;
     private float _restartConfirmationDuration = .75f;
@@ -117,6 +120,11 @@ public class Sc_Player : MonoBehaviour
     {
         _movement = context.ReadValue<Vector2>();
 
+    }
+
+    public void OnCameraLook(InputAction.CallbackContext context)
+    {
+        _cameraAim = context.ReadValue<Vector2>();
     }
 
     public void OnInteraction(InputAction.CallbackContext context)
@@ -291,9 +299,17 @@ public class Sc_Player : MonoBehaviour
         playerInput.moveX = _movement.x;
         playerInput.moveY = _movement.y;
 
+        playerInput.aimX = _cameraAim.x;
+        playerInput.aimY = _cameraAim.y;
+
         playerInput.cameraRef = Camera.main;
 
         _playerCharacter.Controller.SetInputs(ref playerInput);
+
+        if (Sc_CameraManager.instance != null)
+        {
+            Sc_CameraManager.instance.AimCamera(playerInput);
+        }
     }
     #endregion
 
