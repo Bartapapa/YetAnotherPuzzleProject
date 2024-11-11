@@ -10134,7 +10134,7 @@ MonoBehaviour:
   BlowDistance: 10
   StrongBlowDistance: 5
   BlowForce: 200
-  StrongBlowForce: 350
+  StrongBlowForce: 450
   CharacterLayers:
     serializedVersion: 2
     m_Bits: 192

@@ -31,7 +31,10 @@ EditorBuildSettings:
     guid: 322ed10f1738ad840ba28fa562003124
   - enabled: 1
     path: Assets/Scenes/Level_1_4.unity
-    guid: bfbd509bdad74844299e1d794d214421
+    guid: cd46cba5a2b98fa4492144224fee9138
+  - enabled: 1
+    path: Assets/Scenes/Level_1_5.unity
+    guid: 9ecd51881257f014c88dd4b43c87a11b
   - enabled: 1
     path: Assets/Scenes/Loading.unity
     guid: 23b3103b3c9c1fb45bf1f51624295909
@@ -41,9 +44,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/UIScene.unity
     guid: 741ac163526402246921955f40e2f07b
-  - enabled: 1
-    path: Assets/Scenes/SampleScene2.unity
-    guid: 879596765e9016b4c952bfbfa39fd920
   - enabled: 1
     path: Assets/Scenes/SampleScene1.unity
     guid: 99c9720ab356a0642a771bea13969a05

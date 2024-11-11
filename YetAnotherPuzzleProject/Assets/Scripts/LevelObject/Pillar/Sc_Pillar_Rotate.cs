@@ -8,6 +8,7 @@ using static UnityEngine.UI.Image;
 public class Sc_Pillar_Rotate : Sc_Pillar
 {
     [Header("ROTATE PARAMETERS")]
+    public Vector3 RotateAxis = new Vector3(0f, 1f, 0f);
     public float _rotateAngle = 90f;
     public float _rotateOverTime = 1f;
 
@@ -23,7 +24,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         base.Awake();
 
         _originalRot = _rb.rotation;
-        _destRot = Quaternion.Euler(_rb.rotation.eulerAngles + new Vector3(0, _rotateAngle, 0f));
+        _destRot = Quaternion.Euler(_rb.rotation.eulerAngles + RotateAxis*_rotateAngle);
     }
 
     #region Activateable implementation
@@ -95,7 +96,6 @@ public class Sc_Pillar_Rotate : Sc_Pillar
     public void ForceRotate()
     {
         StopRotate();
-
     }
 
     public void GaugeRotate(float gauge)
@@ -106,7 +106,8 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             if (!Lock.IsActivated) return;
         }
 
-        Vector3 euler = new Vector3(0f, _rotateAngle * gauge, 0f);     
+        Vector3 euler = RotateAxis * (_rotateAngle * gauge);
+        //Vector3 euler = new Vector3(0f, _rotateAngle * gauge, 0f);     
         Quaternion newRot = Quaternion.Euler(euler);
         float angle = Quaternion.Angle(_rb.rotation, newRot);
         Quaternion difference = Quaternion.Inverse(transform.rotation) * newRot;
@@ -155,7 +156,7 @@ public class Sc_Pillar_Rotate : Sc_Pillar
         float angle;
         Quaternion difference;
         Quaternion originalRot = _rb.rotation;
-        Quaternion destRot = Quaternion.Euler(_rb.rotation.eulerAngles + new Vector3(0, _rotateAngle, 0f));
+        Quaternion destRot = Quaternion.Euler(_rb.rotation.eulerAngles + (RotateAxis*_rotateAngle));
 
         while (time < _rotateOverTime)
         {
