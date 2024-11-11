@@ -26,6 +26,9 @@ public static class Loader
         Level_1_3,
         Level_1_4,
         Level_1_5,
+        Level_2_1,
+        Level_2_2,
+        Level_2_3,
         //Fill this with the Scene names
     }
 

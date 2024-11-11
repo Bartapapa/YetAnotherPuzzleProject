@@ -7139,7 +7139,7 @@ PrefabInstance:
     - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
       propertyPath: _toLevel
-      value: 12
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4816407122717179903, guid: 707e93b5f83eadf4b9175908b22cc622,
         type: 3}
@@ -8805,6 +8805,7 @@ MonoBehaviour:
   CanBeReloaded: 0
   IsLobby: 1
   IsDebugLevel: 0
+  WalkWay: {fileID: 0}
   TreasureVases:
   - {fileID: 1853192796}
   - {fileID: 581912693}
@@ -9945,17 +9946,17 @@ PrefabInstance:
     - target: {fileID: 113878519417326437, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 22.69
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 113878519417326437, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 18.51
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 113878519417326437, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 22.69
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4503927942155642188, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
@@ -9974,23 +9975,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6101913765097330401, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
+      propertyPath: CameraDistance
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6101913765097330401, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
       propertyPath: _focusOriginalPosition
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.6858582
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.4428377
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.230449
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
@@ -10027,6 +10033,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6978807002403718611, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6978807002403718611, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6978807002403718611, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 7498131763848867240, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_Name
@@ -10035,17 +10056,17 @@ PrefabInstance:
     - target: {fileID: 8798688338589188428, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.4358582
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8798688338589188428, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.1928377
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8798688338589188428, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5195508
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

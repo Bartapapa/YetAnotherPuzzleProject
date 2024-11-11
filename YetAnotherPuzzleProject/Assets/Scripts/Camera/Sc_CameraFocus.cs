@@ -71,9 +71,9 @@ public class Sc_CameraFocus : MonoBehaviour
 
     private void HandleAim()
     {
-        _input = Vector2.MoveTowards(_input, _desiredInput, 50f * Time.deltaTime);
+        _input = Vector2.MoveTowards(_input, _desiredInput, 250f * Time.deltaTime);
 
-        AimParent.localEulerAngles += new Vector3(-_input.y * AimSpeed * Time.deltaTime, _input.x * AimSpeed * Time.deltaTime, 0f);
+        AimParent.localEulerAngles += new Vector3(-_input.y * Time.deltaTime, _input.x * Time.deltaTime, 0f);
         AimParent.localEulerAngles = new Vector3(Mathf.Clamp(AimParent.localEulerAngles.x, MinMaxXAim.x, MinMaxXAim.y), AimParent.localEulerAngles.y, AimParent.localEulerAngles.z);
         //AimParent.Rotate(_in, _input.x * Time.deltaTime, 0f);
 
@@ -82,7 +82,7 @@ public class Sc_CameraFocus : MonoBehaviour
 
     public void AddAimInput(Vector2 aimInput)
     {
-        _desiredInput += aimInput;
+        _desiredInput += aimInput * AimSpeed;
     }
 
     private void HandleFocus()

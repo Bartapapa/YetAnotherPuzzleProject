@@ -67,11 +67,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90fcc06fdf626241849c9d4630999e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Activateables:
-  - {fileID: 0}
-  - {fileID: 0}
+  Activateables: []
+  CanFailToActivate: 0
   ActivationDelay: 0.25
-  WeightThreshold: 10
+  WeightThreshold: 100
   CurrentWeight: 0
   RegisteredObjects: []
 --- !u!1 &1415095815665477238
