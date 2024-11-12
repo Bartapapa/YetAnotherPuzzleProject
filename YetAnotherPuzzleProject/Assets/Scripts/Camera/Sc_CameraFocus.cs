@@ -44,7 +44,7 @@ public class Sc_CameraFocus : MonoBehaviour
     private void Start()
     {
         _defaultCamera = GetComponentInChildren<CinemachineVirtualCamera>();
-        _originalPosition = transform.position;
+        _originalPosition = AimParent.position;
 
         if (UseAim)
         {
@@ -76,6 +76,9 @@ public class Sc_CameraFocus : MonoBehaviour
         AimParent.localEulerAngles += new Vector3(-_input.y * Time.deltaTime, _input.x * Time.deltaTime, 0f);
         AimParent.localEulerAngles = new Vector3(Mathf.Clamp(AimParent.localEulerAngles.x, MinMaxXAim.x, MinMaxXAim.y), AimParent.localEulerAngles.y, AimParent.localEulerAngles.z);
         //AimParent.Rotate(_in, _input.x * Time.deltaTime, 0f);
+
+        //Vector3 averageHeight = FindAveragePosition();
+        //AimParent.position = Vector3.Lerp(AimParent.position, new Vector3(AimParent.position.x, averageHeight.y, AimParent.position.z), _cameraFollowSpeed * Time.deltaTime);
 
         _desiredInput = Vector2.zero;
     }
