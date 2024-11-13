@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class Sc_Level : MonoBehaviour
 {
@@ -14,8 +15,9 @@ public class Sc_Level : MonoBehaviour
     public bool IsLobby = false;
     public bool IsDebugLevel = false;
 
-    [Header("TREASURE VASES")]
+    [Header("OBJECTDATA")]
     public List<Sc_Vase> TreasureVases = new List<Sc_Vase>();
+    public List<Sc_SpiritSeedBowl> SpiritSeedBowls = new List<Sc_SpiritSeedBowl>();
 
     [Header("NAVMESH")]
     public NavMeshSurface NMSurface;
@@ -60,7 +62,7 @@ public class Sc_Level : MonoBehaviour
             //Load current level data
             Sc_GameManager.instance.LoadCurrentLevelData();
             //Save current level data
-            Sc_GameManager.instance.SaveLevelData(this);
+            Sc_GameManager.instance.SaveAllCurrentLevelData();
 
             SpawnAllPlayerCharacters();
             //Load all player character data
@@ -83,6 +85,15 @@ public class Sc_Level : MonoBehaviour
         for (int i = 0; i < saveProfile.VasesChecked.Count; i++)
         {
             TreasureVases[i]._interactible.CanBeInteractedWith = !saveProfile.VasesChecked[i];
+            TreasureVases[i].HasBeenSearchedThrough = saveProfile.VasesChecked[i];
+        }
+        for (int i = 0; i < saveProfile.PotsPlanted.Count; i++)
+        {
+            if (saveProfile.PotsPlanted[i])
+            {
+                SpiritSeedBowls[i].Bloom();
+                SpiritSeedBowls[i].HasBeenPlanted = true;
+            }
         }
     }
     #endregion

@@ -8808,6 +8808,7 @@ MonoBehaviour:
   TreasureVases:
   - {fileID: 1853192796}
   - {fileID: 581912693}
+  SpiritSeedBowls: []
   NMSurface: {fileID: 0}
   _minMaxXZLevelDimensions: {x: -10, y: 10, z: -10, w: 10}
   _ceilingHeight: 25
@@ -9942,21 +9943,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1746405678}
     m_Modifications:
-    - target: {fileID: 113878519417326437, guid: 46d26a525fcbf604199b78a4d0ef5f39,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 22.69
-      objectReference: {fileID: 0}
-    - target: {fileID: 113878519417326437, guid: 46d26a525fcbf604199b78a4d0ef5f39,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 18.51
-      objectReference: {fileID: 0}
-    - target: {fileID: 113878519417326437, guid: 46d26a525fcbf604199b78a4d0ef5f39,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 22.69
-      objectReference: {fileID: 0}
     - target: {fileID: 4503927942155642188, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: _defaultVC
@@ -9980,17 +9966,17 @@ PrefabInstance:
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.6858582
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.4428377
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.230449
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
@@ -10035,17 +10021,17 @@ PrefabInstance:
     - target: {fileID: 8798688338589188428, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.4358582
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8798688338589188428, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 5.1928377
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8798688338589188428, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.5195508
+      value: -2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

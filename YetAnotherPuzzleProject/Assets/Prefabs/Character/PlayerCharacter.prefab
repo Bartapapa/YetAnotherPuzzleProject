@@ -251,8 +251,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 1.3
+  m_Center: {x: 0, y: -0.35, z: 0}
 --- !u!1 &1115547306754840536
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,6 +381,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GuidedSpirits: []
+  MinMaxFollowDistance: {x: 1.5, y: 3}
+  MinMaxUpwardsAngle: {x: -15, y: 75}
+  MinMaxOrbitSpeed: {x: -60, y: 60}
 --- !u!1 &1254770008173087859
 GameObject:
   m_ObjectHideFlags: 0
@@ -6155,6 +6158,8 @@ MonoBehaviour:
   Inventory: {fileID: 332057463008107770}
   SoundHandler: {fileID: 625332916299377650}
   RestartCircle: {fileID: 5354505410294209312}
+  AimingRotationSpeed: 2
+  BaseRotationSpeed: 0
   Skins:
   - {fileID: 3131302744962042065}
   - {fileID: 8678975204937097495}
@@ -6178,10 +6183,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _defaultState: 1
-  _maxGroundedMoveSpeed: 6
+  _maxGroundedMoveSpeed: 5
   _groundedMovementSharpness: 10
+  MaxGroundedAngle: 50
   _rotationSharpness: 10
-  _maxAirMoveSpeed: 6
+  _maxAirMoveSpeed: 5
   _airMovementSharpness: 15
   _airDrag: 0
   _gravity: {x: 0, y: -30, z: 0}

@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 813632446700017760}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710677, w: 0.7071068}
-  m_LocalPosition: {x: 0.65, y: 1, z: 0}
+  m_LocalPosition: {x: 0.65, y: 0, z: 0}
   m_LocalScale: {x: 1.9, y: 0.1, z: 1.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -219,13 +219,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Generator: {fileID: 2053105722028253018}
   WObject: {fileID: 253775003874132503}
+  MeshPivot: {fileID: 7214700939847286854}
   ImpulseSource: {fileID: 2336233342582731759}
   Dust: {fileID: 8082810741560646125}
-  _maxSpeed: 2
+  _maxSpeed: 3
   _speedSharpness: 10
   _gravity: {x: 0, y: -30, z: 0}
   InheritedVelocity: {x: 0, y: 0, z: 0}
   InheritedYaw: 0
+  _targetUp: {x: 0, y: 1, z: 0}
   Source: {fileID: 3106128560952282421}
   PushLoop: {fileID: 8300000, guid: 0b02c16ee693a80439ca5cd1349f87b5, type: 3}
   PushLoopVolume: 0.7
@@ -539,7 +541,7 @@ Transform:
   m_GameObject: {fileID: 4509340536467513510}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710677, w: 0.7071068}
-  m_LocalPosition: {x: -0.65, y: 1, z: 0}
+  m_LocalPosition: {x: -0.65, y: 0, z: 0}
   m_LocalScale: {x: 1.9, y: 0.1, z: 1.9}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5583,7 +5585,7 @@ Transform:
   m_GameObject: {fileID: 6530560122130098306}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0.70710677, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.8, y: 0.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5664,7 +5666,7 @@ Transform:
   m_GameObject: {fileID: 6936038202408110165}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

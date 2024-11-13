@@ -245,6 +245,18 @@ public class Sc_Player : MonoBehaviour
         }
     }
 
+    public void OnCameraShift(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            float value = context.ReadValue<float>();
+            if (Mathf.Abs(value) >= .5f)
+            {
+                Sc_CameraManager.instance.ShiftCamera(Mathf.Sign(value));
+            }
+        }
+    }
+
     public void OnRestartLevel(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -277,11 +289,6 @@ public class Sc_Player : MonoBehaviour
                 PlayerCharacter.RestartCircle.Anim.Play("FadeOut");
             }
         }
-    }
-
-    private void OnRestartLevelConfirmed()
-    {
-
     }
 
     private void HandlePlayerInputs()

@@ -41,7 +41,7 @@ public class Sc_Vase : MonoBehaviour
         {
             _interactible.CanBeInteractedWith = false;
             HasBeenSearchedThrough = true;
-            Sc_GameManager.instance.SaveLevelData(Sc_GameManager.instance.CurrentLevel);
+            Sc_GameManager.instance.SaveCurrentLevelVases();
         }
     }
 

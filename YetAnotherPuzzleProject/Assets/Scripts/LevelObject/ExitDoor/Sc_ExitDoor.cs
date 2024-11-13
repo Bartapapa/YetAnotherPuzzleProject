@@ -65,6 +65,7 @@ public class Sc_ExitDoor : Sc_Activateable
     public void LoadLevel()
     {
         Sc_GameManager.instance.SavePlayerCharacterData();
+        Sc_GameManager.instance.SaveAllCurrentLevelData();
         Sc_GameManager.instance.Load(_toLevel);
     }
 

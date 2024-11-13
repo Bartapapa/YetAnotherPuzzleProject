@@ -18,12 +18,11 @@ public class Sc_Interactible : MonoBehaviour
     [Header("PARAMETERS")]
     public int _priority = 0;
     public bool CanBeInteractedWithOnThrow = false;
+    [SerializeField] private bool _canBeInteractedWith = true;
 
     [Header("KEY")]
     public bool _usesKey = false;
     public List<int> _keyIDs = new List<int>();
-
-    private bool _canBeInteractedWith = true;
     public bool CanBeInteractedWith { get { return _canBeInteractedWith; } set { _canBeInteractedWith = value; } }
 
     private void Start()

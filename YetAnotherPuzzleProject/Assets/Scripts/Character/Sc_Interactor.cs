@@ -6,7 +6,7 @@ using UnityEngine;
 public class Sc_Interactor : MonoBehaviour
 {
     [Header("OBJECT REFS")]
-    public Sc_Character Character;
+    public Sc_Character_Player Character;
     public Sc_Inventory _inventory;
 
     [Header("PARAMETERS")]

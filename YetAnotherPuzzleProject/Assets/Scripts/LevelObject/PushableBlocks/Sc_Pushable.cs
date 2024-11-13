@@ -9,6 +9,7 @@ public class Sc_Pushable : MonoBehaviour
     [Header("OBJECT REFS")]
     public Sc_PowerGenerator Generator;
     public Sc_WeightedObject WObject;
+    public Transform MeshPivot;
     public CinemachineImpulseSource ImpulseSource;
     public ParticleSystem Dust;
 
@@ -19,6 +20,7 @@ public class Sc_Pushable : MonoBehaviour
     protected Vector3 _pushedDirection = Vector3.zero;
     [ReadOnly] public Vector3 InheritedVelocity = Vector3.zero;
     [ReadOnly] public float InheritedYaw = 0f;
+    [ReadOnly] public Vector3 _targetUp = Vector3.up;
 
     [Header("SOUND")]
     public AudioSource Source;
@@ -82,6 +84,13 @@ public class Sc_Pushable : MonoBehaviour
     private void Update()
     {
         HandlePushSound();
+        HandleMeshUp();
+    }
+
+    private void HandleMeshUp()
+    {
+        if (!_isGrounded) return;
+        MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, _targetUp, 1f * Time.fixedDeltaTime);
     }
 
     public virtual void Energize(bool energize)
@@ -174,6 +183,7 @@ public class Sc_Pushable : MonoBehaviour
         else
         {
             WObject.RBVelocity = Vector3.zero;
+            _targetUp = _groundHit.normal;
         }
 
         return localIsGrounded;

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public enum GameState
 {
@@ -220,28 +221,57 @@ public class Sc_GameManager : MonoBehaviour
         return newSaveData;
     }
 
-    public void SaveLevelData(Sc_Level level)
+    private void CheckSaveData()
     {
         if (CurrentData == null)
         {
             CurrentData = CreateNewSaveData();
         }
+    }
+
+    private void CheckLevelSaveData()
+    {
+        if (CurrentData.GetLevelSaveProfileForLevel(CurrentLevel) == null)
+        {
+            Debug.LogWarning("No save data found for " + CurrentLevel.CurrentScene + "! Creating now.");
+            SaveAllCurrentLevelData();
+        }
+    }
+
+    public void SaveAllCurrentLevelData()
+    {
+        CheckSaveData();
+        CurrentData.CreateLevelSaveProfile(CurrentLevel);
+        SaveCurrentLevelVases();
+        SaveCurrentLevelSpiritBowls();
+    }
+
+    public void SaveLevelData(Sc_Level level)
+    {
+        CheckSaveData();
         CurrentData.CreateLevelSaveProfile(level);
+    }
+
+    public void SaveCurrentLevelVases()
+    {
+        CheckSaveData();
+        CheckLevelSaveData();
+        CurrentData.GetLevelSaveProfileForLevel(CurrentLevel).SaveVases(CurrentLevel.TreasureVases);
+    }
+
+    public void SaveCurrentLevelSpiritBowls()
+    {
+        CheckSaveData();
+        CheckLevelSaveData();
+        CurrentData.GetLevelSaveProfileForLevel(CurrentLevel).SaveSeedBowls(CurrentLevel.SpiritSeedBowls);
     }
 
     public void LoadCurrentLevelData()
     {
-        if (CurrentData == null) return;
+        CheckSaveData();
         if (CurrentLevel == null) return;
-        if (CurrentData.GetLevelSaveProfileForLevel(CurrentLevel) == null)
-        {
-            Debug.LogWarning("No save data found for " + CurrentLevel.CurrentScene + "!");
-            return;
-        }
-        else
-        {
-            CurrentLevel.LoadLevelData(CurrentData.GetLevelSaveProfileForLevel(CurrentLevel));
-        }
+        CheckLevelSaveData();
+        CurrentLevel.LoadLevelData(CurrentData.GetLevelSaveProfileForLevel(CurrentLevel));
     }
 
     public void SavePlayerCharacterData()

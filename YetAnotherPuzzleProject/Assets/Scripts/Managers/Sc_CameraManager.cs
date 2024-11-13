@@ -13,6 +13,9 @@ public class Sc_CameraManager : MonoBehaviour
     public CinemachineVirtualCamera _defaultVC;
     public Sc_CameraFocus _defaultCameraFocus;
 
+    [Header("ROTATION")]
+    public AnimationCurve RotateCurve;
+
     private Coroutine _cameraRotateCO;
     private Coroutine _cameraShakeCO;
 
@@ -70,6 +73,13 @@ public class Sc_CameraManager : MonoBehaviour
 
     #region CAMERACOMMANDS
 
+    public void ShiftCamera(float sign)
+    {
+        if (_cameraRotateCO != null) return;
+        float degreesEuler = sign >= 0f ? -90f : 90f;
+        RotateDefaultCamera(degreesEuler, 3f);
+    }
+
     public void RotateDefaultCamera(float degreesEuler, float overTime)
     {
         if (_cameraRotateCO != null)
@@ -87,7 +97,7 @@ public class Sc_CameraManager : MonoBehaviour
 
         while (time < overTime)
         {
-            Quaternion rot = Quaternion.Lerp(fromRot, toRot, time/overTime);
+            Quaternion rot = Quaternion.LerpUnclamped(fromRot, toRot, RotateCurve.Evaluate(time/overTime));
             focus.transform.rotation = rot;
             time += Time.deltaTime;
             yield return null;

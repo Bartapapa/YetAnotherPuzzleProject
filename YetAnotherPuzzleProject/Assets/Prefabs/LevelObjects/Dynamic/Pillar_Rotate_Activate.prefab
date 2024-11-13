@@ -148,8 +148,8 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
+      inSlope: 2
+      outSlope: 2
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -175,10 +175,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  ImpulseSource: {fileID: 0}
+  BreakingSparks: []
   Source: {fileID: 3755418767075064999}
   Loop: {fileID: 8300000, guid: 8169117627c692f42884db165fee3131, type: 3}
   MinMaxLoopPitch: {x: 0.45, y: 0.55}
   LoopVolume: 0.3
+  BreakLoop: {fileID: 0}
+  BreakDescent: {fileID: 0}
+  BreakEnd: {fileID: 0}
+  RotateAxis: {x: 0, y: 1, z: 0}
   _rotateAngle: 90
   _rotateOverTime: 4
 --- !u!65 &3809993044256825233

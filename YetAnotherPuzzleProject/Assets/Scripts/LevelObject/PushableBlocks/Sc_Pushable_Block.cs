@@ -75,4 +75,25 @@ public class Sc_Pushable_Block : Sc_Pushable
                 break;
         }
     }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.cyan;
+        if (_frontBlockElement != BlockElements.None)
+        {
+            Gizmos.DrawSphere(_frontElementAnchor.position, .15f);
+        }
+        if (_rightBlockElement != BlockElements.None)
+        {
+            Gizmos.DrawSphere(_rightElementAnchor.position, .15f);
+        }
+        if (_leftBlockElement != BlockElements.None)
+        {
+            Gizmos.DrawSphere(_leftElementAnchor.position, .15f);
+        }
+        if (_backBlockElement != BlockElements.None)
+        {
+            Gizmos.DrawSphere(_backElementAnchor.position, .15f);
+        }
+    }
 }

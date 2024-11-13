@@ -360,6 +360,7 @@ public class Sc_Pillar : Sc_Activateable
     {
         //Settle, camera shake, loud noise
         _activationTimer = PeriodicActivationDuration*.2f;
+        IsActivated = false;
         _isBrokenFalling = false;
         Sc_GameManager.instance.SoundManager.CreateAudioSourceObject(BreakEnd, transform.position, 1f);
         if (Sc_CameraManager.instance != null)

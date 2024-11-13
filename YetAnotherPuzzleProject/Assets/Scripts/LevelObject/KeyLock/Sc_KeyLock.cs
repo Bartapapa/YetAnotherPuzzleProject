@@ -2,9 +2,13 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Sc_KeyLock : Sc_Activator
 {
+    [Header("LOCK OPENED")]
+    public UnityEvent OnLockOpened;
+
     [Header("OBJECT REFS")]
     public Sc_Interactible Interactible;
     public ParticleSystem Particles;
@@ -30,6 +34,7 @@ public class Sc_KeyLock : Sc_Activator
     {
         Interactible.CanBeInteractedWith = false;
         DelayActivation();
+        OnLockOpened?.Invoke();
 
         _rb.isKinematic = false;
         _rb.useGravity = true;

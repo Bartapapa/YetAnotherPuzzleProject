@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Cinemachine.DocumentationSortingAttribute;
 
 [System.Serializable]
 public class PlayerCharacterSaveProfile
@@ -44,23 +45,35 @@ public class LevelSaveProfile
 {
     public Loader.Scene Level = Loader.Scene.Managers;
     public List<bool> VasesChecked = new List<bool>();
+    public List<bool> PotsPlanted = new List<bool>();
 
     public LevelSaveProfile (Sc_Level level)
     {
         Level = level.CurrentScene;
-        for (int i = 0; i < level.TreasureVases.Count; i++)
+    }
+
+    public void SaveVases(List<Sc_Vase> vases)
+    {
+        VasesChecked.Clear();
+        for (int i = 0; i < vases.Count; i++)
         {
-            VasesChecked.Add(level.TreasureVases[i].HasBeenSearchedThrough);
+            VasesChecked.Add(vases[i].HasBeenSearchedThrough);
+        }
+    }
+
+    public void SaveSeedBowls(List<Sc_SpiritSeedBowl> bowls)
+    {
+        PotsPlanted.Clear();
+        for (int i = 0; i < bowls.Count; i++)
+        {
+            PotsPlanted.Add(bowls[i].HasBeenPlanted);
         }
     }
 
     public void OverwriteSave(Sc_Level level)
     {
         VasesChecked.Clear();
-        for (int i = 0; i < level.TreasureVases.Count; i++)
-        {
-            VasesChecked.Add(level.TreasureVases[i].HasBeenSearchedThrough);
-        }
+        PotsPlanted.Clear();
     }
 }
 

@@ -22,6 +22,7 @@ public class Sc_CharacterController : MonoBehaviour
     [Header("MOVEMENT")]
     public float _maxGroundedMoveSpeed = 7f;
     public float _groundedMovementSharpness = 15f;
+    public float MaxGroundedAngle = 60f;
     public float _rotationSharpness = 10f;
     public float _maxAirMoveSpeed = 7f;
     public float _airMovementSharpness = 15f;
@@ -143,11 +144,8 @@ public class Sc_CharacterController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //_isGrounded = GroundCheck(!_isGrounded);
         _isGrounded = GroundCheck();
         if (_isGrounded && _currentState == CharacterState.Default && !IsClimbing && !IsAnchoring) HandleBalancingVerticalForce();
-        //If add physics based floors
-        //if (_walkingOnRb) HandleWalkingOnRB();
 
         HandleRotation();
         HandleVelocity();
@@ -242,7 +240,7 @@ public class Sc_CharacterController : MonoBehaviour
     #region PHYSICS
     private void HandleBalancingVerticalForce()
     {
-        if (_isClimbing) return;
+        if (IsClimbing || IsAnchoring) return;
 
         //Make RB float above ground, giving a force that 'attaches' it to the ground if too far away, and pushes it back if too close
         float distanceToGround = _groundHit.distance;
@@ -325,6 +323,7 @@ public class Sc_CharacterController : MonoBehaviour
                 break;
 
             case CharacterState.Default:
+                if (IsAnchoring) return;
                 if (!_isClimbing)
                 {
                     if (IsGrounded)
@@ -403,6 +402,11 @@ public class Sc_CharacterController : MonoBehaviour
     private bool GroundCheck()
     {
         bool localIsGrounded = Physics.SphereCast(_groundCheckEmissionPoint.transform.position, .2f, Vector3.down, out _groundHit, _groundCheckDistance, _groundLayers, QueryTriggerInteraction.Ignore);
+        if (localIsGrounded)
+        {
+            float angle = Vector3.Angle(Vector3.up, _groundHit.normal);
+            localIsGrounded = angle <= MaxGroundedAngle ? true : false;
+        }       
 
         if (localIsGrounded && !_isGrounded)
         {
@@ -421,14 +425,14 @@ public class Sc_CharacterController : MonoBehaviour
     {
         StopAnchoringSequence();
 
+        IgnoreInputs = true;
+
         _anchorEndAction = onAnchorEnd;
 
         _anchorFromPoint = transform.position;
         _anchorFromRot = transform.rotation;
         _anchorToPoint = toAnchorPoint;
         _anchorToRot = toAnchorRot;
-
-        IgnoreInputs = true;
 
         _anchorCo = StartCoroutine(AnchorToCo(overTime));
     }
@@ -442,14 +446,17 @@ public class Sc_CharacterController : MonoBehaviour
             float alpha = time / overTime;
             Vector3 toPoint = Vector3.Slerp(_anchorFromPoint, _anchorToPoint, alpha);
             Quaternion toRot = Quaternion.Slerp(_anchorFromRot, _anchorToRot, alpha);
-            _rb.Move(toPoint, toRot);
+            //_rb.Move(toPoint, toRot);
+            transform.position = toPoint;
+            transform.rotation = toRot;
             time += Time.deltaTime;
             yield return null;
         }
-        _rb.Move(_anchorToPoint, _anchorToRot);
+        //_rb.Move(_anchorToPoint, _anchorToRot);
+        transform.position = _anchorToPoint;
+        transform.rotation = _anchorToRot;
         _rb.velocity = Vector3.zero;
         _anchorCo = null;
-
         IgnoreInputs = false;
 
         if (_anchorEndAction != null)
@@ -464,7 +471,10 @@ public class Sc_CharacterController : MonoBehaviour
         if (_anchorCo != null)
         {
             StopCoroutine(_anchorCo);
+            _anchorCo = null;
         }
+
+        IgnoreInputs = false;
     }
 
     public void SetAnchor(Transform anchor)
