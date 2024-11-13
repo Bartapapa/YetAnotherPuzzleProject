@@ -67,6 +67,7 @@ public class Sc_TreasureManager : MonoBehaviour
     public Sc_Item FindRandomNewRareTreasure()
     {
         Sc_Item foundTreasure = GetNewRandomRareTreasure();
+        if (!foundTreasure) foundTreasure = GetNewRandomCommonTreasure();
         FindTreasure(foundTreasure);
         return foundTreasure;
     }
@@ -74,6 +75,8 @@ public class Sc_TreasureManager : MonoBehaviour
     public Sc_Item FindRandomNewVeryRareTreasure()
     {
         Sc_Item foundTreasure = GetNewRandomVeryRareTreasure();
+        if (!foundTreasure) foundTreasure = GetNewRandomRareTreasure();
+        if (!foundTreasure) foundTreasure = GetNewRandomCommonTreasure();
         FindTreasure(foundTreasure);
         return foundTreasure;
     }
