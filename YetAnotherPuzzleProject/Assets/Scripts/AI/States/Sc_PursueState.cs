@@ -67,11 +67,11 @@ public class Sc_PursueState : Sc_State
     public override void OnHearSomething(Sc_AIBrain brain, Sc_SoundStimuli sstimuli)
     {
         //Debug.Log("I heard something!");
-        if (sstimuli.Player != null)
+        if (sstimuli.PlayerSource != null)
         {
-            if (sstimuli.Player == CurrentPlayerTarget)
+            if (sstimuli.PlayerSource == CurrentPlayerTarget)
             {
-                TargetLastKnownLocation = sstimuli.Player.transform.position;
+                TargetLastKnownLocation = sstimuli.PlayerSource.transform.position;
                 //Produce sound recently coroutine.
                 if (_hearTargetSoundTrackingCo != null)
                 {
@@ -85,11 +85,11 @@ public class Sc_PursueState : Sc_State
     public override void OnSawSomething(Sc_AIBrain brain, Sc_VisualStimuli vstimuli)
     {
         //Debug.Log("I saw something!");
-        if (vstimuli.Player != null)
+        if (vstimuli.PlayerSource != null)
         {
-            if (vstimuli.Player == CurrentPlayerTarget)
+            if (vstimuli.PlayerSource == CurrentPlayerTarget)
             {
-                ChangeTarget(brain, vstimuli.Player);
+                ChangeTarget(brain, vstimuli.PlayerSource);
             }
         }
     }

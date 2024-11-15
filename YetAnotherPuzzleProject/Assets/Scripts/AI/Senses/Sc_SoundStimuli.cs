@@ -2,16 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_SoundStimuli : MonoBehaviour
+public class Sc_SoundStimuli : Sc_Stimuli
 {
     [Header("OBJECT REFS")]
     public Sc_Lifespan Lifespan;
     public SphereCollider SoundCollider;
-    public GameObject Source;
-    public Sc_Character_Player Player;
-
-    [Header("PARAMETERS")]
-    public int Priority = 10;
 
     public delegate void SoundStimuliEvent(Sc_SoundStimuli stimuli);
     public event SoundStimuliEvent OnSoundEnded;
@@ -39,7 +34,7 @@ public class Sc_SoundStimuli : MonoBehaviour
             SoundCollider.radius = .1f;
         }
 
-        Player = player;
+        PlayerSource = player;
     }
 
     private void OnEnable()

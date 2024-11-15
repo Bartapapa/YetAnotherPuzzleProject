@@ -4,14 +4,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Sc_VisualStimuli : MonoBehaviour
+public class Sc_VisualStimuli : Sc_Stimuli
 {
     [Header("OBJECT REFS")]
-    public Sc_Character_Player Player;
     [ReadOnly][SerializeField] private List<Sc_LightSource> _lightSources = new List<Sc_LightSource>();
 
     [Header("PARAMETERS")]
-    public int Priority = 10;
     public bool Active = true;
     [SerializeField] private LayerMask _obstacleLayers;
     [ReadOnly][SerializeField] private bool _isInLight = false;

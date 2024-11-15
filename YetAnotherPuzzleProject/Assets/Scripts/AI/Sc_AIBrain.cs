@@ -29,7 +29,7 @@ public class Sc_AIBrain : MonoBehaviour
 
     [Header("MOVEMENT")]
     public float IdleMoveSpeed = 2f;
-    public float InvestigateMoveSpeed = 4f;
+    public float InvestigateMoveSpeed = 3f;
     public float PursueMoveSpeed = 6f;
 
     [Header("ALERTED")]
@@ -178,11 +178,11 @@ public class Sc_AIBrain : MonoBehaviour
         //When first seeing a player stimuli, add a grace period. If UnseeStimuli hasn't been called for the same stimuli within the grace period, then do all of this.
         //_currentState.OnSawSomething(this, vstimuli);
 
-        if (vstimuli.Player != null)
+        if (vstimuli.PlayerSource != null)
         {
-            if (!_seenCharacters.Contains(vstimuli.Player))
+            if (!_seenCharacters.Contains(vstimuli.PlayerSource))
             {
-                _seenCharacters.Add(vstimuli.Player);
+                _seenCharacters.Add(vstimuli.PlayerSource);
             }
             if (!_seenPlayerStimuli.Contains(vstimuli))
             {
@@ -222,9 +222,9 @@ public class Sc_AIBrain : MonoBehaviour
 
     private void OnUnseeStimuli(Sc_VisualStimuli vstimuli)
     {
-        if (vstimuli.Player != null)
+        if (vstimuli.PlayerSource != null)
         {
-            _seenCharacters.Remove(vstimuli.Player);
+            _seenCharacters.Remove(vstimuli.PlayerSource);
             _seenPlayerStimuli.Remove(vstimuli);
 
             if (_canNoticePlayers && _seenPlayerStimuli.Count == 0)
@@ -243,9 +243,9 @@ public class Sc_AIBrain : MonoBehaviour
     {
         _currentState.OnHearSomething(this, sstimuli);
 
-        if (sstimuli.Player != null)
+        if (sstimuli.PlayerSource != null)
         {
-            GeneratePlayerAwareness(false, sstimuli.Player);
+            GeneratePlayerAwareness(false, sstimuli.PlayerSource);
         }
     }
     #endregion

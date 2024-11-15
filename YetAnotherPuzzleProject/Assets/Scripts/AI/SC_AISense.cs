@@ -52,11 +52,11 @@ public class SC_AISense : MonoBehaviour
             _sensedSight.Add(vstimuli);
             OnSeeSomething?.Invoke(vstimuli);
 
-            if (vstimuli.Player != null)
+            if (vstimuli.PlayerSource != null)
             {
-                if (!_sensedPlayer.Contains(vstimuli.Player))
+                if (!_sensedPlayer.Contains(vstimuli.PlayerSource))
                 {
-                    _sensedPlayer.Add(vstimuli.Player);
+                    _sensedPlayer.Add(vstimuli.PlayerSource);
                 }
             }
         }
@@ -67,9 +67,9 @@ public class SC_AISense : MonoBehaviour
         _sensedSight.Remove(vstimuli);
         OnUnseeSomething?.Invoke(vstimuli);
 
-        if (vstimuli.Player != null)
+        if (vstimuli.PlayerSource != null)
         {
-            _sensedPlayer.Remove(vstimuli.Player);
+            _sensedPlayer.Remove(vstimuli.PlayerSource);
         }
     }
 
