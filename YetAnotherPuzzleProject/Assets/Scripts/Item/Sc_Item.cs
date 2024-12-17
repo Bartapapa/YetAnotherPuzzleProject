@@ -37,8 +37,11 @@ public class Sc_Item : MonoBehaviour
     private Transform _treasureAcquireAnchor = null;
     private Vector3 _treasureAcquirePoint = Vector3.zero;
     private float _commonTreasureLifetime = 1.5f;
+    public float CommonTreasureLifetime { get { return _commonTreasureLifetime; } }
     private float _rareTreasureLifetime = 2f;
+    public float RareTreasureLifetime { get { return _rareTreasureLifetime; } }
     private float _veryRareTreasureLifetime = 3f;
+    public float VeryRareTreasureLifetime { get { return _veryRareTreasureLifetime; } }
     private bool _acquire;
 
 

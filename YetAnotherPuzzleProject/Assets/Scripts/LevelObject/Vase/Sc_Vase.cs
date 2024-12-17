@@ -90,7 +90,6 @@ public class Sc_Vase : MonoBehaviour
                 {
                     //Found a random very rare treasure.
                     foundItem = Sc_TreasureManager.instance.FindRandomNewVeryRareTreasure();
-                    Debug.Log(foundItem);
                 }
 
                 if (foundItem == null)
@@ -117,6 +116,8 @@ public class Sc_Vase : MonoBehaviour
                         {
                             newItem.OnInteractedWith(interactor);
                         }
+
+                        player.Inventory.FoundItem(newItem);                      
                     }
                 }
                 break;
@@ -124,6 +125,12 @@ public class Sc_Vase : MonoBehaviour
                 if (interactor != null)
                 {
                     newItem.AcquireTreasure(interactor.transform);
+
+                    Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+                    if (player)
+                    {
+                        player.Inventory.FoundTreasure(foundItem);
+                    }
                 }
                 else
                 {

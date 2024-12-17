@@ -14,38 +14,19 @@ public class Sc_Character_Player : Sc_Character
     public float AimingRotationSpeed = 2f;
     [ReadOnly] public float BaseRotationSpeed = 0f;
 
-    [Header("PLAYER CHARACTER SKINS")]
-    public List<GameObject> Skins = new List<GameObject>();
-    [SerializeField][ReadOnly] private int _skinIndex = -1;
-    public int SkinIndex { get { return _skinIndex; } }
+    [Header("PLAYER CHARACTER MESH")]
+    public Renderer[] BodyRenderers;
+    public Renderer[] CoatRenderers;
+    public Renderer[] BillRenderers;
+    public Renderer[] LegRenderers;
 
     private void Start()
     {
         BaseRotationSpeed = Controller._rotationSharpness;
 
-        //ChooseRandomSkin();
-        Skins.Clear();
-    }
-
-    public void ChooseRandomSkin()
-    {
-        int randomSkin = Random.Range(0, Skins.Count);
-        ChooseSkin(randomSkin);
-    }
-
-    public void ChooseSkin(int skinIndex)
-    {
-        for (int i = 0; i < Skins.Count; i++)
+        if (Sc_PlayerManager.instance != null)
         {
-            if (i == skinIndex)
-            {
-                Skins[i].SetActive(true);
-                _skinIndex = i;
-            }
-            else
-            {
-                Skins[i].SetActive(false);
-            }
+            Sc_PlayerManager.instance.ApplyRandomSkin(BodyRenderers, CoatRenderers, BillRenderers, LegRenderers);
         }
     }
 }

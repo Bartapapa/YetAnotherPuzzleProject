@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[System.Serializable]
+public class PlayerSkin
+{
+    public Color BodyColor = Color.white;
+    public Color CoatColor = Color.white;
+    public Color BillColor = Color.white;
+    public Color LegColor = Color.white;
+    public bool WhiteCollar = true;
+}
+
 public class Sc_PlayerManager : MonoBehaviour
 {
     public static Sc_PlayerManager instance { get; private set; }
@@ -13,6 +23,9 @@ public class Sc_PlayerManager : MonoBehaviour
     [Header("Players")]
     [SerializeField] private List<PlayerInput> _currentPlayers = new List<PlayerInput>();
     public List<PlayerInput> CurrentPlayers => _currentPlayers;
+
+    [Header("Player skins")]
+    public List<PlayerSkin> PlayerSkins = new List<PlayerSkin>();
 
     public event System.Action<PlayerInput> PlayerJoinedGame;
     public event System.Action<PlayerInput> PlayerLeftGame;
@@ -138,4 +151,46 @@ public class Sc_PlayerManager : MonoBehaviour
         if (index > CurrentPlayers.Count) return null;
         return GetPlayerFromPInput(CurrentPlayers[index]);
     }
+
+    #region SKINS
+
+    public void ApplySkin(int skinIndex, Renderer[] bodyRenderers, Renderer[] coatRenderers, Renderer[] billRenderers, Renderer[] legRenderers)
+    {
+        PlayerSkin skinToApply = PlayerSkins[skinIndex];
+
+        foreach(Renderer rend in bodyRenderers)
+        {
+            rend.material.color = skinToApply.BodyColor;
+        }
+        foreach (Renderer rend in coatRenderers)
+        {
+            rend.material.color = skinToApply.CoatColor;
+        }
+        foreach (Renderer rend in billRenderers)
+        {
+            rend.material.color = skinToApply.BillColor;
+        }
+        foreach (Renderer rend in legRenderers)
+        {
+            rend.material.color = skinToApply.LegColor;
+        }
+
+        PlayerSkins.RemoveAt(skinIndex);
+    }
+
+    public void ApplyRandomSkin(Renderer[] bodyRenderers, Renderer[] coatRenderers, Renderer[] billRenderers, Renderer[] legRenderers)
+    {
+        int skinIndex = GetRandomSkinIndex();
+
+        ApplySkin(skinIndex, bodyRenderers, coatRenderers, billRenderers, legRenderers);
+    }
+
+    private int GetRandomSkinIndex()
+    {
+        int randomIndex = UnityEngine.Random.Range(0, PlayerSkins.Count);
+
+        return randomIndex;
+    }
+
+    #endregion
 }

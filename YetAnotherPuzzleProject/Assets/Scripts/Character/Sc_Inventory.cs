@@ -28,10 +28,13 @@ public class Sc_Inventory : MonoBehaviour
     public bool CanAim { get { return IsUsingItem || Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || CurrentlyHeldItem == null? false : true; } }
     [ReadOnly] public bool IsAiming = false;
 
+
     public delegate void ItemEvent(Sc_Item item);
     public ItemEvent ItemThrown;
     public ItemEvent ItemDropped;
     public ItemEvent ItemPickedUp;
+    public ItemEvent ItemFound;
+    public ItemEvent TreasureFound;
 
     private void Update()
     {
@@ -537,6 +540,16 @@ public class Sc_Inventory : MonoBehaviour
         TrajectoryLine.enabled = false;
         ImpactSphere.SetActive(false);
         Character.Controller.CanMove = true;
+    }
+
+    public void FoundTreasure(Sc_Item item)
+    {
+        TreasureFound?.Invoke(item);
+    }
+
+    public void FoundItem(Sc_Item item)
+    {
+        ItemFound?.Invoke(item);
     }
 
 }

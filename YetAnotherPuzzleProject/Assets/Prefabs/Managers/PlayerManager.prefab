@@ -165,3 +165,24 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
   _currentPlayers: []
+  PlayerSkins:
+  - BodyColor: {r: 0, g: 0.8, b: 0.08235294, a: 1}
+    CoatColor: {r: 1, g: 0.9490196, b: 0, a: 1}
+    BillColor: {r: 0.7254902, g: 0.5058824, b: 0, a: 1}
+    LegColor: {r: 0.8666667, g: 0.5254902, b: 0, a: 1}
+    WhiteCollar: 0
+  - BodyColor: {r: 0, g: 0, b: 0, a: 1}
+    CoatColor: {r: 0.509434, g: 0.33765057, b: 0, a: 1}
+    BillColor: {r: 0.7254902, g: 0.5058824, b: 0, a: 1}
+    LegColor: {r: 0.8666667, g: 0.5254902, b: 0, a: 1}
+    WhiteCollar: 0
+  - BodyColor: {r: 0.8773585, g: 0, b: 0, a: 1}
+    CoatColor: {r: 0.122641504, g: 0.0973834, b: 0.048015304, a: 1}
+    BillColor: {r: 0.7254902, g: 0.5058824, b: 0, a: 1}
+    LegColor: {r: 0.8666667, g: 0.5254902, b: 0, a: 1}
+    WhiteCollar: 0
+  - BodyColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
+    CoatColor: {r: 0.046422996, g: 0, b: 0.6981132, a: 1}
+    BillColor: {r: 0.7254902, g: 0.5058824, b: 0, a: 1}
+    LegColor: {r: 0.8666667, g: 0.5254902, b: 0, a: 1}
+    WhiteCollar: 0

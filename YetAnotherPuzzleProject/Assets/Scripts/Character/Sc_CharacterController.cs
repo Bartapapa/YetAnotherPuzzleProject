@@ -106,6 +106,9 @@ public class Sc_CharacterController : MonoBehaviour
     public delegate void DefaultEvent();
     public event DefaultEvent PushStart;
     public event DefaultEvent PushEnd;
+    public event DefaultEvent OnStartLadderClimb;
+    public delegate void BoolEvent(bool value);
+    public event BoolEvent OnLadderLeave;
     public delegate void RBEvent(Rigidbody rb);
     public event RBEvent OnGroundedMovement;
     public event RBEvent OnAerialMovement;
@@ -592,6 +595,8 @@ public class Sc_CharacterController : MonoBehaviour
         _bottomOfLadder = _currentLadder._startPoint.position - (Vector3.up * .1f);
 
         AnchorTo(startPoint, startRot, .5f, () => StartClimbing());
+
+        OnStartLadderClimb?.Invoke();
     }
 
     public void EndClimbSequence(Sc_Ladder ladder, bool top)
@@ -601,6 +606,8 @@ public class Sc_CharacterController : MonoBehaviour
         Quaternion toRot = top ? _currentLadder._topAnchor.rotation : _currentLadder._footAnchor.rotation;
 
         AnchorTo(toPoint, toRot, .5f);
+
+        OnLadderLeave?.Invoke(top);
     }
 
     public void StartClimbing()
