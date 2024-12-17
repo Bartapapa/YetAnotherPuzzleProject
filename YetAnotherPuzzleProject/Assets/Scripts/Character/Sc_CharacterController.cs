@@ -83,6 +83,7 @@ public class Sc_CharacterController : MonoBehaviour
     private bool _isClimbing = false;
     public bool IsClimbing { get { return _isClimbing; } }
     private Vector2 _climbInputVector;
+    public Vector2 ClimbInputVector { get { return _climbInputVector; } }
     private Sc_Ladder _currentLadder;
     private Vector3 _topOfLadder;
     private Vector3 _bottomOfLadder;

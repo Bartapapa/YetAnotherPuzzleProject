@@ -23,7 +23,7 @@ public class Sc_Character_Player : Sc_Character
     {
         BaseRotationSpeed = Controller._rotationSharpness;
 
-        ChooseRandomSkin();
+        //ChooseRandomSkin();
         Skins.Clear();
     }
 
