@@ -119,23 +119,25 @@ public class Sc_SoundHandler_PlayerCharacter : Sc_SoundHandler
 
     private void OnGroundedMovement(Rigidbody rb)
     {
-        Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
-        if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && PlayerCharacter.Controller.IsGrounded && !PlayerCharacter.Controller.IsPushingBlock)
-        {
-            if (!_currentlyWalking)
-            {
-                _currentlyWalking = true;
-                StartFootsteps();
-            }
-        }
-        else
-        {          
-            if (_currentlyWalking)
-            {
-                _currentlyWalking = false;
-                StopFootsteps();
-            }
-        }
+        //Now controlled by the AnimationHandler w/ animationEvents
+
+        //Vector3 horizontalVelocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
+        //if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && PlayerCharacter.Controller.IsGrounded && !PlayerCharacter.Controller.IsPushingBlock)
+        //{
+        //    if (!_currentlyWalking)
+        //    {
+        //        _currentlyWalking = true;
+        //        StartFootsteps();
+        //    }
+        //}
+        //else
+        //{          
+        //    if (_currentlyWalking)
+        //    {
+        //        _currentlyWalking = false;
+        //        StopFootsteps();
+        //    }
+        //}
     }
 
     private void OnAerialMovement(Rigidbody rb)

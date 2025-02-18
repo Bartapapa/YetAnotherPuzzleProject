@@ -69,6 +69,7 @@ public class Sc_CharacterController : MonoBehaviour
     public float _characterRadius = .5f;
     public float _pushRequestTime = .5f;
     public LayerMask _pushableObjectLayers;
+    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || IsPushingBlock) ? false : true; } }
     private RaycastHit _pushableHit;
     private float _pushRequestTimer = 0f;
     private bool _pushRequested = false;
@@ -95,7 +96,6 @@ public class Sc_CharacterController : MonoBehaviour
 
     private Rigidbody _rb;
     public Rigidbody RB { get { return _rb; } }
-    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || IsPushingBlock) ? false : true; } }
     private Vector3 _moveInputVector;
     private Vector3 _lookInputVector;
     private bool _ignoreInputs = false;

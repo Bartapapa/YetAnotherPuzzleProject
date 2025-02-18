@@ -5,6 +5,8 @@ using UnityEngine;
 public class Sc_AH_Sam : Sc_AnimationHandler
 {
     [Header("SAM OBJECT REFERENCES")]
+    public Sc_Character_Player PlayerCharacter;
+    public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_CharacterController Controller;
     public Sc_Inventory Inventory;
 
@@ -41,6 +43,10 @@ public class Sc_AH_Sam : Sc_AnimationHandler
 
         bool isPushing = Controller.IsPushingBlock;
         float lateralMovement = Mathf.Abs(Vector3.Magnitude(new Vector3(Controller.RB.velocity.x, 0f, Controller.RB.velocity.z)));
+        if (lateralMovement <= .1f)
+        {
+            lateralMovement = 0f;
+        }
         float verticalMovement = Mathf.Clamp(Controller.RB.velocity.y / 10f, -1f, 1f);
 
         Anim.SetFloat("LateralSpeed", lateralMovement);
@@ -104,5 +110,12 @@ public class Sc_AH_Sam : Sc_AnimationHandler
     private void OnItemFound(Sc_Item item)
     {
 
+    }
+
+    public void Footstep()
+    {
+        Sc_GameManager.instance.SoundManager.PlayRandomSFX(SoundHandler.FootstepSource, SoundHandler._footsteps, SoundHandler._minMaxFootstepPitch);
+
+        SoundHandler.GenerateSoundObject(PlayerCharacter.gameObject, transform.position, 1f, .3f, PlayerCharacter);
     }
 }

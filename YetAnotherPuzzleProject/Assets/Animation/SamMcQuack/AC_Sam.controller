@@ -1010,8 +1010,7 @@ BlendTree:
     m_DirectBlendParameter: LateralSpeed
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 2059750750254226541, guid: 3b5e88cff4e81744e9ff9501bfdfcd9c,
-      type: 3}
+    m_Motion: {fileID: 7400000, guid: ad14a35d297baf449b06a983f87237ce, type: 2}
     m_Threshold: 1
     m_Position: {x: 1, y: 0}
     m_TimeScale: 7

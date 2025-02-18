@@ -7062,6 +7062,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Trumpet
       objectReference: {fileID: 0}
+    - target: {fileID: 5836488002427195035, guid: f673933baf5f04348b516b502d735677,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7172,7 +7177,7 @@ PrefabInstance:
     - target: {fileID: 8527400921336382835, guid: 98d153d72b7f6f243a71bac1dd47fe2f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8879614849537785371, guid: 98d153d72b7f6f243a71bac1dd47fe2f,
         type: 3}
@@ -14198,6 +14203,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpiritSeed
       objectReference: {fileID: 0}
+    - target: {fileID: 5836488002427195035, guid: e322bc7c1f7422c47b5fc15401930fe1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14312,6 +14322,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Vase_Treasure
+      objectReference: {fileID: 0}
+    - target: {fileID: 9079802378645112028, guid: 93a44b05b7ab4f244bf0b543a43a248d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16103,6 +16118,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpiritSeedBowl_Circular
+      objectReference: {fileID: 0}
+    - target: {fileID: 1576040765341366268, guid: bef22277dee0472479bcd75be4940b5a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6089282192840826745, guid: bef22277dee0472479bcd75be4940b5a,
         type: 3}
@@ -18525,6 +18545,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SpiritSeedBowl_Square
+      objectReference: {fileID: 0}
+    - target: {fileID: 3141120936148011564, guid: d5d3345f329f1da45b5bd35b1586a886,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
