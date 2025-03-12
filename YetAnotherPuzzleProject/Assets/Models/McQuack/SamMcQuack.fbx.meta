@@ -24,6 +24,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Raincoat
     second: {fileID: 2100000, guid: e7bbfdfb2742b634a9f77d308bf1dc8c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RoboArm
+    second: {fileID: 2100000, guid: d96404bb7008a9e4a8e4ba5969acabd2, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -113,14 +118,25 @@ ModelImporter:
       has translation animation that will be discarded.\n\t'Pinky1.L' has translation
       animation that will be discarded.\n\t'Index1.R' has translation animation that
       will be discarded.\n\t'Pinky1.R' has translation animation that will be discarded.\n\nClip
-      'Armature|Run2_Push' has import animation warnings that might lower retargeting
-      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Index1.L'
-      has translation animation that will be discarded.\n\t'Pinky1.L' has translation
-      animation that will be discarded.\n\t'Index1.R' has translation animation that
-      will be discarded.\n\t'Pinky1.R' has translation animation that will be discarded.\n\nClip
-      'Armature|Run3' has import animation warnings that might lower retargeting
-      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Shoulder.L'
-      has translation animation that will be discarded.\n\t'Shoulder.R' has translation
+      'Armature|Robo_ChargeUp' has import animation warnings that might lower retargeting
+      quality:\nNote: Activate translation DOF on avatar to improve retargeting quality.\n\t'Shoulder.R'
+      has translation animation that will be discarded.\n\t'Leg.L' has translation
+      animation that will be discarded.\n\t'Leg.R' has translation animation that
+      will be discarded.\n\nClip 'Armature|Robo_ChargeUp_Release' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Index1.L' has translation
+      animation that will be discarded.\n\t'Pinky1.L' has translation animation that
+      will be discarded.\n\t'Shoulder.R' has translation animation that will be discarded.\n\t'Index1.R'
+      has translation animation that will be discarded.\n\t'Pinky1.R' has translation
+      animation that will be discarded.\n\nClip 'Armature|Run2_Push' has import animation
+      warnings that might lower retargeting quality:\nNote: Activate translation
+      DOF on avatar to improve retargeting quality.\n\t'Index1.L' has translation
+      animation that will be discarded.\n\t'Pinky1.L' has translation animation that
+      will be discarded.\n\t'Index1.R' has translation animation that will be discarded.\n\t'Pinky1.R'
+      has translation animation that will be discarded.\n\nClip 'Armature|Run3' has
+      import animation warnings that might lower retargeting quality:\nNote: Activate
+      translation DOF on avatar to improve retargeting quality.\n\t'Shoulder.L' has
+      translation animation that will be discarded.\n\t'Shoulder.R' has translation
       animation that will be discarded.\n\t'Pinky1.R' has translation animation that
       will be discarded.\n\t'Leg.L' has translation animation that will be discarded.\n\t'Leg.R'
       has translation animation that will be discarded.\n\nClip 'Armature|Throw'

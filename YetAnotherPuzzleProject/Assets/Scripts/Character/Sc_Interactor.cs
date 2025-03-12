@@ -84,36 +84,47 @@ public class Sc_Interactor : MonoBehaviour
         {
             if (interactible.CanBeInteractedWith)
             {
-                if (interactible._usesKey)
-                {
-                    if (_inventory == null)
-                    {
-                        //Do nothing
-                    }
-                    else
-                    {
-                        if (!_inventory.IsCurrentlyHoldingItem)
-                        {
-                            //Do nothing
-                        }
-                        else
-                        {
-                            int currentHeldItemKey = _inventory.CurrentlyHeldItem._itemData.ID;
-                            if (interactible.InteractorHasCorrectKey(currentHeldItemKey))
-                            {
-                                localChosenInteractibles.Add(interactible);
-                            }
-                            else
-                            {
-                                //Do nothing
-                            }
-                        }
-                    }
-                }
-                else
+                if (interactible.InteractorMeetsConditions(Character))
                 {
                     localChosenInteractibles.Add(interactible);
-                }            
+                }
+
+
+                //if (interactible._usesKey)
+                //{
+                //    if (_inventory == null)
+                //    {
+                //        //Do nothing
+                //    }
+                //    else
+                //    {
+                //        if (!_inventory.IsCurrentlyHoldingItem)
+                //        {
+                //            //Do nothing
+                //        }
+                //        else
+                //        {
+                //            if (interactible.InteractorMeetsConditions(Character))
+                //            {
+                //                localChosenInteractibles.Add(interactible);
+                //            }
+
+                //            //int currentHeldItemKey = _inventory.CurrentlyHeldItem._itemData.ID;
+                //            //if (interactible.InteractorHasCorrectKey(currentHeldItemKey))
+                //            //{
+                //            //    localChosenInteractibles.Add(interactible);
+                //            //}
+                //            //else
+                //            //{
+                //            //    //Do nothing
+                //            //}
+                //        }
+                //    }
+                //}
+                //else
+                //{
+                //    localChosenInteractibles.Add(interactible);
+                //}            
             }
         }
 

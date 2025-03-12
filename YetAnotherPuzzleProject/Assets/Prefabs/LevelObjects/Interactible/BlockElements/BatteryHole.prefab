@@ -288,6 +288,14 @@ MonoBehaviour:
   _debugUnselectedMat: {fileID: 2100000, guid: 1b4d1e77b0c202b428ed34ffb9d63a97, type: 2}
   _mesh: {fileID: 1208794880622121941}
   _priority: 0
+  CanBeInteractedWithOnThrow: 0
+  _canBeInteractedWith: 1
+  _condition:
+    Type: 3
+    _andConditions: []
+    _orConditions: []
+    _itemIdToEquip: 0
+    nothinglmfao: 1
   _usesKey: 1
   _keyIDs: 00000000
 --- !u!114 &217489669567972189
@@ -302,8 +310,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd431f372472754fbb3783de937d336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Lock: {fileID: 0}
+  StartActivated: 0
+  IsActivated: 0
+  CanBeActivated: 1
+  CanBeDeactivated: 1
+  PeriodicActivation: 0
+  PeriodicActivationDuration: 5
+  PeriodicActivationInitialDelay: 0
+  OnBatteryPlaced:
+    m_PersistentCalls:
+      m_Calls: []
   _interactible: {fileID: 5142416254486146446}
-  _activateable: {fileID: 0}
+  Pushable: {fileID: 0}
   _batteryMesh: {fileID: 3732275341259707471}
 --- !u!1 &3732275341259707471
 GameObject:

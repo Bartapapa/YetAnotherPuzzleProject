@@ -937,8 +937,14 @@ MonoBehaviour:
   _priority: 0
   CanBeInteractedWithOnThrow: 0
   _canBeInteractedWith: 1
+  _condition:
+    Type: 3
+    _andConditions: []
+    _orConditions: []
+    _itemIdToEquip: 9
+    nothinglmfao: 1
   _usesKey: 1
-  _keyIDs: 09000000
+  _keyIDs: 
 --- !u!114 &7230112808504741023
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6726,6 +6732,12 @@ MonoBehaviour:
   _priority: 0
   CanBeInteractedWithOnThrow: 0
   _canBeInteractedWith: 1
+  _condition:
+    Type: 0
+    _andConditions: []
+    _orConditions: []
+    _itemIdToEquip: -1
+    nothinglmfao: 1
   _usesKey: 0
   _keyIDs: 
 --- !u!65 &148164840769775978
@@ -7648,6 +7660,12 @@ MonoBehaviour:
   _priority: 0
   CanBeInteractedWithOnThrow: 0
   _canBeInteractedWith: 1
+  _condition:
+    Type: 0
+    _andConditions: []
+    _orConditions: []
+    _itemIdToEquip: -1
+    nothinglmfao: 1
   _usesKey: 0
   _keyIDs: 
 --- !u!65 &55189946460721202

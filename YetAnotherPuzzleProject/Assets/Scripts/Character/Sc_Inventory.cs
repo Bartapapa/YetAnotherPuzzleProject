@@ -478,7 +478,6 @@ public class Sc_Inventory : MonoBehaviour
     public void UseCurrentItem()
     {
         if (!CanUseItem) return;
-
         CurrentlyHeldItem.UseItem();
     }
 

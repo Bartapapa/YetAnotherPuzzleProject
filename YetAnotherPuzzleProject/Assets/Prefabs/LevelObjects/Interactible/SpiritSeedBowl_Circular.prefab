@@ -486,8 +486,14 @@ MonoBehaviour:
   _priority: 0
   CanBeInteractedWithOnThrow: 0
   _canBeInteractedWith: 1
+  _condition:
+    Type: 3
+    _andConditions: []
+    _orConditions: []
+    _itemIdToEquip: 9
+    nothinglmfao: 1
   _usesKey: 1
-  _keyIDs: 09000000
+  _keyIDs: 
 --- !u!114 &2051806917908805412
 MonoBehaviour:
   m_ObjectHideFlags: 0

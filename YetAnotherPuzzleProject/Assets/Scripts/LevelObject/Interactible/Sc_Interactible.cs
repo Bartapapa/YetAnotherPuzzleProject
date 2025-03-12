@@ -21,6 +21,7 @@ public class Sc_Interactible : MonoBehaviour
     [SerializeField] private bool _canBeInteractedWith = true;
 
     [Header("KEY")]
+    public Condition _condition;
     public bool _usesKey = false;
     public List<int> _keyIDs = new List<int>();
     public bool CanBeInteractedWith { get { return _canBeInteractedWith; } set { _canBeInteractedWith = value; } }
@@ -80,5 +81,10 @@ public class Sc_Interactible : MonoBehaviour
     public bool InteractorHasCorrectKey(int id)
     {
         return _keyIDs.Contains(id);
+    }
+
+    public bool InteractorMeetsConditions(Sc_Character_Player interactingCharacter)
+    {
+        return _condition.CheckPlayerCondition(interactingCharacter);
     }
 }
