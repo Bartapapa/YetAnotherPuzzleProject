@@ -9,9 +9,10 @@ public class Sc_Character_Player : Sc_Character
     public Sc_Inventory Inventory;
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_RestartCircle RestartCircle;
+    public Sc_RoboArm RoboArm;
 
     [Header("PLAYER CHARACTER STATE")]
-    public bool HasRoboArm = false; 
+    public bool HasRoboArm = false;
 
     [Header("PLAYER CHARACTER KEYBOARD AIMING HANDLING")]
     public float AimingRotationSpeed = 2f;
@@ -34,7 +35,7 @@ public class Sc_Character_Player : Sc_Character
             Sc_PlayerManager.instance.ApplyRandomSkin(BodyRenderers, CoatRenderers, BillRenderers, LegRenderers);
         }
 
-        ApplyRoboArm(HasRoboArm);
+        ApplyRoboArm(RoboArm.HasRoboArm);
     }
 
     public void ApplyRoboArm(bool apply)

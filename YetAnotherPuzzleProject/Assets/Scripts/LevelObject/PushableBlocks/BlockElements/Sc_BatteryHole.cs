@@ -21,7 +21,8 @@ public class Sc_BatteryHole : MonoBehaviour
 
     public void OnRoboArmInteract(Sc_Character_Player interactor)
     {
-        EnergizeWithoutBattery();
+        interactor.RoboArm.LinkedPushable = Pushable;
+        RoboArmEnergize();
     }
 
     private void PlaceBattery()
@@ -35,9 +36,9 @@ public class Sc_BatteryHole : MonoBehaviour
         _batteryMesh.SetActive(true);
     }
 
-    private void EnergizeWithoutBattery()
+    private void RoboArmEnergize()
     {
         _interactible.CanBeInteractedWith = false;
-        if (Pushable) Pushable.Energize(true);
+        if (Pushable) Pushable.RoboArmEnergize(true);
     }
 }

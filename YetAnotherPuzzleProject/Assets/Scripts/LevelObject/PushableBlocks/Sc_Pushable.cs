@@ -13,6 +13,9 @@ public class Sc_Pushable : MonoBehaviour
     public CinemachineImpulseSource ImpulseSource;
     public ParticleSystem Dust;
 
+    [Header("STATE")]
+    public bool _roboArmEnergized = false;
+
     [Header("MOVEMENT")]
     public float _maxSpeed = 1f;
     public float _speedSharpness = 15f;
@@ -91,6 +94,12 @@ public class Sc_Pushable : MonoBehaviour
     {
         if (!_isGrounded) return;
         MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, _targetUp, 1f * Time.fixedDeltaTime);
+    }
+
+    public virtual void RoboArmEnergize(bool energize)
+    {
+        _roboArmEnergized = energize;
+        Energize(energize);
     }
 
     public virtual void Energize(bool energize)

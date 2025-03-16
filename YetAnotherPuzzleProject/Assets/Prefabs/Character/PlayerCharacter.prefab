@@ -6114,6 +6114,7 @@ GameObject:
   - component: {fileID: 4996591085980717630}
   - component: {fileID: 565604149710831749}
   - component: {fileID: -2450906041205579653}
+  - component: {fileID: 2472126452193254659}
   m_Layer: 6
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -6159,7 +6160,9 @@ MonoBehaviour:
   Inventory: {fileID: 332057463008107770}
   SoundHandler: {fileID: 625332916299377650}
   RestartCircle: {fileID: 5354505410294209312}
+  RoboArm: {fileID: 2472126452193254659}
   HasRoboArm: 1
+  HasLinkedRoboArm: 0
   AimingRotationSpeed: 2
   BaseRotationSpeed: 0
   BodyRenderers:
@@ -6548,6 +6551,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 257
   _isInLight: 0
+--- !u!114 &2472126452193254659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4729834681734867247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bae64addced7524478943fc2d5447199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HasRoboArm: 1
+  LinkedPushable: {fileID: 0}
 --- !u!1 &4748321182727310683
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,6 +21,10 @@ public class Sc_Player : MonoBehaviour
     
     private Vector2 _movement;
 
+    private bool _channelRequested = false;
+    private float _channelConfirmDuration = 1f;
+    private float _channelConfirmationTimer = 0f;
+
     private bool _restartRequested = false;
     private float _restartConfirmationDuration = .75f;
     private float _restartConfirmationTimer = 0f;
@@ -32,6 +36,7 @@ public class Sc_Player : MonoBehaviour
             HandlePlayerInputs();
         }
 
+        HandleChannelRequest();
         HandleRestartRequest();
     }
 
@@ -116,7 +121,6 @@ public class Sc_Player : MonoBehaviour
     public void OnMovement(InputAction.CallbackContext context)
     {
         _movement = context.ReadValue<Vector2>();
-
     }
 
     public void OnInteraction(InputAction.CallbackContext context)
@@ -176,7 +180,22 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
-            _playerCharacter.Inventory.UseCurrentItem();
+            _channelRequested = true;
+            Debug.Log(3);
+        }
+        if (context.canceled)
+        {
+            if (_channelConfirmationTimer >= _channelConfirmDuration)
+            {
+                _playerCharacter.RoboArm.StopChannel();
+            }
+            else
+            {
+                _playerCharacter.Inventory.UseCurrentItem();
+            }
+            
+            _channelConfirmationTimer = 0f;
+            _channelRequested = false;
         }
     }
 
@@ -270,6 +289,22 @@ public class Sc_Player : MonoBehaviour
         {
             _restartRequested = false;
             PlayerCharacter.RestartCircle.Anim.Play("FadeOut");
+        }
+    }
+
+    private void HandleChannelRequest()
+    {
+        if (_channelRequested)
+        {
+            if (_channelConfirmationTimer < _channelConfirmDuration)
+            {
+                _channelConfirmationTimer += Time.deltaTime;
+            }
+            else
+            {
+                _channelConfirmationTimer = _channelConfirmDuration;
+                _playerCharacter.RoboArm.StartChannel();
+            }
         }
     }
 
