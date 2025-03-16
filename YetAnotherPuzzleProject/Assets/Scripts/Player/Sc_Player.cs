@@ -113,6 +113,9 @@ public class Sc_Player : MonoBehaviour
         PlayerCharacter.Controller.StopClimbing();
         PlayerCharacter.Inventory.ResetInventory();
 
+        PlayerCharacter.RoboArm.StopChannel();
+        PlayerCharacter.RoboArm.LinkedPushable = null;
+
         PlayerCharacter.Controller.ParentToObject(this.transform);
     }
 
@@ -178,10 +181,9 @@ public class Sc_Player : MonoBehaviour
 
     public void OnUse(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && _playerCharacter.RoboArm.HasRoboArm)
         {
             _channelRequested = true;
-            Debug.Log(3);
         }
         if (context.canceled)
         {

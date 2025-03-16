@@ -6162,7 +6162,6 @@ MonoBehaviour:
   RestartCircle: {fileID: 5354505410294209312}
   RoboArm: {fileID: 2472126452193254659}
   HasRoboArm: 1
-  HasLinkedRoboArm: 0
   AimingRotationSpeed: 2
   BaseRotationSpeed: 0
   BodyRenderers:
@@ -6563,6 +6562,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bae64addced7524478943fc2d5447199, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Controller: {fileID: 7095921624226034130}
   HasRoboArm: 1
   LinkedPushable: {fileID: 0}
 --- !u!1 &4748321182727310683
@@ -19064,6 +19064,7 @@ MonoBehaviour:
   SoundHandler: {fileID: 625332916299377650}
   Controller: {fileID: 7095921624226034130}
   Inventory: {fileID: 332057463008107770}
+  RoboArm: {fileID: 2472126452193254659}
 --- !u!137 &518336366157824602 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: -8645358716862396532, guid: 3b5e88cff4e81744e9ff9501bfdfcd9c,

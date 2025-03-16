@@ -9,6 +9,7 @@ public class Sc_AH_Sam : Sc_AnimationHandler
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_CharacterController Controller;
     public Sc_Inventory Inventory;
+    public Sc_RoboArm RoboArm;
 
     private void Start()
     {
@@ -24,6 +25,9 @@ public class Sc_AH_Sam : Sc_AnimationHandler
         Inventory.TreasureFound += OnTreasureFound;
         Inventory.ItemFound -= OnItemFound;
         Inventory.ItemFound += OnItemFound;
+
+        RoboArm.OnChannel -= OnChannel;
+        RoboArm.OnChannel += OnChannel;
     }
 
     private void Update()
@@ -110,6 +114,11 @@ public class Sc_AH_Sam : Sc_AnimationHandler
     private void OnItemFound(Sc_Item item)
     {
 
+    }
+
+    private void OnChannel(bool value)
+    {
+        Anim.SetBool("isChanneling", value);
     }
 
     public void Footstep()

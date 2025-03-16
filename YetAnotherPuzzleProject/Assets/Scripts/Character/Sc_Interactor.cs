@@ -15,7 +15,7 @@ public class Sc_Interactor : MonoBehaviour
 
     [ReadOnly][SerializeField] private Sc_Interactible _currentSelectedInteractible;
     [ReadOnly][SerializeField] private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
-    public bool CanInteract { get { return _inventory.IsUsingItem || Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded ? false : true; } }
+    public bool CanInteract { get { return _inventory.IsUsingItem || Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || Character.RoboArm.IsChanneling ? false : true; } }
     public Sc_Interactible CurrentSelectedInteractible { get { return _currentSelectedInteractible; } }
 
     private void Start()
