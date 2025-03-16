@@ -97,6 +97,7 @@ public class Sc_CharacterController : MonoBehaviour
     private Rigidbody _rb;
     public Rigidbody RB { get { return _rb; } }
     private Vector3 _moveInputVector;
+    private Vector3 _desiredMoveInputVector;
     private Vector3 _lookInputVector;
     private bool _ignoreInputs = false;
     public bool IgnoreInputs{
@@ -143,7 +144,9 @@ public class Sc_CharacterController : MonoBehaviour
         if (_runParticles != null)
         {
             HandleParticles();
-        }      
+        }
+
+        _moveInputVector = Vector3.MoveTowards(_moveInputVector, _desiredMoveInputVector, 20f * Time.deltaTime);
     }
 
     private void FixedUpdate()
@@ -168,7 +171,8 @@ public class Sc_CharacterController : MonoBehaviour
         Quaternion controlRotation = Quaternion.Euler(0, cameraRotation, 0);
 
         Vector3 desiredMoveInputVector = controlRotation * moveInputVector;
-        _moveInputVector = Vector3.MoveTowards(_moveInputVector, desiredMoveInputVector, 20f*Time.deltaTime);
+        _desiredMoveInputVector = desiredMoveInputVector;
+
         if (_forcedLookAtDir != Vector3.zero)
         {
             _lookInputVector = _forcedLookAtDir;
@@ -498,7 +502,11 @@ public class Sc_CharacterController : MonoBehaviour
     #region PUSHING
     private void CheckRequestPush()
     {
-        if (_isClimbing || !_isGrounded) return;
+        if (_isClimbing || !_isGrounded)
+        {
+            EndPush();
+            return;
+        }
 
         if (Physics.Raycast(transform.position + new Vector3(0, (_characterHeight * .5f), 0f), transform.forward, out _pushableHit, _pushCheckDistance, _pushableObjectLayers))
         {
@@ -521,10 +529,14 @@ public class Sc_CharacterController : MonoBehaviour
                     if (_currentPushable.PushedBy != this) return;
                 }
 
-                if (_currentPushable.IsSliding) return;
+                if (_currentPushable.IsSliding)
+                {
+                    EndPush();
+                    return;
+                }
 
                 float dot = Vector3.Dot(_pushableHit.normal, _moveInputVector);
-                if (-dot > .8f)
+                if (-dot > .8f && _moveInputVector.magnitude > .1f)
                 {
                     _pushRequested = true;
                     _pushDirection = -_pushableHit.normal;
@@ -563,10 +575,10 @@ public class Sc_CharacterController : MonoBehaviour
 
     private void EndPush()
     {
+        _pushRequested = false;
         if (!_isPushingBlock) return;
         Debug.Log("PUSH ENDED");
         _isPushingBlock = false;
-        _pushRequested = false;
 
         if (_currentPushable)
         {

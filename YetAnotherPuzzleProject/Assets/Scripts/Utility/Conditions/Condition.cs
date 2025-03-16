@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.ProBuilder.Shapes;
 
 public enum ConditionType
 {
@@ -24,7 +25,7 @@ public class Condition
     [Header("InteractorHasItemEquipped")]
     public int _itemIdToEquip = -1;
     [Header("InteractorHasRoboArm")]
-    public bool nothinglmfao = true;
+    public bool _checkIfNoRoboArm = false;
 
     public virtual bool CheckPlayerCondition(Sc_Character_Player playerCharacter)
     {
@@ -44,10 +45,46 @@ public class Condition
                 int currentHeldItemKey = playerCharacter.Inventory.CurrentlyHeldItem._itemData.ID;
                 return currentHeldItemKey == _itemIdToEquip;
             case ConditionType.InteractorHasRoboArm:
-                return false;
+                return _checkIfNoRoboArm ? !playerCharacter.HasRoboArm : playerCharacter.HasRoboArm;
         }
 
         return false;
+    }
+
+    public virtual bool CheckPlayerItemCondition(int itemID)
+    {
+        List<int> passingItemIDs = new List<int>();
+
+        switch (Type)
+        {
+            case ConditionType.And:
+                foreach (Condition cond in _andConditions)
+                {
+                    switch (cond.Type)
+                    {
+                        case ConditionType.InteractorHasItemEquipped:
+                            passingItemIDs.Add(cond._itemIdToEquip);
+                            break;
+                    }
+                }
+                break;
+            case ConditionType.Or:
+                foreach (Condition cond in _andConditions)
+                {
+                    switch (cond.Type)
+                    {
+                        case ConditionType.InteractorHasItemEquipped:
+                            passingItemIDs.Add(cond._itemIdToEquip);
+                            break;
+                    }
+                }
+                break;
+            case ConditionType.InteractorHasItemEquipped:
+                passingItemIDs.Add(_itemIdToEquip);
+                break;
+        }
+
+        return passingItemIDs.Contains(itemID);
     }
 
     private bool AndConditionCheck(Sc_Character_Player playerCharacter)

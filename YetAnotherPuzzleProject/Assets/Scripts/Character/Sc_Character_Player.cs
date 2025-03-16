@@ -10,6 +10,9 @@ public class Sc_Character_Player : Sc_Character
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_RestartCircle RestartCircle;
 
+    [Header("PLAYER CHARACTER STATE")]
+    public bool HasRoboArm = false; 
+
     [Header("PLAYER CHARACTER KEYBOARD AIMING HANDLING")]
     public float AimingRotationSpeed = 2f;
     [ReadOnly] public float BaseRotationSpeed = 0f;
@@ -19,6 +22,8 @@ public class Sc_Character_Player : Sc_Character
     public Renderer[] CoatRenderers;
     public Renderer[] BillRenderers;
     public Renderer[] LegRenderers;
+    public GameObject[] NormalMeshes;
+    public GameObject[] RoboMeshes;
 
     private void Start()
     {
@@ -27,6 +32,34 @@ public class Sc_Character_Player : Sc_Character
         if (Sc_PlayerManager.instance != null)
         {
             Sc_PlayerManager.instance.ApplyRandomSkin(BodyRenderers, CoatRenderers, BillRenderers, LegRenderers);
+        }
+
+        ApplyRoboArm(HasRoboArm);
+    }
+
+    public void ApplyRoboArm(bool apply)
+    {
+        if (apply)
+        {
+            for (int i = 0; i < NormalMeshes.Length; i++)
+            {
+                NormalMeshes[i].SetActive(false);
+            }
+            for (int i = 0; i < RoboMeshes.Length; i++)
+            {
+                RoboMeshes[i].SetActive(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < NormalMeshes.Length; i++)
+            {
+                NormalMeshes[i].SetActive(true);
+            }
+            for (int i = 0; i < RoboMeshes.Length; i++)
+            {
+                RoboMeshes[i].SetActive(false);
+            }
         }
     }
 }

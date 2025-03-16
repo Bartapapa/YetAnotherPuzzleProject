@@ -272,7 +272,22 @@ MonoBehaviour:
       - m_Target: {fileID: 217489669567972189}
         m_TargetAssemblyTypeName: Sc_BatteryHole, Assembly-CSharp
         m_MethodName: OnInteract
-        m_Mode: 1
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnRoboArmInteraction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 217489669567972189}
+        m_TargetAssemblyTypeName: Sc_BatteryHole, Assembly-CSharp
+        m_MethodName: OnRoboArmInteract
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -291,12 +306,23 @@ MonoBehaviour:
   CanBeInteractedWithOnThrow: 0
   _canBeInteractedWith: 1
   _condition:
-    Type: 3
+    Type: 2
     _andConditions: []
-    _orConditions: []
+    _orConditions:
+    - Type: 3
+      _andConditions: []
+      _orConditions: []
+      _itemIdToEquip: 0
+      _checkIfNoRoboArm: 0
+    - Type: 4
+      _andConditions: []
+      _orConditions: []
+      _itemIdToEquip: 0
+      _checkIfNoRoboArm: 0
     _itemIdToEquip: 0
-    nothinglmfao: 1
+    _checkIfNoRoboArm: 0
   _usesKey: 1
+  _usesRoboArm: 1
   _keyIDs: 00000000
 --- !u!114 &217489669567972189
 MonoBehaviour:
@@ -310,14 +336,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd431f372472754fbb3783de937d336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Lock: {fileID: 0}
-  StartActivated: 0
-  IsActivated: 0
-  CanBeActivated: 1
-  CanBeDeactivated: 1
-  PeriodicActivation: 0
-  PeriodicActivationDuration: 5
-  PeriodicActivationInitialDelay: 0
   OnBatteryPlaced:
     m_PersistentCalls:
       m_Calls: []

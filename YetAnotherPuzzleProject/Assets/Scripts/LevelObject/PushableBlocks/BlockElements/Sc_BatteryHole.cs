@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Sc_BatteryHole : Sc_Activateable
+public class Sc_BatteryHole : MonoBehaviour
 {
     public UnityEvent OnBatteryPlaced;
 
@@ -14,9 +14,14 @@ public class Sc_BatteryHole : Sc_Activateable
 
     private bool _batteryPlaced = false;
 
-    public void OnInteract()
+    public void OnInteract(Sc_Character interactor)
     {
         PlaceBattery();
+    }
+
+    public void OnRoboArmInteract(Sc_Character_Player interactor)
+    {
+        EnergizeWithoutBattery();
     }
 
     private void PlaceBattery()
@@ -28,5 +33,11 @@ public class Sc_BatteryHole : Sc_Activateable
         OnBatteryPlaced?.Invoke();
 
         _batteryMesh.SetActive(true);
+    }
+
+    private void EnergizeWithoutBattery()
+    {
+        _interactible.CanBeInteractedWith = false;
+        if (Pushable) Pushable.Energize(true);
     }
 }
