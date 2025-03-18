@@ -257,6 +257,39 @@ public class Sc_Pushable : MonoBehaviour
         //_rb.velocity += _gravity * Time.fixedDeltaTime;
     }
 
+    public void RedirectInputToPushDirection (ref CharacterInput input)
+    {
+        Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(input.moveX, 0f, input.moveY), 1f);
+        float cameraRotation = input.cameraRef.transform.eulerAngles.y;
+        Quaternion controlRotation = Quaternion.Euler(0, cameraRotation, 0);
+        Vector3 desiredMoveInputVector = controlRotation * moveInputVector;
+
+        float forwardDot = Vector3.Dot(desiredMoveInputVector, transform.forward);
+        float rightwardDot = Vector3.Dot(desiredMoveInputVector, transform.right);
+        Vector3 pushDirection = Vector3.zero;
+        if (forwardDot >= .7f)
+        {
+            pushDirection = transform.forward;
+        }
+        else if (forwardDot <= -.7f)
+        {
+            pushDirection = -transform.forward;
+        }
+        else if (rightwardDot >= .7f)
+        {
+            pushDirection = transform.right;
+        }
+        else if (rightwardDot <= -.7f)
+        {
+            pushDirection = -transform.right;
+        }
+
+        if (pushDirection != Vector3.zero)
+        {
+            Push(pushDirection);
+        }      
+    }
+
     public virtual void Push(Vector3 direction)
     {
         if (CheckObstacle(direction) || _onSlope) return;

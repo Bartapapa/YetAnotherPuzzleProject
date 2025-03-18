@@ -181,7 +181,7 @@ public class Sc_Player : MonoBehaviour
 
     public void OnUse(InputAction.CallbackContext context)
     {
-        if (context.performed && _playerCharacter.RoboArm.HasRoboArm)
+        if (context.performed && _playerCharacter.RoboArm.CanChannel)
         {
             _channelRequested = true;
         }
@@ -337,7 +337,14 @@ public class Sc_Player : MonoBehaviour
 
         playerInput.cameraRef = Camera.main;
 
-        _playerCharacter.Controller.SetInputs(ref playerInput);
+        if (!_playerCharacter.RoboArm.IsChanneling)
+        {
+            _playerCharacter.Controller.SetInputs(ref playerInput);
+        }
+        else
+        {
+            _playerCharacter.RoboArm.LinkedPushable.RedirectInputToPushDirection(ref playerInput);
+        }
     }
     #endregion
 
