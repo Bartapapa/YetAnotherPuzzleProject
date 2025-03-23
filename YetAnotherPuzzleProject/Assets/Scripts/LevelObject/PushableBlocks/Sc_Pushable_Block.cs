@@ -69,7 +69,7 @@ public class Sc_Pushable_Block : Sc_Pushable
         {
             case BlockElements.BatteryHole:
                 Sc_BatteryHole newBatteryHole = Instantiate<Sc_BatteryHole>(_batteryHolePrefab, spawnTransform.position, spawnTransform.rotation, spawnTransform);
-                newBatteryHole.Pushable = this;
+                newBatteryHole.Activateables.Add(this);
                 break;
             case BlockElements.Handle:
                 break;

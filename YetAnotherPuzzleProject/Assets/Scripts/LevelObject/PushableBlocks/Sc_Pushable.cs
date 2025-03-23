@@ -4,9 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_Pushable : MonoBehaviour
+public class Sc_Pushable : Sc_Activateable
 {
-    [Header("OBJECT REFS")]
+    [Header("PUSHABLE OBJECT REFS")]
     public Sc_PowerGenerator Generator;
     public Sc_WeightedObject WObject;
     public Transform MeshPivot;
@@ -66,8 +66,10 @@ public class Sc_Pushable : MonoBehaviour
     protected bool _isSliding;
     public bool IsSliding { get { return _isSliding; } }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         InitializePushable();
         DBG_InitializeMats();
     }
@@ -84,16 +86,25 @@ public class Sc_Pushable : MonoBehaviour
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         HandlePushSound();
         HandleMeshUp();
     }
 
     private void HandleMeshUp()
     {
-        if (!_isGrounded) return;
-        MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, _targetUp, 1f * Time.fixedDeltaTime);
+        if (!_isGrounded)
+        {
+            MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, Vector3.up, .2f * Time.fixedDeltaTime);
+        }
+        else
+        {
+            MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, _targetUp, 1f * Time.fixedDeltaTime);
+        }
+
     }
 
     public virtual void RoboArmEnergize(bool energize)
@@ -101,6 +112,37 @@ public class Sc_Pushable : MonoBehaviour
         _roboArmEnergized = energize;
         Energize(energize);
     }
+
+    #region Activateable implementation
+    public override bool Activate(bool toggleOn)
+    {
+        if (base.Activate(toggleOn))
+        {
+            Energize(toggleOn);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public override void ForceActivate(bool toggleOn)
+    {
+        base.ForceActivate(toggleOn);
+        Energize(toggleOn);
+    }
+
+    public override void OnLockEngaged(bool engage)
+    {
+
+    }
+
+    public override void OnLockDestroyed()
+    {
+        
+    }
+    #endregion
 
     public virtual void Energize(bool energize)
     {
@@ -267,19 +309,19 @@ public class Sc_Pushable : MonoBehaviour
         float forwardDot = Vector3.Dot(desiredMoveInputVector, transform.forward);
         float rightwardDot = Vector3.Dot(desiredMoveInputVector, transform.right);
         Vector3 pushDirection = Vector3.zero;
-        if (forwardDot >= .7f)
+        if (forwardDot >= .85f)
         {
             pushDirection = transform.forward;
         }
-        else if (forwardDot <= -.7f)
+        else if (forwardDot <= -.85f)
         {
             pushDirection = -transform.forward;
         }
-        else if (rightwardDot >= .7f)
+        else if (rightwardDot >= .85f)
         {
             pushDirection = transform.right;
         }
-        else if (rightwardDot <= -.7f)
+        else if (rightwardDot <= -.85f)
         {
             pushDirection = -transform.right;
         }

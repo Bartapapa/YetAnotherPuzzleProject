@@ -336,9 +336,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfd431f372472754fbb3783de937d336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnBatteryPlaced:
-    m_PersistentCalls:
-      m_Calls: []
+  Activateables: []
+  CanFailToActivate: 0
+  ActivationDelay: 0.5
   _interactible: {fileID: 5142416254486146446}
   Pushable: {fileID: 0}
   _batteryMesh: {fileID: 3732275341259707471}

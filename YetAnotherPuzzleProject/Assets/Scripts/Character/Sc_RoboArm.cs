@@ -10,13 +10,13 @@ public class Sc_RoboArm : MonoBehaviour
     [Header("STATE")]
     public bool HasRoboArm = false;
 
-    [Header("LINKED PUSHABLE")]
-    public Sc_Pushable LinkedPushable;
+    [Header("LINKED ACTIVATEABLES")]
+    public List<Sc_RoboArmInputListener> LinkedRoboArmListeners = new List<Sc_RoboArmInputListener>();
 
     private bool _isChanneling = false;
-    public bool HasLinkedRoboArm { get { return LinkedPushable != null; } }
+    public bool HasLinkedListeners { get { return LinkedRoboArmListeners.Count > 0; } }
     public bool IsChanneling { get { return _isChanneling; } }
-    public bool CanChannel { get { return !HasRoboArm || !LinkedPushable ? false : true; } }
+    public bool CanChannel { get { return !HasRoboArm || !HasLinkedListeners ? false : true; } }
 
     public delegate void BoolEvent(bool value);
     public event BoolEvent OnChannel;

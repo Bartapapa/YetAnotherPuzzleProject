@@ -113,8 +113,8 @@ public class Sc_Player : MonoBehaviour
         PlayerCharacter.Controller.StopClimbing();
         PlayerCharacter.Inventory.ResetInventory();
 
-        PlayerCharacter.RoboArm.StopChannel();
-        PlayerCharacter.RoboArm.LinkedPushable = null;
+        ResetChannelRequest();
+        PlayerCharacter.RoboArm.LinkedRoboArmListeners.Clear();
 
         PlayerCharacter.Controller.ParentToObject(this.transform);
     }
@@ -124,12 +124,16 @@ public class Sc_Player : MonoBehaviour
     public void OnMovement(InputAction.CallbackContext context)
     {
         _movement = context.ReadValue<Vector2>();
+
+        if (_movement.sqrMagnitude > 0 && !_playerCharacter.RoboArm.IsChanneling) ResetChannelRequest();
     }
 
     public void OnInteraction(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
+            ResetChannelRequest();
+
             if (_playerCharacter.Controller.IsAnchoredToValve)
             {
                 _playerCharacter.Controller.CurrentValve.EndUsing();
@@ -155,6 +159,8 @@ public class Sc_Player : MonoBehaviour
         if (context.performed)
         {
             if (!_playerCharacter.Inventory.CanAim) return;
+
+            ResetChannelRequest();
 
             if (context.action.activeControl.device.displayName == "Keyboard" || context.action.activeControl.device.displayName == "Mouse")
             {
@@ -189,11 +195,11 @@ public class Sc_Player : MonoBehaviour
         {
             if (_channelConfirmationTimer >= _channelConfirmDuration)
             {
-                _playerCharacter.RoboArm.StopChannel();
+                ResetChannelRequest();
             }
             else
             {
-                _playerCharacter.Inventory.UseCurrentItem();
+                if (!_playerCharacter.RoboArm.IsChanneling) _playerCharacter.Inventory.UseCurrentItem();
             }
             
             _channelConfirmationTimer = 0f;
@@ -205,6 +211,8 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
+            ResetChannelRequest();
+
             if (_playerCharacter.Inventory.IsUsingItem)
             {
                 _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(0);
@@ -221,6 +229,8 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
+            ResetChannelRequest();
+
             if (_playerCharacter.Inventory.IsUsingItem)
             {
                 _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(1);
@@ -237,6 +247,8 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
+            ResetChannelRequest();
+
             if (_playerCharacter.Inventory.IsUsingItem)
             {
                 _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(2);
@@ -253,6 +265,8 @@ public class Sc_Player : MonoBehaviour
     {
         if (context.performed)
         {
+            ResetChannelRequest();
+
             if (_playerCharacter.Inventory.IsUsingItem)
             {
                 _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(3);
@@ -260,9 +274,7 @@ public class Sc_Player : MonoBehaviour
             else
             {
                 _playerCharacter.Inventory.DropCurrentItem();
-
             }
-
         }
     }
 
@@ -294,6 +306,12 @@ public class Sc_Player : MonoBehaviour
         }
     }
 
+    private void ResetChannelRequest()
+    {
+        _channelRequested = false;
+        _playerCharacter.RoboArm.StopChannel();
+    }
+
     private void HandleChannelRequest()
     {
         if (_channelRequested)
@@ -306,6 +324,13 @@ public class Sc_Player : MonoBehaviour
             {
                 _channelConfirmationTimer = _channelConfirmDuration;
                 _playerCharacter.RoboArm.StartChannel();
+            }
+        }
+        else
+        {
+            if (_channelConfirmationTimer > 0f)
+            {
+                _channelConfirmationTimer = 0f;
             }
         }
     }
@@ -343,7 +368,11 @@ public class Sc_Player : MonoBehaviour
         }
         else
         {
-            _playerCharacter.RoboArm.LinkedPushable.RedirectInputToPushDirection(ref playerInput);
+            foreach(Sc_RoboArmInputListener roboArmListener in _playerCharacter.RoboArm.LinkedRoboArmListeners)
+            {
+                roboArmListener.OnRoboArmChannelInput(ref playerInput);
+            }
+            //_playerCharacter.RoboArm.LinkedPushable.RedirectInputToPushDirection(ref playerInput);
         }
     }
     #endregion

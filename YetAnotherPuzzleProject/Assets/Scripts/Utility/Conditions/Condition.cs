@@ -65,16 +65,20 @@ public class Condition
                         case ConditionType.InteractorHasItemEquipped:
                             passingItemIDs.Add(cond._itemIdToEquip);
                             break;
+                        default:
+                            break;
                     }
                 }
                 break;
             case ConditionType.Or:
-                foreach (Condition cond in _andConditions)
-                {
+                foreach (Condition cond in _orConditions)
+                { 
                     switch (cond.Type)
                     {
                         case ConditionType.InteractorHasItemEquipped:
                             passingItemIDs.Add(cond._itemIdToEquip);
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -82,6 +86,8 @@ public class Condition
             case ConditionType.InteractorHasItemEquipped:
                 passingItemIDs.Add(_itemIdToEquip);
                 break;
+            default:
+                break; 
         }
 
         return passingItemIDs.Contains(itemID);
