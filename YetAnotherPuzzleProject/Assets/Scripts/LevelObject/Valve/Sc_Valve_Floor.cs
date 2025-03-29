@@ -68,6 +68,12 @@ public class Sc_Valve_Floor : Sc_GaugeInputer
         }
 
         StartUsing(interactor);
+
+        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        if (player)
+        {
+            _interactible.EndInteract(interactor);
+        }
     }
 
     private void Update()

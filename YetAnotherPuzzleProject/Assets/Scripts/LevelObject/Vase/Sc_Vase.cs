@@ -43,6 +43,12 @@ public class Sc_Vase : MonoBehaviour
             HasBeenSearchedThrough = true;
             Sc_GameManager.instance.SaveCurrentLevelVases();
         }
+
+        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        if (player)
+        {
+            _interactible.EndInteract(interactor);
+        }
     }
 
     public void CheckVase(Sc_Character interactor)

@@ -8,6 +8,7 @@ public class Sc_Interactor : MonoBehaviour
     [Header("OBJECT REFS")]
     public Sc_Character_Player Character;
     public Sc_Inventory _inventory;
+    [ReadOnly] public Sc_Interactible _lastInteractedInteractible;
 
     [Header("PARAMETERS")]
     public float _interactionRange = 1.5f;
@@ -15,7 +16,15 @@ public class Sc_Interactor : MonoBehaviour
 
     [ReadOnly][SerializeField] private Sc_Interactible _currentSelectedInteractible;
     [ReadOnly][SerializeField] private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
-    public bool CanInteract { get { return _inventory.IsUsingItem || Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || Character.RoboArm.IsChanneling ? false : true; } }
+    public bool CanInteract { get { return
+                    _inventory.IsUsingItem ||
+                    Character.Controller.IsClimbing ||
+                    Character.Controller.IsAnchoring ||
+                    Character.Controller.IsAnchoredToValve ||
+                    !Character.Controller.IsGrounded ||
+                    Character.RoboArm.IsChanneling ||
+                    Character.RoboArm.IsInputingCode
+                    ? false : true; } }
     public Sc_Interactible CurrentSelectedInteractible { get { return _currentSelectedInteractible; } }
 
     private void Start()

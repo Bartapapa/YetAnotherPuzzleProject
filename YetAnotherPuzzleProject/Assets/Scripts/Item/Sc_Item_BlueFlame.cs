@@ -41,6 +41,8 @@ public class Sc_Item_BlueFlame : Sc_Item
 
             player.Inventory.PickUpItemAndEquip(this);
         }
+
+        _interactible.EndInteract(interactor);
     }
 
     public override void UseItem()

@@ -19,10 +19,12 @@ public class Sc_Ladder : MonoBehaviour
 
     public void OnInteract(Sc_Character interactor)
     {
-        Sc_CharacterController interactorController = interactor.Controller;
-        if (interactorController)
+        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        if (player)
         {
-            interactorController.InitiateClimbSequence(this);
+            player.Controller.InitiateClimbSequence(this);
+
+            _interactible.EndInteract(interactor);
         }
     }
 

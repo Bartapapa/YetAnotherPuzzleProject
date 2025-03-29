@@ -17,8 +17,11 @@ public class Sc_BatteryHole : Sc_Activator
     {
         foreach(Sc_Activateable activateable in Activateables)
         {
-            Sc_RoboArmInputListener roboArmListener = activateable.GetComponent<Sc_RoboArmInputListener>();
-            if (roboArmListener) RoboArmInputListeners.Add(roboArmListener);
+            Sc_RoboArmInputListener[] roboArmListeners = activateable.GetComponents<Sc_RoboArmInputListener>();
+            for (int i = 0; i < roboArmListeners.Length; i++)
+            {
+                RoboArmInputListeners.Add(roboArmListeners[i]);
+            }
         }
     }
 
@@ -26,26 +29,27 @@ public class Sc_BatteryHole : Sc_Activator
     {
         if (!StopDelayedActivation())
         {
-            //if (!ToggleActivate())
-            //{
-            //    return;
-            //}
             if (!DelayActivation())
             {
                 return;
             }
         }
         PlaceBattery();
+
+        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        if (player)
+        {
+            _interactible.EndInteract(player);
+        }
     }
 
     public void OnRoboArmInteract(Sc_Character_Player interactor)
     {
+        //Put here entire sequence for animation, turning around etc etc;
+
+
         if (!StopDelayedActivation())
         {
-            //if (!ToggleActivate())
-            //{
-            //    return;
-            //}
             if (!DelayActivation())
             {
                 return;
@@ -53,6 +57,7 @@ public class Sc_BatteryHole : Sc_Activator
         }
         interactor.RoboArm.LinkedRoboArmListeners = RoboArmInputListeners;
         RoboArmEnergize();
+        interactor.RoboArm.StartInputingCode();
     }
 
     private void PlaceBattery()

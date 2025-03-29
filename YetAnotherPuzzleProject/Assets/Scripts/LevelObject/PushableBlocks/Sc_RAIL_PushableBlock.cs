@@ -8,7 +8,7 @@ public class Sc_RAIL_PushableBlock : Sc_RoboArmInputListener
     [Header("PUSHABLE OBJECT REF")]
     public Sc_Pushable pushable;
 
-    protected override void TranslateInput(ref CharacterInput playerInput)
+    protected override void TranslateChannelInput(ref CharacterInput playerInput)
     {
         //base.TranslateInput(ref playerInput);
         Vector3 moveInputVector = Vector3.ClampMagnitude(new Vector3(playerInput.moveX, 0f, playerInput.moveY), 1f);
@@ -38,6 +38,7 @@ public class Sc_RAIL_PushableBlock : Sc_RoboArmInputListener
 
         if (pushDirection != Vector3.zero)
         {
+            if (!pushable) return;
             pushable.Push(pushDirection);
         }
     }

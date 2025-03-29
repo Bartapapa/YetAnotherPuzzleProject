@@ -115,6 +115,7 @@ public class Sc_Player : MonoBehaviour
 
         ResetChannelRequest();
         PlayerCharacter.RoboArm.LinkedRoboArmListeners.Clear();
+        PlayerCharacter.RoboArm.StopInputingCode();
 
         PlayerCharacter.Controller.ParentToObject(this.transform);
     }
@@ -149,6 +150,15 @@ public class Sc_Player : MonoBehaviour
             else
             {
                 _playerCharacter.SoundHandler.Quack();
+            }
+        }
+        if (context.canceled)
+        {
+            if (_playerCharacter.Interactor._lastInteractedInteractible == null) return;
+            _playerCharacter.Interactor._lastInteractedInteractible.EndInteract(_playerCharacter);
+            if (_playerCharacter.RoboArm.IsInputingCode)
+            {
+                _playerCharacter.RoboArm.OnRoboArmEndInteract();
             }
         }
     }
@@ -362,17 +372,24 @@ public class Sc_Player : MonoBehaviour
 
         playerInput.cameraRef = Camera.main;
 
-        if (!_playerCharacter.RoboArm.IsChanneling)
+        if (!_playerCharacter.RoboArm.IsChanneling && !_playerCharacter.RoboArm.IsInputingCode)
         {
             _playerCharacter.Controller.SetInputs(ref playerInput);
         }
-        else
+        else if (_playerCharacter.RoboArm.IsChanneling)
         {
             foreach(Sc_RoboArmInputListener roboArmListener in _playerCharacter.RoboArm.LinkedRoboArmListeners)
             {
                 roboArmListener.OnRoboArmChannelInput(ref playerInput);
             }
             //_playerCharacter.RoboArm.LinkedPushable.RedirectInputToPushDirection(ref playerInput);
+        }
+        else if (_playerCharacter.RoboArm.IsInputingCode)
+        {
+            foreach (Sc_RoboArmInputListener roboArmListener in _playerCharacter.RoboArm.LinkedRoboArmListeners)
+            {
+                roboArmListener.OnRoboArmCodeInput(ref playerInput);
+            }
         }
     }
     #endregion

@@ -64,7 +64,9 @@ public class Sc_Item : MonoBehaviour
             else
             {
                 player.Inventory.PickUpItemAndEquip(this);
-            }          
+            }
+
+            _interactible.EndInteract(interactor);
         }
     }
 

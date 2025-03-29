@@ -50,6 +50,7 @@ public class Sc_Interactible : MonoBehaviour
             Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
             if (player)
             {
+                player.Interactor._lastInteractedInteractible = this;
                 if (_usesRoboArm && _usesKey)
                 {
                     if (player.Inventory.CurrentlyHeldItem != null)
@@ -116,6 +117,17 @@ public class Sc_Interactible : MonoBehaviour
                 return;
             }
         }
+    }
+
+    public virtual void EndInteract(Sc_Character interactor)
+    {
+        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        if (player)
+        {
+            //Debug.Log("INTERACTION ENDED - ITEM");
+            player.Interactor._lastInteractedInteractible = null;
+        }
+        //Base EndInteract method
     }
 
     public void InteractWithThrow()

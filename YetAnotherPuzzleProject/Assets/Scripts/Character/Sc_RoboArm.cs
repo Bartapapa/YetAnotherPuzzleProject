@@ -14,12 +14,39 @@ public class Sc_RoboArm : MonoBehaviour
     public List<Sc_RoboArmInputListener> LinkedRoboArmListeners = new List<Sc_RoboArmInputListener>();
 
     private bool _isChanneling = false;
+    private bool _isInputingCode = false;
     public bool HasLinkedListeners { get { return LinkedRoboArmListeners.Count > 0; } }
     public bool IsChanneling { get { return _isChanneling; } }
+    public bool IsInputingCode { get { return _isInputingCode; } }
     public bool CanChannel { get { return !HasRoboArm || !HasLinkedListeners ? false : true; } }
 
     public delegate void BoolEvent(bool value);
     public event BoolEvent OnChannel;
+
+    public void OnRoboArmEndInteract()
+    {
+        StopInputingCode();
+    }
+
+    public void StartInputingCode()
+    {
+        if (_isInputingCode) return;
+
+        _isInputingCode = true;
+        Controller.CanMove = false;
+        Controller.CanRotate = false;
+    }
+
+    public void StopInputingCode()
+    {
+        if (!_isInputingCode) return;
+
+        Debug.Log("STOPPED INPUTING CODE");
+
+        _isInputingCode = false;
+        Controller.CanMove = true;
+        Controller.CanRotate = true;
+    }
 
     public void StartChannel()
     {
