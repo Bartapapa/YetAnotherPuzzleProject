@@ -26,6 +26,7 @@ public class Sc_Pushable_Block : Sc_Pushable
     public BlockElements _backBlockElement = BlockElements.None;
     public BlockElements _rightBlockElement = BlockElements.None;
     public BlockElements _leftBlockElement = BlockElements.None;
+    public Sc_ShedMesh _plainFacePrefab;
     public Sc_BatteryHole _batteryHolePrefab;
 
     protected override void InitializePushable()
@@ -45,8 +46,6 @@ public class Sc_Pushable_Block : Sc_Pushable
 
     private void SpawnBlockElement(BlockFace face, BlockElements blockElement)
     {
-        if (blockElement == BlockElements.None) return;
-
         Transform spawnTransform = null;
 
         switch (face)
@@ -67,9 +66,18 @@ public class Sc_Pushable_Block : Sc_Pushable
 
         switch (blockElement)
         {
+            case BlockElements.None:
+                Sc_ShedMesh newPlainFace = Instantiate<Sc_ShedMesh>(_plainFacePrefab, spawnTransform.position, spawnTransform.rotation, spawnTransform);
+                ShedMeshes.Add(newPlainFace);
+                break;
             case BlockElements.BatteryHole:
                 Sc_BatteryHole newBatteryHole = Instantiate<Sc_BatteryHole>(_batteryHolePrefab, spawnTransform.position, spawnTransform.rotation, spawnTransform);
                 newBatteryHole.Activateables.Add(this);
+                foreach(Transform mesh in newBatteryHole._emissiveHoleMeshes)
+                {
+                    EmissiveMeshes.Add(mesh);
+                }
+                ShedMeshes.Add(newBatteryHole._shedMesh);
                 break;
             case BlockElements.Handle:
                 break;

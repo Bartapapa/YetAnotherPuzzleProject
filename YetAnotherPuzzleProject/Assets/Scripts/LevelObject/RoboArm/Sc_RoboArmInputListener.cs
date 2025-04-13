@@ -28,6 +28,12 @@ public class Sc_RoboArmInputListener : MonoBehaviour
 
     private bool _inputCodeElement = false;
 
+    public delegate void DefaultEvent();
+    public event DefaultEvent CodeUp;
+    public event DefaultEvent CodeDown;
+    public event DefaultEvent CodeRight;
+    public event DefaultEvent CodeLeft;
+
     public void OnRoboArmChannelInput(ref CharacterInput playerInput)
     {
         TranslateChannelInput(ref playerInput);
@@ -53,24 +59,28 @@ public class Sc_RoboArmInputListener : MonoBehaviour
             {
                 Debug.Log("CODE RIGHT");
                 _inputCodeElement = true;
+                CodeRight?.Invoke();
                 CheckCode(CodeDirections.Right);
             }
             else if (moveInputVector.x <= -.85f)
             {
                 Debug.Log("CODE LEFT");
                 _inputCodeElement = true;
+                CodeLeft?.Invoke();
                 CheckCode(CodeDirections.Left);
             }
             else if (moveInputVector.z >= .85f)
             {
                 Debug.Log("CODE UP");
                 _inputCodeElement = true;
+                CodeUp?.Invoke();
                 CheckCode(CodeDirections.Up);
             }
             else if (moveInputVector.z <= -.85f)
             {
                 Debug.Log("CODE DOWN");
                 _inputCodeElement = true;
+                CodeDown?.Invoke();
                 CheckCode(CodeDirections.Down);
             }
         }

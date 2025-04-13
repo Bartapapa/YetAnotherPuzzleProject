@@ -8,6 +8,8 @@ public class Sc_BatteryHole : Sc_Activator
     [Header("BATTERY HOLE OBJECT REFS")]
     public Sc_Interactible _interactible;
     public GameObject _batteryMesh;
+    public Sc_ShedMesh _shedMesh;
+    public List<Transform> _emissiveHoleMeshes = new List<Transform>();
 
     [ReadOnly][SerializeField] public List<Sc_RoboArmInputListener> RoboArmInputListeners = new List<Sc_RoboArmInputListener>();
 

@@ -44,16 +44,31 @@ public class Sc_Pushable : Sc_Activateable
     protected RaycastHit _obstacleHit;
 
     [Header("GENERATOR")]
+    public List<Transform> EmissiveMeshes = new List<Transform>();
     public List<Transform> DebugGeneratorMeshes = new List<Transform>();
     public Material DeEnergizedMat;
     public Material EnergizedMat;
     private List<Renderer> _renderers = new List<Renderer>();
+    private List<Material> _emissiveMats = new List<Material>();
+
+    [Header("CORE FORM")]
+    public List<Sc_ShedMesh> ShedMeshes = new List<Sc_ShedMesh>();
+    public Vector3 CoreFormBoxColliderSize = new Vector3(1.5f, 1.5f, 1.5f);
+    public float CoreFormCapsuleColliderRadius = .75f;
+    public float CoreFormCapsuleColliderHeight = 1.5f;
+    private bool _isInCoreForm = false;
+    public bool IsInCoreForm { get { return _isInCoreForm; } }
+
+
+    protected Coroutine _energizeCO;
 
     protected Sc_CharacterController _pushedBy;
     public Sc_CharacterController PushedBy { get { return _pushedBy; } set { _pushedBy = value; } }
 
-    protected BoxCollider _collider;
-    public Collider Collider { get { return _collider; } }
+    protected BoxCollider _boxCollider;
+    public Collider BoxCollider { get { return _boxCollider; } }
+    protected CapsuleCollider _capsuleCollider;
+    public Collider CapsuleCOllider { get { return _capsuleCollider; } }
     protected Rigidbody _rb;
     public Rigidbody RB { get { return _rb; } }
     protected Vector3 _boxColliderCenter;
@@ -71,17 +86,17 @@ public class Sc_Pushable : Sc_Activateable
         base.Start();
 
         InitializePushable();
-        DBG_InitializeMats();
+        InitializeEmissiveMeshes();
     }
 
-    private void DBG_InitializeMats()
+    private void InitializeEmissiveMeshes()
     {
-        foreach(Transform mesh in DebugGeneratorMeshes)
+        foreach(Transform mesh in EmissiveMeshes)
         {
-            Renderer[] rends = mesh.GetComponents<Renderer>();
-            foreach(Renderer rend in rends)
+            Renderer rend = mesh.GetComponent<Renderer>();
+            if (rend)
             {
-                _renderers.Add(rend);
+                _emissiveMats.Add(rend.material);
             }
         }
     }
@@ -96,6 +111,8 @@ public class Sc_Pushable : Sc_Activateable
 
     private void HandleMeshUp()
     {
+        if (_isInCoreForm) return;
+
         if (!_isGrounded)
         {
             MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, Vector3.up, .2f * Time.fixedDeltaTime);
@@ -104,7 +121,6 @@ public class Sc_Pushable : Sc_Activateable
         {
             MeshPivot.up = Vector3.MoveTowards(MeshPivot.up, _targetUp, 1f * Time.fixedDeltaTime);
         }
-
     }
 
     public virtual void RoboArmEnergize(bool energize)
@@ -148,11 +164,43 @@ public class Sc_Pushable : Sc_Activateable
     {
         Generator.GeneratePower(energize);
 
-        Material toMat = energize ? EnergizedMat : DeEnergizedMat;
-        foreach(Renderer rend in _renderers)
+        if (energize)
         {
-            rend.material = toMat;
+            if (_energizeCO != null)
+            {
+                StopCoroutine(_energizeCO);
+            }
+            _energizeCO = StartCoroutine(EnergizingCO());
         }
+        
+        //Material toMat = energize ? EnergizedMat : DeEnergizedMat;
+        //foreach(Renderer rend in _renderers)
+        //{
+        //    rend.material = toMat;
+        //}
+    }
+
+    private IEnumerator EnergizingCO()
+    {
+        float duration = 1f;
+        float timer = 0f;
+        while (timer < duration)
+        {
+            foreach(Material emissiveMat in _emissiveMats)
+            {
+                float alpha = (timer / duration) * 150f;
+                emissiveMat.SetFloat("_EmissiveStrength", alpha);
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        foreach (Material emissiveMat in _emissiveMats)
+        {
+            emissiveMat.SetFloat("_EmissiveStrength", 150f);
+        }
+        
+        _energizeCO = null;
     }
 
     private void HandlePushSound()
@@ -202,15 +250,22 @@ public class Sc_Pushable : Sc_Activateable
             return;
         }
 
-        _collider = GetComponent<BoxCollider>();
-        if (_collider == null)
+        _boxCollider = GetComponent<BoxCollider>();
+        if (_boxCollider == null)
         {
             Debug.LogWarning(this.name + " doesn't have a BoxCollider!");
             return;
         }
 
-        _boxColliderCenter = _collider.center;
-        _boxColliderHalfExtents = new Vector3(_collider.size.x*.5f, _collider.size.y*.5f, _collider.size.z*.5f);
+        _boxColliderCenter = _boxCollider.center;
+        _boxColliderHalfExtents = new Vector3(_boxCollider.size.x*.5f, _boxCollider.size.y*.5f, _boxCollider.size.z*.5f);
+
+        _capsuleCollider = GetComponent<CapsuleCollider>();
+        if (_capsuleCollider == null)
+        {
+            Debug.LogWarning(this.name + " doesn't have a CapsuleCollider!");
+            return;
+        }
     }
 
     private void FixedUpdate()
@@ -347,36 +402,29 @@ public class Sc_Pushable : Sc_Activateable
         return Mathf.Abs(angle) <= 1 || Mathf.Abs(angle) >= 80 ? false : true;
     }
 
-    //private bool SlopeCheck()
-    //{
-    //    Physics.Raycast(transform.position + _boxColliderCenter, Vector3.down, out _slopeHit, 2f, _groundLayers, QueryTriggerInteraction.Ignore);
-    //    float angle = Vector3.Angle(Vector3.up, _slopeHit.normal);
-    //    return Mathf.Abs(angle) > 1 ? true : false;
-    //}
+    public virtual void OnCodeInputComplete(int codeID)
+    {
+        if(codeID == 0)
+        {
+            Code_BreakOpen();
+        }
+    }
 
-    //private void RegisterObject(Sc_WeightedObject wObject)
-    //{
-    //    _registeredObjects.Add(wObject);
-    //    weightedObject._weight += wObject._weight;
-    //}
+    public void Code_BreakOpen()
+    {
+        //spawn VFX + camerashake
 
-    //private void UnregisterObject(Sc_WeightedObject wObject)
-    //{
-    //    if (!_registeredObjects.Contains(wObject)) return;
+        //undo collisions for base form, set collisions for core form
+        _boxCollider.size = CoreFormBoxColliderSize;
+        _capsuleCollider.height = CoreFormCapsuleColliderHeight;
+        _capsuleCollider.radius = CoreFormCapsuleColliderRadius;
+        _rb.useGravity = false;
+        _gravity = Vector3.zero;
 
-    //    _registeredObjects.Remove(wObject);
-    //    weightedObject._weight -= wObject._weight;
-    //}
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    Sc_WeightedObject wObject = other.GetComponent<Sc_WeightedObject>();
-    //    if (wObject) RegisterObject(wObject);
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    Sc_WeightedObject wObject = other.GetComponent<Sc_WeightedObject>();
-    //    if (wObject) UnregisterObject(wObject);
-    //}
+        //make interactibles non interactible
+        foreach (Sc_ShedMesh shedMesh in ShedMeshes)
+        {
+            shedMesh.OnMeshShed();
+        }
+    }
 }

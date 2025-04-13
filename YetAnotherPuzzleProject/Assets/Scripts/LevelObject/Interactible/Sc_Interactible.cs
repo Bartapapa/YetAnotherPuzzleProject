@@ -11,10 +11,13 @@ public class Sc_Interactible : MonoBehaviour
     public UnityEvent OnThrownInteraction;
 
     [Header("OBJECT REFS")]
+    public List<Transform> _interactibleHighlightMeshes = new List<Transform>();
+    public bool useDebug = true;
     public Material _debugSelectedMat;
     public Material _debugUnselectedMat;
     public Transform _mesh;
     private Renderer _meshRenderer;
+    private List<Material> _interactibleHighlightMats = new List<Material>();
 
     [Header("PARAMETERS")]
     public int _priority = 0;
@@ -30,17 +33,52 @@ public class Sc_Interactible : MonoBehaviour
 
     private void Start()
     {
-        _meshRenderer = _mesh.GetComponent<Renderer>();
+        if (useDebug)
+        {
+            _meshRenderer = _mesh.GetComponent<Renderer>();
+        }
+        else
+        {
+            foreach (Transform mesh in _interactibleHighlightMeshes)
+            {
+                Renderer rend = mesh.GetComponent<Renderer>();
+                if (rend)
+                {
+                    Material mat = rend.material;
+                    _interactibleHighlightMats.Add(mat);
+                }
+            }
+        }
     }
 
     public void Select()
     {
-        _meshRenderer.material = _debugSelectedMat;
+        if (useDebug)
+        {
+            _meshRenderer.material = _debugSelectedMat;
+        }
+        else
+        {
+            foreach(Material mat in _interactibleHighlightMats)
+            {
+                mat.SetFloat("_interactibleSelectLerp", 1f);
+            }
+        }       
     }
 
     public void Deselect()
     {
-        _meshRenderer.material = _debugUnselectedMat;
+        if (useDebug)
+        {
+            _meshRenderer.material = _debugUnselectedMat;
+        }
+        else
+        {
+            foreach (Material mat in _interactibleHighlightMats)
+            {
+                mat.SetFloat("_interactibleSelectLerp", 0f);
+            }
+        }       
     }
 
     public void Interact(Sc_Character interactor, bool force = false)
