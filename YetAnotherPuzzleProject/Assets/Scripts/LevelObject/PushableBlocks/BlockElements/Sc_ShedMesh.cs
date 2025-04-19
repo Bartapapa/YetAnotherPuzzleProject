@@ -8,6 +8,20 @@ public class Sc_ShedMesh : MonoBehaviour
     public List<Collider> Colliders = new List<Collider>();
     public List<Rigidbody> Rigidbodies = new List<Rigidbody>();
 
+    private List<Material> _mats = new List<Material>();
+
+    private void Start()
+    {
+        foreach(Collider coll in Colliders)
+        {
+            Renderer rend = coll.GetComponent<Renderer>();
+            if (rend)
+            {
+                _mats.Add(rend.material);
+            }
+        }
+    }
+
     public virtual void OnMeshShed()
     {
         if (Sc_Level.instance != null)
@@ -34,5 +48,36 @@ public class Sc_ShedMesh : MonoBehaviour
         {
             coll.enabled = true;
         }
+
+        //Dissolve mesh
+        //Destroy after dissolve
+        StartCoroutine(DissolveCo());
+    }
+
+    private IEnumerator DissolveCo()
+    {
+        float timer = 0f;
+        float duration = 3f;
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        timer = 0f;
+        while (timer < duration)
+        {
+            float alpha = timer / duration;
+            foreach(Material mat in _mats)
+            {
+                mat.SetFloat("_dissolveLerp", alpha);
+            }
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        foreach(Collider coll in Colliders)
+        {
+            Destroy(coll.gameObject);
+        }
+        Destroy(this.gameObject);
     }
 }

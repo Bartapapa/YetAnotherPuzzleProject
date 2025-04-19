@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &548275958
 RectTransform:
   m_ObjectHideFlags: 0
@@ -602,7 +602,7 @@ MonoBehaviour:
   m_text: Verylongname
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 4eea79a03ab437e4c9d15012b67552e5, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 6995dc39cec1c574498fd79c49fb27cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -719,13 +719,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1430250144}
+  - component: {fileID: 1430250145}
   m_Layer: 5
   m_Name: Dialogue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1430250144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -746,6 +747,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0}
+--- !u!114 &1430250145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1430250143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a719b9076855f9478416b53c2f44578, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ParentGroup: {fileID: 548275958}
+  DialogueText: {fileID: 1524084382}
+  NameTagText: {fileID: 1123524944}
 --- !u!1001 &1443353671
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -759,6 +775,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UIManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7875364690405362654, guid: d241924852c574746aff756c9aefd5ea,
+        type: 3}
+      propertyPath: DialogueBox
+      value: 
+      objectReference: {fileID: 1430250145}
     - target: {fileID: 7875364690405362654, guid: d241924852c574746aff756c9aefd5ea,
         type: 3}
       propertyPath: Transitioner
@@ -891,14 +912,14 @@ MonoBehaviour:
     lectus at nisi.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: 4eea79a03ab437e4c9d15012b67552e5, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 6995dc39cec1c574498fd79c49fb27cc, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4279585876
-  m_fontColor: {r: 0.3301887, g: 0.29735872, b: 0.08254717, a: 1}
+    rgba: 4281488227
+  m_fontColor: {r: 0.38679248, g: 0.32646063, b: 0.19522074, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

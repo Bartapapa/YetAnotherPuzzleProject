@@ -5320,6 +5320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7109498619842076266}
   - component: {fileID: 3158950867249815273}
+  - component: {fileID: 8058154740538731998}
   - component: {fileID: 239925580081401669}
   - component: {fileID: 9021106798358883316}
   - component: {fileID: 253775003874132503}
@@ -5375,6 +5376,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9, y: 2, z: 1.9}
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!65 &8058154740538731998
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3874516146704767000}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.4, y: 1, z: 1.4}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!54 &239925580081401669
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5475,6 +5497,31 @@ MonoBehaviour:
   CoreFormBoxColliderSize: {x: 1.5, y: 1.5, z: 1.5}
   CoreFormCapsuleColliderRadius: 0.75
   CoreFormCapsuleColliderHeight: 1.5
+  CoreFormHoverDistance: 0.2
+  CoreFormYAdjustmentCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -2.4991605
+      outSlope: -2.4991605
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.027367711
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   _frontElementAnchor: {fileID: 8266444288400645407}
   _backElementAnchor: {fileID: 6483015878625638162}
   _rightElementAnchor: {fileID: 7671026213011178953}
@@ -17079,7 +17126,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &3041281460224432782
@@ -17150,7 +17197,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &7215087468977655409
@@ -17227,7 +17274,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &2759937805473536299
@@ -17298,7 +17345,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &2734229028166223513
@@ -17369,7 +17416,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &1816747197341989011
@@ -17446,7 +17493,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &6013452443501274354
@@ -17517,7 +17564,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &5152755306221061856
@@ -17588,7 +17635,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 1
-  m_Interpolate: 1
+  m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!64 &2877330652316005292

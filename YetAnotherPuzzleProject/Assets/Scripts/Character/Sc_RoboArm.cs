@@ -69,4 +69,23 @@ public class Sc_RoboArm : MonoBehaviour
 
         OnChannel?.Invoke(false);
     }
+
+    public void SetRAILS(List<Sc_RoboArmInputListener> RAILS)
+    {
+        LinkedRoboArmListeners = RAILS;
+        foreach(Sc_RoboArmInputListener rail in LinkedRoboArmListeners)
+        {
+            rail.CodeDone -= StopInputingCode;
+            rail.CodeDone += StopInputingCode;
+        }
+    }
+
+    public void ClearRAILS()
+    {
+        foreach (Sc_RoboArmInputListener rail in LinkedRoboArmListeners)
+        {
+            rail.CodeDone -= StopInputingCode;
+        }
+        LinkedRoboArmListeners.Clear();
+    }
 }

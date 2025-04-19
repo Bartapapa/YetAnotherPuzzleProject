@@ -8,6 +8,7 @@ public class Sc_UIManager : MonoBehaviour
 
     [Header("OBJECT REFS")]
     public Sc_Transition Transitioner;
+    public Sc_DialogueBox DialogueBox;
 
     private void Awake()
     {
@@ -20,5 +21,17 @@ public class Sc_UIManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    #region Dialogue
+    public void OpenDialogueBox(bool force = false)
+    {
+        DialogueBox.ShowBox(force);
+    }
+
+    public void CloseDialogueBox(bool force = false)
+    {
+        DialogueBox.CloseBox(force);
+    }
+    #endregion
 
 }

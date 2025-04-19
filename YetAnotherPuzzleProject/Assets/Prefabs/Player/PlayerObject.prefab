@@ -283,6 +283,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 12e918e1-9dd6-4e7a-96f4-d8d095dcab95
     m_ActionName: Player/SpinCamera[/XInputControllerWindows/leftTrigger,/XInputControllerWindows/rightTrigger,/Keyboard/q,/Keyboard/e]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 777417243090285201}
+        m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
+        m_MethodName: OnAdvanceText
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: b4f88900-b026-42be-975d-05de755b172e
+    m_ActionName: Dialogue/AdvanceText[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -300,6 +316,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ac5847c1b0046749897fd526d405e52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerInput: {fileID: 2640737740989691867}
   _characterPrefab: {fileID: 332216593892983843, guid: d1c142d607fc3ee4db9677649465bc24,
     type: 3}
   _playerCharacter: {fileID: 0}

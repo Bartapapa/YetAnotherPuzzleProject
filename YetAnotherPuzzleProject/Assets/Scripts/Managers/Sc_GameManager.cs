@@ -23,6 +23,8 @@ public class Sc_GameManager : MonoBehaviour
     public Sc_PlayerManager PlayerManager;
     public Sc_SoundManager SoundManager;
     public Sc_TreasureManager TreasureManager;
+    public Sc_DialogueManager DialogueManager;
+    public Sc_StoryManager StoryManager;
     public Sc_Level CurrentLevel;
 
     [Header("SAVEDATA")]
@@ -294,6 +296,21 @@ public class Sc_GameManager : MonoBehaviour
             int savedCurrentHeldItem = CurrentData.CharacterSaveProfiles[i].CurrentHeldItemIndex;
             players[i].PlayerCharacter.Inventory.PopulateInventory(savedInventory, savedCurrentHeldItem);
         }
+    }
+
+    public void SaveStoryData()
+    {
+        if (CurrentData == null)
+        {
+            CurrentData = CreateNewSaveData();
+        }
+        CurrentData.CreateStorySaveProfile();
+    }
+
+    public void LoadStoryData()
+    {
+        if (CurrentData == null) return;
+        StoryManager.LoadStoryProfile(CurrentData.StorySaveProfile);
     }
 
 

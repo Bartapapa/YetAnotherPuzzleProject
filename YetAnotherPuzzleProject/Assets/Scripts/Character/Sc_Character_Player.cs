@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Sc_Character_Player : Sc_Character
 {
+    [Header("PLAYER REF")]
+    public Sc_Player ControllingPlayer;
+
     [Header("PLAYER CHARACTER OBJECT REFS")]
     public Sc_Interactor Interactor;
     public Sc_Inventory Inventory;

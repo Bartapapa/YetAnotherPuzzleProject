@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: BlankSaveData
   m_EditorClassIdentifier: 
   CharacterSaveProfiles: []
+  LevelSaveProfiles: []
+  StorySaveProfile:
+    ActiveQuestIDs: 
+    ActiveQuestsCurrentStepIndex: 

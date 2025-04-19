@@ -56,9 +56,14 @@ public class Sc_Pushable : Sc_Activateable
     public Vector3 CoreFormBoxColliderSize = new Vector3(1.5f, 1.5f, 1.5f);
     public float CoreFormCapsuleColliderRadius = .75f;
     public float CoreFormCapsuleColliderHeight = 1.5f;
+    public float CoreFormHoverDistance = .5f;
+    public AnimationCurve CoreFormYAdjustmentCurve;
     private bool _isInCoreForm = false;
     public bool IsInCoreForm { get { return _isInCoreForm; } }
 
+    protected List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
+    protected List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
+    protected Vector3 _cachedPos = Vector3.zero;
 
     protected Coroutine _energizeCO;
 
@@ -188,7 +193,7 @@ public class Sc_Pushable : Sc_Activateable
         {
             foreach(Material emissiveMat in _emissiveMats)
             {
-                float alpha = (timer / duration) * 150f;
+                float alpha = (timer / duration) * 50f;
                 emissiveMat.SetFloat("_EmissiveStrength", alpha);
             }
             timer += Time.deltaTime;
@@ -197,7 +202,7 @@ public class Sc_Pushable : Sc_Activateable
 
         foreach (Material emissiveMat in _emissiveMats)
         {
-            emissiveMat.SetFloat("_EmissiveStrength", 150f);
+            emissiveMat.SetFloat("_EmissiveStrength", 50f);
         }
         
         _energizeCO = null;
@@ -277,19 +282,51 @@ public class Sc_Pushable : Sc_Activateable
 
     private bool Grounded()
     {
-        bool localIsGrounded = Physics.Raycast(transform.position + (Vector3.up * .2f), Vector3.down, out _groundHit, .5f, _groundLayers, QueryTriggerInteraction.Ignore);
-        if (!_isGrounded)
+        float coreFormExtraDistanceCheck = _isInCoreForm ? CoreFormHoverDistance : 0f;
+        bool localIsGrounded = false;
+        if (_isInCoreForm)
         {
-            if (localIsGrounded && _rb.velocity.y <= -5f)
-            {
-                OnLand();
-            }
-            WObject.RBVelocity = _rb.velocity;
+            localIsGrounded = Physics.BoxCast(
+                transform.position + (Vector3.up * .2f),
+                new Vector3(CoreFormBoxColliderSize.x / 2.1f, .1f, CoreFormBoxColliderSize.z / 2.1f),
+                Vector3.down,
+                out _groundHit,
+                Quaternion.identity,
+                CoreFormHoverDistance+.5f,
+                _groundLayers,
+                QueryTriggerInteraction.Ignore);
         }
         else
         {
-            WObject.RBVelocity = Vector3.zero;
-            _targetUp = _groundHit.normal;
+            localIsGrounded = Physics.Raycast(transform.position + (Vector3.up * .2f), Vector3.down, out _groundHit, .5f + coreFormExtraDistanceCheck, _groundLayers, QueryTriggerInteraction.Ignore);
+        }
+            
+        if (!_isGrounded)
+        {
+            if (_isInCoreForm)
+            {
+
+            }
+            else
+            {
+                if (localIsGrounded && _rb.velocity.y <= -5f)
+                {
+                    OnLand();
+                }
+                WObject.RBVelocity = _rb.velocity;
+            }
+        }
+        else
+        {
+            if (_isInCoreForm)
+            {
+                _targetUp = Vector3.up;
+            }
+            else
+            {
+                WObject.RBVelocity = Vector3.zero;
+                _targetUp = _groundHit.normal;
+            }
         }
 
         return localIsGrounded;
@@ -297,6 +334,8 @@ public class Sc_Pushable : Sc_Activateable
 
     private void OnLand()
     {
+        if (_isInCoreForm) return;
+
         GroundShake();
         LandSound();
     }
@@ -346,12 +385,58 @@ public class Sc_Pushable : Sc_Activateable
             StopPushSound();
         }
         //targetMovementVelocity += _gravity * Time.fixedDeltaTime;
-        float rbYVelocity = _rb.velocity.y + (_gravity.y * Time.fixedDeltaTime);
+        float rbYVelocity = 0f;
+        if (_isInCoreForm)
+        {
+            if (_isGrounded)
+            {
+                float coreDistanceToGround = transform.position.y - _groundHit.point.y;
+                //Debug.Log(coreDistanceToGround);
+                if (coreDistanceToGround < 0) coreDistanceToGround = 0;
+                float alpha = coreDistanceToGround / CoreFormHoverDistance;
+                if (alpha > 1)
+                {
+                    rbYVelocity = 0f;
+                }
+                else
+                {
+                    rbYVelocity = CoreFormYAdjustmentCurve.Evaluate(alpha) * 5f;
+                }
+                
+                Debug.Log(rbYVelocity);
+            }
+            else
+            {
+                rbYVelocity = 0f;
+            }
+        }
+        else
+        {
+            rbYVelocity = _rb.velocity.y + (_gravity.y * Time.fixedDeltaTime);
+        }
         targetMovementVelocity = new Vector3(targetMovementVelocity.x, rbYVelocity, targetMovementVelocity.z);
         targetMovementVelocity = targetMovementVelocity + new Vector3(InheritedVelocity.x, 0f, InheritedVelocity.z);
         InheritedVelocity = Vector3.zero;
         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_speedSharpness * Time.fixedDeltaTime));
+
+        Vector3 transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
+        TransmitVelocity(transmittedVel);
+
+        _cachedPos = transform.position;
         //_rb.velocity += _gravity * Time.fixedDeltaTime;
+    }
+
+    private void TransmitVelocity(Vector3 toVel)
+    {
+        foreach (Sc_CharacterController controller in _parentedControllers)
+        {
+            controller.InheritedVelocity += toVel;
+        }
+
+        foreach (Sc_Pushable pushable in _parentedPushables)
+        {
+            pushable.InheritedVelocity += toVel;
+        }
     }
 
     public void RedirectInputToPushDirection (ref CharacterInput input)
@@ -421,10 +506,63 @@ public class Sc_Pushable : Sc_Activateable
         _rb.useGravity = false;
         _gravity = Vector3.zero;
 
+        //initialize core stats
+        WObject._weight = 0;
+        _isInCoreForm = true;
+
         //make interactibles non interactible
         foreach (Sc_ShedMesh shedMesh in ShedMeshes)
         {
             shedMesh.OnMeshShed();
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        if (character)
+        {
+            //character.ParentToObject(_headParent);
+            if (_parentedControllers.Contains(character))
+            {
+                return;
+            }
+            _parentedControllers.Add(character);
+            Debug.Log("Added Controller to pushable: " + character.name);
+            return;
+        }
+
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+        if (pushable)
+        {
+            if (_parentedPushables.Contains(pushable))
+            {
+                return;
+            }
+            _parentedPushables.Add(pushable);
+            Debug.Log("Added Pushable to pushable: " + pushable.name);
+            return;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        if (character)
+        {
+            //character.ParentToObject(null);
+            _parentedControllers.Remove(character);
+            //_parentedRBs.Remove(character.RB);
+            Debug.Log("Removed Controller from pushable: " + character.name);
+        }
+
+        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
+        if (pushable)
+        {
+            _parentedPushables.Remove(pushable);
+            //_parentedRBs.Remove(pushable.RB);
+            Debug.Log("Removed Pushable from pushable: " + pushable.name);
+            return;
         }
     }
 }

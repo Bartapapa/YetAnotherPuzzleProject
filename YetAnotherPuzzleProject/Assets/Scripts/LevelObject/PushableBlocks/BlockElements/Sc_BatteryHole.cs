@@ -57,7 +57,7 @@ public class Sc_BatteryHole : Sc_Activator
                 return;
             }
         }
-        interactor.RoboArm.LinkedRoboArmListeners = RoboArmInputListeners;
+        interactor.RoboArm.SetRAILS(RoboArmInputListeners);
         RoboArmEnergize();
         interactor.RoboArm.StartInputingCode();
     }

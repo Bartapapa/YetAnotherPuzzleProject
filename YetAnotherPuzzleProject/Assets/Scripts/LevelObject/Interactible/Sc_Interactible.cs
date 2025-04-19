@@ -51,7 +51,7 @@ public class Sc_Interactible : MonoBehaviour
         }
     }
 
-    public void Select()
+    public virtual void Select()
     {
         if (useDebug)
         {
@@ -66,7 +66,7 @@ public class Sc_Interactible : MonoBehaviour
         }       
     }
 
-    public void Deselect()
+    public virtual void Deselect()
     {
         if (useDebug)
         {

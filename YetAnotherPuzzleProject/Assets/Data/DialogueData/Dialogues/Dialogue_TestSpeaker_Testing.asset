@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d3e1d58b468c24bb74a8a362329fb2, type: 3}
+  m_Name: Dialogue_TestSpeaker_Testing
+  m_EditorClassIdentifier: 
+  Lines:
+  - Speaker: {fileID: 11400000, guid: f8ea85bfb484d5e46a5a43212ea067b8, type: 2}
+    UseAliasID: 0
+    SpokenLine: Well well well, what have we here? Are we testing some dialogue?
+    OverrideCharacterDelay: -1
+    GoToLineIndex: -1
+    ChoiceGoToLineIndex: {x: -1, y: -1}
+    StartLineEvent:
+      EventName: TestDialogue_Line01_OnLineStart
+    EndLineEvent:
+      EventName: TestDialogue_Line01_OnLineEnd
+  - Speaker: {fileID: 11400000, guid: f8ea85bfb484d5e46a5a43212ea067b8, type: 2}
+    UseAliasID: 0
+    SpokenLine: Here's the next part of the dialogue.
+    OverrideCharacterDelay: -1
+    GoToLineIndex: -1
+    ChoiceGoToLineIndex: {x: -1, y: -1}
+    StartLineEvent:
+      EventName: TestDialogue_Line01_OnLineStart
+    EndLineEvent:
+      EventName: TestDialogue_Line01_OnLineEnd

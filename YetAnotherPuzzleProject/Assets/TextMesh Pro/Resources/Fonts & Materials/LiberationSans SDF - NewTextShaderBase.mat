@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LiberationSans SDF
+  m_Name: LiberationSans SDF - NewTextShaderBase
   m_Shader: {fileID: -6465566751694194690, guid: 040d99337b835f245b5ec45e7951bb7f,
     type: 3}
   m_Parent: {fileID: 0}

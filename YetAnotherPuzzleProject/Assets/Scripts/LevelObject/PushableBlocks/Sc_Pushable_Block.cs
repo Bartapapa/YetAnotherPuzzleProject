@@ -103,5 +103,20 @@ public class Sc_Pushable_Block : Sc_Pushable
         {
             Gizmos.DrawSphere(_backElementAnchor.position, .15f);
         }
+
+        if (IsInCoreForm)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireCube(transform.position + (Vector3.up * .2f), CoreFormBoxColliderSize * .9f);
+        }
+    //    localIsGrounded = Physics.BoxCast(
+    //transform.position + (Vector3.up * .2f),
+    //new Vector3(CoreFormBoxColliderSize.x / 2.1f, .1f, CoreFormBoxColliderSize.z / 2.1f),
+    //Vector3.down,
+    //out _groundHit,
+    //Quaternion.identity,
+    //.5f + coreFormExtraDistanceCheck,
+    //_groundLayers,
+    //QueryTriggerInteraction.Ignore);
     }
 }

@@ -15,6 +15,8 @@ public struct CharacterInput
 public class Sc_Player : MonoBehaviour
 {
     [Header("OBJECT REFERENCES")]
+    [SerializeField] private PlayerInput _playerInput;
+    public PlayerInput PlayerInput { get { return _playerInput; } }
     [SerializeField] private Sc_Character_Player _characterPrefab;
     [SerializeField] private Sc_Character_Player _playerCharacter;
     public Sc_Character_Player PlayerCharacter { get { return _playerCharacter; } }
@@ -31,13 +33,22 @@ public class Sc_Player : MonoBehaviour
 
     void Update()
     {
-        if (_playerCharacter != null)
+        if (_playerInput.currentActionMap.name == "Player")
         {
-            HandlePlayerInputs();
+            if (_playerCharacter != null)
+            {
+                HandlePlayerInputs();
+            }
+
+            HandleChannelRequest();
+            HandleRestartRequest();
         }
 
-        HandleChannelRequest();
-        HandleRestartRequest();
+        if (_playerInput.currentActionMap.name == "Dialogue")
+        {
+            
+        }
+
     }
 
 
@@ -70,6 +81,7 @@ public class Sc_Player : MonoBehaviour
         {
             Sc_Character_Player newCharacter = Instantiate<Sc_Character_Player>(_characterPrefab, spawnPoint, Quaternion.identity, this.transform);
             _playerCharacter = newCharacter;
+            newCharacter.ControllingPlayer = this;
             newCharacter.name = "PlayerCharacter" + Sc_GameManager.instance.PlayerManager.CurrentPlayers.Count;
 
             if (Sc_CameraManager.instance)
@@ -114,7 +126,7 @@ public class Sc_Player : MonoBehaviour
         PlayerCharacter.Inventory.ResetInventory();
 
         ResetChannelRequest();
-        PlayerCharacter.RoboArm.LinkedRoboArmListeners.Clear();
+        PlayerCharacter.RoboArm.ClearRAILS();
         PlayerCharacter.RoboArm.StopInputingCode();
 
         PlayerCharacter.Controller.ParentToObject(this.transform);
@@ -122,6 +134,7 @@ public class Sc_Player : MonoBehaviour
 
     #endregion
     #region INPUTS
+    #region DEFAULT
     public void OnMovement(InputAction.CallbackContext context)
     {
         _movement = context.ReadValue<Vector2>();
@@ -392,6 +405,16 @@ public class Sc_Player : MonoBehaviour
             }
         }
     }
+    #endregion
+    #region DIALOGUE
+    public void OnAdvanceText(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            Sc_DialogueManager.instance.GoToNextLine();
+        }
+    }
+    #endregion
     #endregion
 
 }

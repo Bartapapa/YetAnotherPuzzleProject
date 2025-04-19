@@ -33,6 +33,7 @@ public class Sc_RoboArmInputListener : MonoBehaviour
     public event DefaultEvent CodeDown;
     public event DefaultEvent CodeRight;
     public event DefaultEvent CodeLeft;
+    public event DefaultEvent CodeDone;
 
     public void OnRoboArmChannelInput(ref CharacterInput playerInput)
     {
@@ -125,6 +126,7 @@ public class Sc_RoboArmInputListener : MonoBehaviour
                 {
                     Debug.Log("CODE " + _codeIndex + " COMPLETE!");
                     CodeComplete?.Invoke(_codeIndex);
+                    CodeDone?.Invoke();
                     ResetCode();
                 }
             }
