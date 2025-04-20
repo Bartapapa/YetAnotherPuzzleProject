@@ -134,6 +134,42 @@ public class Sc_Player : MonoBehaviour
 
     #endregion
     #region INPUTS
+
+    public void SwitchActionMap(string toActionMap)
+    {
+        ResetInputs();
+        _playerInput.SwitchCurrentActionMap(toActionMap);
+    }
+
+    private void ResetInputs()
+    {
+        CharacterInput playerInput = new CharacterInput();
+
+        playerInput.moveX = 0f;
+        playerInput.moveY = 0f;
+
+        playerInput.cameraRef = Camera.main;
+
+        if (!_playerCharacter.RoboArm.IsChanneling && !_playerCharacter.RoboArm.IsInputingCode)
+        {
+            _playerCharacter.Controller.SetInputs(ref playerInput);
+        }
+        else if (_playerCharacter.RoboArm.IsChanneling)
+        {
+            foreach (Sc_RoboArmInputListener roboArmListener in _playerCharacter.RoboArm.LinkedRoboArmListeners)
+            {
+                roboArmListener.OnRoboArmChannelInput(ref playerInput);
+            }
+        }
+        else if (_playerCharacter.RoboArm.IsInputingCode)
+        {
+            foreach (Sc_RoboArmInputListener roboArmListener in _playerCharacter.RoboArm.LinkedRoboArmListeners)
+            {
+                roboArmListener.OnRoboArmCodeInput(ref playerInput);
+            }
+        }
+    }
+
     #region DEFAULT
     public void OnMovement(InputAction.CallbackContext context)
     {

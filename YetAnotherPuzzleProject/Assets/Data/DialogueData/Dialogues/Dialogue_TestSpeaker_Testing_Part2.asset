@@ -15,11 +15,10 @@ MonoBehaviour:
   Lines:
   - Speaker: {fileID: 11400000, guid: f8ea85bfb484d5e46a5a43212ea067b8, type: 2}
     UseAliasID: 0
-    SpokenLine: You've already spoken to me.
+    _internalSpokenLine: You've already spoken to me #GetTestSpokenToNumber# times.
+    DialogueVariableGet: []
     OverrideCharacterDelay: -1
-    GoToLineIndex: -1
-    ChoiceGoToLineIndex: {x: -1, y: -1}
     StartLineEvent:
-      EventName: TestDialogue_Line01_OnLineStart
+      EventName: 
     EndLineEvent:
-      EventName: TestDialogue_Line01_OnLineEnd
+      EventName: 

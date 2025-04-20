@@ -13,19 +13,21 @@ MonoBehaviour:
   m_Name: TestSpeaker_TestSpeaker
   m_EditorClassIdentifier: 
   _internalName: testspeaker
-  ShownName: Test Speaker
   Aliases:
   - Alias: The tester
     Font: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     NameColor: {r: 0, g: 0, b: 0, a: 1}
+    Voice: {fileID: 11400000, guid: 8eb04e0eca48d7c4ebe0de9212a03044, type: 2}
   - Alias: The jester
     Font: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     NameColor: {r: 0, g: 0, b: 0, a: 1}
+    Voice: {fileID: 0}
   - Alias: The fester
     Font: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     NameColor: {r: 0, g: 0, b: 0, a: 1}
+    Voice: {fileID: 0}
   - Alias: The lester???
     Font: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     NameColor: {r: 0, g: 0, b: 0, a: 1}
-  Font: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  NameColor: {r: 0, g: 0, b: 0, a: 1}
+    Voice: {fileID: 0}
+  BaseCharacterDelay: 0.06

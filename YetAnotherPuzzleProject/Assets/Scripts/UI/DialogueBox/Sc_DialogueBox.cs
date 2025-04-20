@@ -17,6 +17,7 @@ public class Sc_DialogueBox : MonoBehaviour
     private Coroutine _currentNameTagWritingCO;
     private Coroutine _currentDialogueTextWritingCO;
     private int _currentDialogueLineVisibleCharacterIndex = 0;
+    private int _currentVoiceBlipCharacterIndex = 0;
     private WaitForSeconds _baseCharacterDelay;
     private WaitForSeconds _basePunctuationDelay;
 
@@ -74,6 +75,14 @@ public class Sc_DialogueBox : MonoBehaviour
         float baseDelay = line.OverrideCharacterDelay >= 0f ? line.OverrideCharacterDelay : line.Speaker.BaseCharacterDelay;
         WaitForSeconds characterDelay = new WaitForSeconds(baseDelay);
         WaitForSeconds punctuationDelay = new WaitForSeconds(baseDelay * 4f);
+
+        SO_DialogueVoiceParameters speakerVoice = line.GetAlias.Voice;
+        if (speakerVoice != null)
+        {
+            //Blip at start of line, whatever the circumstances.
+            speakerVoice.VoiceBlip();
+        }
+
         while (_currentDialogueLineVisibleCharacterIndex < textInfo.characterCount)
         {
             char character = textInfo.characterInfo[_currentDialogueLineVisibleCharacterIndex].character;
@@ -85,12 +94,23 @@ public class Sc_DialogueBox : MonoBehaviour
             }
             else
             {
+                _currentVoiceBlipCharacterIndex++;
                 yield return characterDelay;
             }
 
             _currentDialogueLineVisibleCharacterIndex++;
+
+            if (speakerVoice != null)
+            {
+                if (_currentVoiceBlipCharacterIndex >= speakerVoice.BlipCharacterDelay)
+                {
+                    _currentVoiceBlipCharacterIndex = 0;
+                    speakerVoice.VoiceBlip();
+                }
+            }
         }
 
+        _currentVoiceBlipCharacterIndex = 0;
         OnDialogueTextEndWriting();
         _currentDialogueTextWritingCO = null;
     }

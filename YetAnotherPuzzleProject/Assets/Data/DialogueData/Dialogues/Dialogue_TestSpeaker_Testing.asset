@@ -15,21 +15,20 @@ MonoBehaviour:
   Lines:
   - Speaker: {fileID: 11400000, guid: f8ea85bfb484d5e46a5a43212ea067b8, type: 2}
     UseAliasID: 0
-    SpokenLine: Well well well, what have we here? Are we testing some dialogue?
+    _internalSpokenLine: Well well well, what do we have here? Are we testing some
+      dialogue?
+    DialogueVariableGet: []
     OverrideCharacterDelay: -1
-    GoToLineIndex: -1
-    ChoiceGoToLineIndex: {x: -1, y: -1}
     StartLineEvent:
       EventName: TestDialogue_Line01_OnLineStart
     EndLineEvent:
       EventName: TestDialogue_Line01_OnLineEnd
   - Speaker: {fileID: 11400000, guid: f8ea85bfb484d5e46a5a43212ea067b8, type: 2}
     UseAliasID: 0
-    SpokenLine: Here's the next part of the dialogue.
+    _internalSpokenLine: Here's the rest of the dialogue.
+    DialogueVariableGet: []
     OverrideCharacterDelay: -1
-    GoToLineIndex: -1
-    ChoiceGoToLineIndex: {x: -1, y: -1}
     StartLineEvent:
-      EventName: TestDialogue_Line01_OnLineStart
+      EventName: 
     EndLineEvent:
-      EventName: TestDialogue_Line01_OnLineEnd
+      EventName: 

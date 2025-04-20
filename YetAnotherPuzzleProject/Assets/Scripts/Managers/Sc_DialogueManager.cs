@@ -18,6 +18,8 @@ public class Sc_DialogueManager : MonoBehaviour
     public event DefaultEvent DialogueStarted;
     public event DefaultEvent DialogueEnded;
 
+    private int _testSpokenToNumber = 0;
+
     private void Awake()
     {
         if (instance == null)
@@ -154,6 +156,25 @@ public class Sc_DialogueManager : MonoBehaviour
         DialogueEnded?.Invoke();
     }
 
+    #region DialogueSpecific
+    #region DialogueVariables
+    public string GetTestNumber01()
+    {
+        Debug.LogWarning("Got test number 01!");
+        return 0.ToString();
+    }
+    public string GetTestNumber02()
+    {
+        Debug.LogWarning("Got test number 02!");
+        return 1.ToString();
+    }
+    public string GetTestSpokenToNumber()
+    {
+        Debug.LogWarning("Got test spoken to number!");
+        _testSpokenToNumber++;
+        return _testSpokenToNumber.ToString();
+    }
+    #endregion
     #region DialogueLineEvents
     #region TestDialogue
     private void TestDialogue_Line01_OnLineStart()
@@ -165,6 +186,7 @@ public class Sc_DialogueManager : MonoBehaviour
     {
         Debug.LogWarning("Line01_OnLineEnd event!");
     }
+    #endregion
     #endregion
     #endregion
 }

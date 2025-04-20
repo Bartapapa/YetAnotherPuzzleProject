@@ -5,10 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class SpeakerAlias
 {
+    [Header("NAME")]
     public string Alias = "";
     public Material Font;
     public Color NameColor = Color.white;
-    //Voice?
+
+    [Header("VOICE")]
+    public SO_DialogueVoiceParameters Voice;
 }
 
 [CreateAssetMenu(menuName = "YetAnotherPuzzleProject/Dialogue/BaseDialogueSpeaker", fileName = "Speaker_InternalName")]

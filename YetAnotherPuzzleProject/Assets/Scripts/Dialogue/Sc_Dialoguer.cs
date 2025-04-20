@@ -56,7 +56,7 @@ public class Sc_Dialoguer : MonoBehaviour
         if (playerCharacter)
         {
             _currentInteractingPlayerCharacter = playerCharacter;
-            playerCharacter.ControllingPlayer.PlayerInput.SwitchCurrentActionMap("Dialogue");
+            playerCharacter.ControllingPlayer.SwitchActionMap("Dialogue");
         }
     }
 
@@ -67,7 +67,7 @@ public class Sc_Dialoguer : MonoBehaviour
 
     private void OnDialogueEnd()
     {
-        _currentInteractingPlayerCharacter.ControllingPlayer.PlayerInput.SwitchCurrentActionMap("Player");
+        _currentInteractingPlayerCharacter.ControllingPlayer.SwitchActionMap("Player");
         _currentInteractingPlayerCharacter = null;
         Interactible.CanBeInteractedWith = true;
 

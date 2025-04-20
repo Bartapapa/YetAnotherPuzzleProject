@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5082c287414a8b54dae3dcb45bab83d1, type: 3}
+  m_Name: Voice_testspeaker_TheTester
+  m_EditorClassIdentifier: 
+  BlipCharacterDelay: 2
+  _voiceBlips:
+  - {fileID: 8300000, guid: cf1519fbf17eba44ab673c340a02ddc8, type: 3}
+  - {fileID: 8300000, guid: d476497794fa53542b5834adb2ebda38, type: 3}
+  - {fileID: 8300000, guid: 06ebfcfed01610d40b63eb7ec094815e, type: 3}
+  - {fileID: 8300000, guid: f8bab3c2963f57e458c250a4d099f174, type: 3}
+  - {fileID: 8300000, guid: 99cec381a4eb05b49afe9500ff5c33a8, type: 3}
+  - {fileID: 8300000, guid: cd259825f062f5a48bf71457ac0b1bc0, type: 3}
+  - {fileID: 8300000, guid: 6fd82de14562745409dbdedb6d52589e, type: 3}
+  _voiceMinMaxPitch: {x: 0.9, y: 1}
+  _volume: 0.3
