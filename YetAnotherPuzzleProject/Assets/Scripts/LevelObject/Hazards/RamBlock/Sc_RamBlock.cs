@@ -26,14 +26,15 @@ public class Sc_RamBlock : MonoBehaviour
     private bool _isRetreating = false;
     private Vector3 _originPos;
 
-    protected List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
-    protected List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
+    public List<Sc_CharacterController> _parentedControllers = new List<Sc_CharacterController>();
+    public List<Sc_Pushable> _parentedPushables = new List<Sc_Pushable>();
     private List<Sc_CrushingHandler> _detectedCharacters = new List<Sc_CrushingHandler>();
     private Rigidbody _rb;
     private RaycastHit _crashHit;
     private Coroutine _postCrashCo;
     private Coroutine _resetIntoPlaceCo;
     private Vector3 _cachedPos;
+    private Vector3 _calcVel = Vector3.zero;
 
     private void Start()
     {
@@ -103,7 +104,7 @@ public class Sc_RamBlock : MonoBehaviour
     private void Charge()
     {
         _isCharging = true;
-        _rb.isKinematic = false;
+        _rb.isKinematic = true;
 
         _detectedCharacters.Clear();
         _canDetect = false;
@@ -114,6 +115,8 @@ public class Sc_RamBlock : MonoBehaviour
         _isCharging = false;
         _rb.isKinematic = true;
         _rb.position = _crashHit.point - (transform.forward * 1f) - (transform.up*1f);
+
+        _calcVel = Vector3.zero;
 
         Sc_CameraManager.instance.CameraShake(ImpulseSource, .1f);
 
@@ -133,7 +136,7 @@ public class Sc_RamBlock : MonoBehaviour
         }
 
         _isRetreating = true;
-        _rb.isKinematic = false;
+        _rb.isKinematic = true;
         _canDetect = true;
         _postCrashCo = null;
     }
@@ -158,13 +161,16 @@ public class Sc_RamBlock : MonoBehaviour
         transform.position = toPos;
         _isRetreating = false;
         _resetIntoPlaceCo = null;
+
+        _calcVel = Vector3.zero;
     }
 
     private void FixedUpdate()
     {
         if (_isCharging)
         {
-            _rb.velocity = Vector3.Lerp(_rb.velocity, transform.forward * MaxRammingSpeed, 1f - Mathf.Exp(-SpeedSharpness * Time.fixedDeltaTime));
+            _calcVel = Vector3.Lerp(_calcVel, transform.forward * MaxRammingSpeed, 1f - Mathf.Exp(-SpeedSharpness * Time.fixedDeltaTime));
+            _rb.MovePosition(_rb.position + (_calcVel * Time.fixedDeltaTime));
 
             Vector3 rayOrigin = transform.position + (transform.up * 1f);
             if (Physics.Raycast(rayOrigin, transform.forward, out _crashHit, 1f + .2f, WallLayers, QueryTriggerInteraction.Ignore))
@@ -174,14 +180,16 @@ public class Sc_RamBlock : MonoBehaviour
         }
         else if (_isRetreating && _resetIntoPlaceCo == null)
         {
-            _rb.velocity = Vector3.Lerp(_rb.velocity, -transform.forward * MaxRetreatingSpeed, 1f - Mathf.Exp(-SpeedSharpness * Time.fixedDeltaTime));
+            _calcVel = Vector3.Lerp(_calcVel, -transform.forward * MaxRetreatingSpeed, 1f - Mathf.Exp(-SpeedSharpness * Time.fixedDeltaTime));
+            _rb.MovePosition(_rb.position + (_calcVel * Time.fixedDeltaTime));
+
             if (Vector3.Distance(_rb.position, _originPos) <= .5f)
             {
                 _resetIntoPlaceCo = StartCoroutine(ResetIntoPlaceCo());
             }
         }
 
-        Vector3 transmittedVel = (transform.position - _cachedPos) / Time.fixedDeltaTime;
+        Vector3 transmittedVel = ((transform.position - _cachedPos) / Time.fixedDeltaTime);
         TransmitVelocity(transmittedVel);
         _cachedPos = transform.position;
     }
@@ -219,55 +227,6 @@ public class Sc_RamBlock : MonoBehaviour
         foreach (Sc_Pushable pushable in _parentedPushables)
         {
             pushable.InheritedVelocity += toVel;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
-        if (character)
-        {
-            //character.ParentToObject(_headParent);
-            if (_parentedControllers.Contains(character))
-            {
-                return;
-            }
-            _parentedControllers.Add(character);
-            Debug.Log("Added Controller to ramblock: " + character.name);
-            return;
-        }
-
-        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
-        if (pushable)
-        {
-            if (_parentedPushables.Contains(pushable))
-            {
-                return;
-            }
-            _parentedPushables.Add(pushable);
-            Debug.Log("Added Pushable to ramblock: " + pushable.name);
-            return;
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
-        if (character)
-        {
-            //character.ParentToObject(null);
-            _parentedControllers.Remove(character);
-            //_parentedRBs.Remove(character.RB);
-            Debug.Log("Removed Controller from ramblock: " + character.name);
-        }
-
-        Sc_Pushable pushable = other.GetComponent<Sc_Pushable>();
-        if (pushable)
-        {
-            _parentedPushables.Remove(pushable);
-            //_parentedRBs.Remove(pushable.RB);
-            Debug.Log("Removed Pushable from ramblock: " + pushable.name);
-            return;
         }
     }
 

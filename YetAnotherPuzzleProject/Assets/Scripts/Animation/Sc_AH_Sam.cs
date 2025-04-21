@@ -46,7 +46,11 @@ public class Sc_AH_Sam : Sc_AnimationHandler
         }
 
         bool isPushing = Controller.IsPushingBlock;
-        float lateralMovement = Mathf.Abs(Vector3.Magnitude(new Vector3(Controller.RB.velocity.x, 0f, Controller.RB.velocity.z)));
+
+        float lateralMovementMultiplier = Controller.MoveInputVector.sqrMagnitude >= .1f ? 1f : 0f;
+        float lateralMovement = 0f;
+        lateralMovement = Mathf.Abs(Vector3.Magnitude(new Vector3(Controller.RB.velocity.x * lateralMovementMultiplier, 0f, Controller.RB.velocity.z * lateralMovementMultiplier)));
+        lateralMovement = Mathf.Lerp(Anim.GetFloat("LateralSpeed"), lateralMovement, .05f);
         if (lateralMovement <= .1f)
         {
             lateralMovement = 0f;

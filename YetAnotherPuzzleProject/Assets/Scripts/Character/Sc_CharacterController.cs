@@ -33,6 +33,7 @@ public class Sc_CharacterController : MonoBehaviour
     public bool CanMove { get { return _canMove; } set { _canMove = value; } }
     public bool CanRotate { get { return _canRotate; } set { _canRotate = value; } }
     private Vector3 _forcedLookAtDir = Vector3.zero;
+    private float _currentMoveSpeed = 0f;
     [ReadOnly] public Vector3 InheritedVelocity = Vector3.zero;
     [ReadOnly] public float InheritedYaw = 0f;
 
@@ -99,6 +100,7 @@ public class Sc_CharacterController : MonoBehaviour
     private CapsuleCollider _capsule;
     public CapsuleCollider Capsule { get { return _capsule; } }
     private Vector3 _moveInputVector;
+    public Vector3 MoveInputVector { get { return _moveInputVector; } }
     private Vector3 _desiredMoveInputVector;
     private Vector3 _lookInputVector;
     private bool _ignoreInputs = false;
@@ -346,7 +348,6 @@ public class Sc_CharacterController : MonoBehaviour
 
                 if (!_isClimbing)
                 {
-
                     if (IsGrounded)
                     {
                         //Find reoriented input depending on groundhit normal, for moving on slopes.
@@ -365,7 +366,8 @@ public class Sc_CharacterController : MonoBehaviour
                         targetMovementVelocity = targetMovementVelocity + InheritedVelocity;
                         InheritedVelocity = Vector3.zero;
                         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_groundedMovementSharpness * Time.fixedDeltaTime));
-
+                        //_rb.velocity += (InheritedVelocity * Time.fixedDeltaTime);
+                        //InheritedVelocity = Vector3.zero;
                         OnGroundedMovement?.Invoke(_rb);
                     }
                     else
@@ -786,4 +788,12 @@ public class Sc_CharacterController : MonoBehaviour
     }
 
     #endregion
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Vector3 from = transform.position + (Vector3.up * _capsule.center.y);
+        Vector3 to = from + new Vector3(RB.velocity.x, 0f, RB.velocity.z);
+        Gizmos.DrawRay(from, to);
+    }
 }
