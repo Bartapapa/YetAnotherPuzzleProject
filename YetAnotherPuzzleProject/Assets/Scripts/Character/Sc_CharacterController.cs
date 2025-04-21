@@ -96,6 +96,8 @@ public class Sc_CharacterController : MonoBehaviour
 
     private Rigidbody _rb;
     public Rigidbody RB { get { return _rb; } }
+    private CapsuleCollider _capsule;
+    public CapsuleCollider Capsule { get { return _capsule; } }
     private Vector3 _moveInputVector;
     private Vector3 _desiredMoveInputVector;
     private Vector3 _lookInputVector;
@@ -114,6 +116,8 @@ public class Sc_CharacterController : MonoBehaviour
     public event RBEvent OnGroundedMovement;
     public event RBEvent OnAerialMovement;
     public event RBEvent OnLanded;
+    public delegate void V3Event(Vector3 v3);
+    public event V3Event OnCrushed;
 
     private void Start()
     {
@@ -126,6 +130,13 @@ public class Sc_CharacterController : MonoBehaviour
         if (_rb == null)
         {
             Debug.LogWarning(this.name + " doesn't have a Rigidbody!");
+            return;
+        }
+
+        _capsule = GetComponent<CapsuleCollider>();
+        if (_capsule == null)
+        {
+            Debug.LogWarning(this.name + " doesn't have a CapsuleCollider!");
             return;
         }
 
@@ -332,8 +343,10 @@ public class Sc_CharacterController : MonoBehaviour
 
             case CharacterState.Default:
                 if (IsAnchoring) return;
+
                 if (!_isClimbing)
                 {
+
                     if (IsGrounded)
                     {
                         //Find reoriented input depending on groundhit normal, for moving on slopes.
@@ -348,6 +361,7 @@ public class Sc_CharacterController : MonoBehaviour
                         //Set velocity, add inheritedVelocity given by pushes and moving pillars.
                         Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
                         if (!_canMove) targetMovementVelocity = Vector3.zero;
+
                         targetMovementVelocity = targetMovementVelocity + InheritedVelocity;
                         InheritedVelocity = Vector3.zero;
                         _rb.velocity = Vector3.Lerp(_rb.velocity, targetMovementVelocity, 1f - Mathf.Exp(-_groundedMovementSharpness * Time.fixedDeltaTime));
@@ -590,10 +604,32 @@ public class Sc_CharacterController : MonoBehaviour
         }
     }
 
-    private void PushPushable()
+    public void PushIntoDirection(Vector3 pushVelocity)
     {
-
+        InheritedVelocity += pushVelocity;
     }
+
+    private bool CheckForCrushing(Vector3 velocity)
+    {
+        if (Mathf.Abs(velocity.magnitude) <= .1f) return false;
+        else
+        {
+            bool willBeCrushed = false;
+            float capsuleYOffset = _capsule.center.y;
+            float capsuleHeight = _capsule.height;
+            float capsuleRadius = _capsule.radius;
+            Vector3 playerPos = transform.position;
+            Vector3 centerPos = playerPos + (Vector3.up * capsuleYOffset);
+
+            if (Physics.BoxCast(centerPos, new Vector3(capsuleRadius * .4f, capsuleHeight * .4f, capsuleRadius * .4f), Vector3.up, Quaternion.identity, 0.1f, _groundLayers, QueryTriggerInteraction.Ignore))
+            {
+                willBeCrushed = true;
+            }
+
+            return willBeCrushed;
+        }
+    }
+
     #endregion
 
     #region CLIMBING

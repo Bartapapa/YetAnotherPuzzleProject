@@ -126,7 +126,8 @@ public class Sc_Pillar : Sc_Activateable
     {
         foreach (Sc_CharacterController controller in _parentedControllers)
         {
-            controller.InheritedVelocity += toVel;
+            controller.PushIntoDirection(toVel);
+            //controller.InheritedVelocity += toVel;
         }
 
         foreach (Sc_Pushable pushable in _parentedPushables)

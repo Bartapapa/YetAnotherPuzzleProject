@@ -136,11 +136,13 @@ public class Sc_WindBlower : Sc_Activateable
 
         foreach(Sc_CharacterController character in pushedCharactersStrong)
         {
-            character.InheritedVelocity += transform.forward * StrongBlowForce * Time.fixedDeltaTime;
+            //character.InheritedVelocity += transform.forward * StrongBlowForce * Time.fixedDeltaTime;
+            character.PushIntoDirection(transform.forward * StrongBlowForce * Time.fixedDeltaTime);
         }
         foreach(Sc_CharacterController character in pushedCharactersGentle)
         {
-            character.InheritedVelocity += transform.forward * BlowForce * Time.fixedDeltaTime;
+            //character.InheritedVelocity += transform.forward * BlowForce * Time.fixedDeltaTime;
+            character.PushIntoDirection(transform.forward * BlowForce * Time.fixedDeltaTime);
         }
     }
 

@@ -58,7 +58,8 @@ public class Sc_Pillar_Rotate : Sc_Pillar
             toPoint = new Vector3(toPoint.x, 0f, toPoint.y);
             Vector3 toVel = (toPoint - point)/Time.fixedDeltaTime;
 
-            controller.InheritedVelocity += toVel * .485f;
+            //controller.InheritedVelocity += toVel * .485f;
+            controller.PushIntoDirection(toVel * .485f);
             controller.InheritedYaw -= angle * .48f;
         }
 

@@ -403,7 +403,6 @@ public class Sc_Pushable : Sc_Activateable
                     rbYVelocity = CoreFormYAdjustmentCurve.Evaluate(alpha) * 5f;
                 }
                 
-                Debug.Log(rbYVelocity);
             }
             else
             {
@@ -430,7 +429,8 @@ public class Sc_Pushable : Sc_Activateable
     {
         foreach (Sc_CharacterController controller in _parentedControllers)
         {
-            controller.InheritedVelocity += toVel;
+            //controller.InheritedVelocity += toVel;
+            controller.PushIntoDirection(toVel);
         }
 
         foreach (Sc_Pushable pushable in _parentedPushables)
