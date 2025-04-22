@@ -5,37 +5,43 @@ using UnityEngine;
 public class Sc_CrushingHandler : MonoBehaviour
 {
     [Header("OBJECT REFS")]
-    public Sc_CharacterController CharacterController;
+    public Sc_Character_Player PlayerCharacter;
     public Sc_Health Health;
+
+    [Header("PARAMETERS")]
+    public float YOffset = 1f;
+    public LayerMask WallLayers;
 
     [SerializeField][ReadOnly] private bool _crushed;
     public bool Crushed { get { return _crushed; } }
 
-    private void Start()
-    {
-        //CharacterController.OnCrushed -= OnCharacterCrushed;
-        //CharacterController.OnCrushed += OnCharacterCrushed;
-    }
-
-    private void OnCharacterCrushed()
+    private void OnCharacterCrushed(Vector3 crushingNormal)
     {
         if (_crushed) return;
 
         Vector3 playerPos = transform.position;
-        float capsuleYOffset = CharacterController.Capsule.center.y;
+        float capsuleYOffset = PlayerCharacter.Controller.Capsule.center.y;
         Vector3 centerPos = playerPos + (Vector3.up * capsuleYOffset);
         RaycastHit crushingHit;
-        Physics.Raycast(centerPos, new Vector3(CharacterController.RB.velocity.x, 0f, CharacterController.RB.velocity.z).normalized, out crushingHit, 5f, CharacterController._groundLayers, QueryTriggerInteraction.Ignore);
+        Physics.Raycast(centerPos, new Vector3(PlayerCharacter.Controller.RB.velocity.x, 0f, PlayerCharacter.Controller.RB.velocity.z).normalized, out crushingHit, 5f, PlayerCharacter.Controller._groundLayers, QueryTriggerInteraction.Ignore);
 
         _crushed = true;
-        CharacterController.IgnoreInputs = true;
-        CharacterController.Capsule.enabled = false;
-        Debug.LogError(CharacterController.gameObject.name + " got crushed!");
+        PlayerCharacter.Controller.IgnoreInputs = true;
+        PlayerCharacter.Controller.Capsule.enabled = false;
+        Debug.LogError(PlayerCharacter.Controller.gameObject.name + " got crushed!");
 
-        //Debug.Log(crushingHit.normal);
-        //Quaternion rot = Quaternion.LookRotation(new Vector3(0, 0, 1), Vector3.up);
-        //Debug.Log(rot.eulerAngles);
-        //CharacterController.RB.rotation = rot;
+        if (crushingNormal != Vector3.zero)
+        {
+            Quaternion rot = Quaternion.LookRotation(-crushingNormal, Vector3.up);
+            PlayerCharacter.Controller.RB.rotation = rot;
+
+            RaycastHit crushHit;
+            if (Physics.Raycast(transform.position + (Vector3.up*(YOffset*.5f)), crushingNormal, out crushHit, 5f, WallLayers, QueryTriggerInteraction.Ignore))
+            {
+                Sc_SquashedPlane newPlane = Instantiate<Sc_SquashedPlane>(PlayerCharacter.SquashedPlanePrefab, crushHit.point + (crushHit.normal*.05f), rot);
+                PlayerCharacter.Mesh.gameObject.SetActive(false);
+            }
+        }
 
         Health.Death();
     }
@@ -47,7 +53,12 @@ public class Sc_CrushingHandler : MonoBehaviour
         if (other.isTrigger) return;
         if (other.gameObject.layer == 0 || other.gameObject.layer == 8)
         {
-            OnCharacterCrushed();
+            Sc_Crusher crusher = other.gameObject.GetComponent<Sc_Crusher>();
+            if (crusher)
+            {
+                OnCharacterCrushed(crusher.transform.forward);
+            }
+            OnCharacterCrushed(Vector3.zero);
         }
     }
 }

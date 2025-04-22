@@ -7,6 +7,7 @@ public class Sc_Character : MonoBehaviour
     [Header("OBJECT REFERENCES")]
     public Sc_CharacterController Controller;
     public Sc_SpiritGuide SpiritGuide;
+    public Transform Mesh;
     public bool CanGuideSpirits { get { return SpiritGuide != null; } }
 
     [Header("CHARACTER PARAMETERS")]

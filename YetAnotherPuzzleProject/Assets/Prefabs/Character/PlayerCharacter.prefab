@@ -6157,6 +6157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Controller: {fileID: 7095921624226034130}
   SpiritGuide: {fileID: 3511729580475614047}
+  Mesh: {fileID: 2199922127989336070}
   CanBeHurt: 1
   HurtFX: {fileID: 7005478335282851330, guid: a11d910b504d9a0429a07cce0e8d1941, type: 3}
   HeadPoint: {fileID: 320353208800396480}
@@ -6167,6 +6168,8 @@ MonoBehaviour:
   SoundHandler: {fileID: 625332916299377650}
   RestartCircle: {fileID: 5354505410294209312}
   RoboArm: {fileID: 2472126452193254659}
+  SquashedPlanePrefab: {fileID: 7085933227003945967, guid: 6b8804ba4073c114da0c63c4aef6e07d,
+    type: 3}
   HasRoboArm: 1
   AimingRotationSpeed: 2
   BaseRotationSpeed: 0
@@ -12811,8 +12814,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67adc816765371a45ab201f063ba238c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CharacterController: {fileID: 7095921624226034130}
+  PlayerCharacter: {fileID: 332216593892983843}
   Health: {fileID: 8582939135618587648}
+  YOffset: 1
+  WallLayers:
+    serializedVersion: 2
+    m_Bits: 257
   _crushed: 0
 --- !u!136 &8474506652236781210
 CapsuleCollider:

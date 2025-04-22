@@ -788,12 +788,4 @@ public class Sc_CharacterController : MonoBehaviour
     }
 
     #endregion
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.blue;
-        Vector3 from = transform.position + (Vector3.up * _capsule.center.y);
-        Vector3 to = from + new Vector3(RB.velocity.x, 0f, RB.velocity.z);
-        Gizmos.DrawRay(from, to);
-    }
 }

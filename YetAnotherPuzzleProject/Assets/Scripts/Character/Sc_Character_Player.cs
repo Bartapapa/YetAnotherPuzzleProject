@@ -13,6 +13,7 @@ public class Sc_Character_Player : Sc_Character
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_RestartCircle RestartCircle;
     public Sc_RoboArm RoboArm;
+    public Sc_SquashedPlane SquashedPlanePrefab;
 
     [Header("PLAYER CHARACTER STATE")]
     public bool HasRoboArm = false;
