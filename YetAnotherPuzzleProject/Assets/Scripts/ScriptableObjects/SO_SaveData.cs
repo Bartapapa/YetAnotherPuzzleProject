@@ -79,26 +79,26 @@ public class PlayerCharacterSaveProfile
         if (playerObject.PlayerCharacter == null) return;
 
         Player = playerObject;
-        Sc_Inventory playerInventory = playerObject.PlayerCharacter.Inventory;
-        for (int i = 0; i < PlayerCharacterInventoryIDs.Length; i++)
-        {
-            if (playerInventory._items[i] != null)
-            {
-                PlayerCharacterInventoryIDs[i] = playerInventory._items[i]._itemData.ID;
-            }
-            else
-            {
-                PlayerCharacterInventoryIDs[i] = -1;
-            }
-        }
-        if (playerInventory.CurrentlyHeldItem != null)
-        {
-            CurrentHeldItemIndex = playerInventory.GetInventoryIndexOfCurrentlyHeldItem();
-        }
-        else
-        {
-            CurrentHeldItemIndex = -1;
-        }
+        //Sc_Inventory playerInventory = playerObject.PlayerCharacter.Inventory;
+        //for (int i = 0; i < PlayerCharacterInventoryIDs.Length; i++)
+        //{
+        //    if (playerInventory._items[i] != null)
+        //    {
+        //        PlayerCharacterInventoryIDs[i] = playerInventory._items[i]._itemData.ID;
+        //    }
+        //    else
+        //    {
+        //        PlayerCharacterInventoryIDs[i] = -1;
+        //    }
+        //}
+        //if (playerInventory.CurrentlyHeldItem != null)
+        //{
+        //    CurrentHeldItemIndex = playerInventory.GetInventoryIndexOfCurrentlyHeldItem();
+        //}
+        //else
+        //{
+        //    CurrentHeldItemIndex = -1;
+        //}
     }
 }
 

@@ -9,7 +9,9 @@ public class Sc_Character_Player : Sc_Character
 
     [Header("PLAYER CHARACTER OBJECT REFS")]
     public Sc_Interactor Interactor;
-    public Sc_Inventory Inventory;
+    public Sc_Inventory_New Inventory;
+    public Sc_Health Health;
+    public Sc_CrushingHandler CrushingHandler;
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_RestartCircle RestartCircle;
     public Sc_RoboArm RoboArm;

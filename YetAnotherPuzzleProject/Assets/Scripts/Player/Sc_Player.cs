@@ -119,11 +119,18 @@ public class Sc_Player : MonoBehaviour
     {
         if (PlayerCharacter == null) return;
 
+        PlayerCharacter.Mesh.gameObject.SetActive(true);
+        PlayerCharacter.Controller.IgnoreInputs = false;
+        PlayerCharacter.Controller.CurrentState = CharacterState.Default;
+        PlayerCharacter.Health.Dead = false;
+        PlayerCharacter.CrushingHandler.Crushed = false;
+        PlayerCharacter.Controller.Capsule.enabled = true;
+
         PlayerCharacter.Interactor.ClearPotentialInteractibles();
         PlayerCharacter.Controller.StopAnchoringSequence();
         PlayerCharacter.Controller.ResetAnchor();
         PlayerCharacter.Controller.StopClimbing();
-        PlayerCharacter.Inventory.ResetInventory();
+        //PlayerCharacter.Inventory.ResetInventory();
 
         ResetChannelRequest();
         PlayerCharacter.RoboArm.ClearRAILS();
@@ -240,11 +247,11 @@ public class Sc_Player : MonoBehaviour
             }
 
             _playerCharacter.Inventory.StopAiming();
-            _playerCharacter.Inventory.ThrowCurrentItem();
+            _playerCharacter.Inventory.ThrowRock();
         }
     }
 
-    public void OnUse(InputAction.CallbackContext context)
+    public void OnUseLantern(InputAction.CallbackContext context)
     {
         if (context.performed && _playerCharacter.RoboArm.CanChannel)
         {
@@ -258,9 +265,9 @@ public class Sc_Player : MonoBehaviour
             }
             else
             {
-                if (!_playerCharacter.RoboArm.IsChanneling) _playerCharacter.Inventory.UseCurrentItem();
+                if (!_playerCharacter.RoboArm.IsChanneling) _playerCharacter.Inventory.EquipLantern();
             }
-            
+
             _channelConfirmationTimer = 0f;
             _channelRequested = false;
         }
@@ -272,14 +279,14 @@ public class Sc_Player : MonoBehaviour
         {
             ResetChannelRequest();
 
-            if (_playerCharacter.Inventory.IsUsingItem)
-            {
-                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(0);
-            }
-            else
-            {
-                _playerCharacter.Inventory.EquipFromInventory(0);
-            }
+            //if (_playerCharacter.Inventory.IsUsingItem)
+            //{
+            //    _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(0);
+            //}
+            //else
+            //{
+            //    _playerCharacter.Inventory.EquipFromInventory(0);
+            //}
 
         }
     }
@@ -290,14 +297,14 @@ public class Sc_Player : MonoBehaviour
         {
             ResetChannelRequest();
 
-            if (_playerCharacter.Inventory.IsUsingItem)
-            {
-                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(1);
-            }
-            else
-            {
-                _playerCharacter.Inventory.EquipFromInventory(1);
-            }
+            //if (_playerCharacter.Inventory.IsUsingItem)
+            //{
+            //    _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(1);
+            //}
+            //else
+            //{
+            //    _playerCharacter.Inventory.EquipFromInventory(1);
+            //}
 
         }
     }
@@ -308,14 +315,14 @@ public class Sc_Player : MonoBehaviour
         {
             ResetChannelRequest();
 
-            if (_playerCharacter.Inventory.IsUsingItem)
-            {
-                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(2);
-            }
-            else
-            {
-                _playerCharacter.Inventory.EquipFromInventory(2);
-            }
+            //if (_playerCharacter.Inventory.IsUsingItem)
+            //{
+            //    _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(2);
+            //}
+            //else
+            //{
+            //    _playerCharacter.Inventory.EquipFromInventory(2);
+            //}
 
         }
     }
@@ -326,14 +333,14 @@ public class Sc_Player : MonoBehaviour
         {
             ResetChannelRequest();
 
-            if (_playerCharacter.Inventory.IsUsingItem)
-            {
-                _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(3);
-            }
-            else
-            {
-                _playerCharacter.Inventory.DropCurrentItem();
-            }
+            //if (_playerCharacter.Inventory.IsUsingItem)
+            //{
+            //    _playerCharacter.Inventory.CurrentlyHeldItem.UseItemSpecial(3);
+            //}
+            //else
+            //{
+            //    _playerCharacter.Inventory.DropCurrentItem();
+            //}
         }
     }
 

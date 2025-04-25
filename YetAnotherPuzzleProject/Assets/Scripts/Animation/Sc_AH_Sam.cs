@@ -8,7 +8,7 @@ public class Sc_AH_Sam : Sc_AnimationHandler
     public Sc_Character_Player PlayerCharacter;
     public Sc_SoundHandler_PlayerCharacter SoundHandler;
     public Sc_CharacterController Controller;
-    public Sc_Inventory Inventory;
+    public Sc_Inventory_New Inventory;
     public Sc_RoboArm RoboArm;
 
     private void Start()
@@ -23,8 +23,8 @@ public class Sc_AH_Sam : Sc_AnimationHandler
 
         Inventory.TreasureFound -= OnTreasureFound;
         Inventory.TreasureFound += OnTreasureFound;
-        Inventory.ItemFound -= OnItemFound;
-        Inventory.ItemFound += OnItemFound;
+        Inventory.UnlockedItem -= OnUnlockedItem;
+        Inventory.UnlockedItem += OnUnlockedItem;
 
         RoboArm.OnChannel -= OnChannel;
         RoboArm.OnChannel += OnChannel;
@@ -115,7 +115,7 @@ public class Sc_AH_Sam : Sc_AnimationHandler
                 () => SetLayerWeight(1, 0f)));
     }
 
-    private void OnItemFound(Sc_Item item)
+    private void OnUnlockedItem(EquippedItem item)
     {
 
     }

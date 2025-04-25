@@ -13,7 +13,7 @@ public class Sc_CrushingHandler : MonoBehaviour
     public LayerMask WallLayers;
 
     [SerializeField][ReadOnly] private bool _crushed;
-    public bool Crushed { get { return _crushed; } }
+    public bool Crushed { get { return _crushed; } set { _crushed = value; } }
 
     private void OnCharacterCrushed(Vector3 crushingNormal)
     {
@@ -25,25 +25,26 @@ public class Sc_CrushingHandler : MonoBehaviour
         RaycastHit crushingHit;
         Physics.Raycast(centerPos, new Vector3(PlayerCharacter.Controller.RB.velocity.x, 0f, PlayerCharacter.Controller.RB.velocity.z).normalized, out crushingHit, 5f, PlayerCharacter.Controller._groundLayers, QueryTriggerInteraction.Ignore);
 
-        _crushed = true;
-        PlayerCharacter.Controller.IgnoreInputs = true;
-        PlayerCharacter.Controller.Capsule.enabled = false;
-        Debug.LogError(PlayerCharacter.Controller.gameObject.name + " got crushed!");
-
         if (crushingNormal != Vector3.zero)
         {
             Quaternion rot = Quaternion.LookRotation(-crushingNormal, Vector3.up);
-            PlayerCharacter.Controller.RB.rotation = rot;
+            //PlayerCharacter.Controller.RB.rotation = rot;
 
             RaycastHit crushHit;
             if (Physics.Raycast(transform.position + (Vector3.up*(YOffset*.5f)), crushingNormal, out crushHit, 5f, WallLayers, QueryTriggerInteraction.Ignore))
             {
-                Sc_SquashedPlane newPlane = Instantiate<Sc_SquashedPlane>(PlayerCharacter.SquashedPlanePrefab, crushHit.point + (crushHit.normal*.05f), rot);
+                Sc_SquashedPlane newPlane = Instantiate<Sc_SquashedPlane>(PlayerCharacter.SquashedPlanePrefab, crushHit.point + (crushHit.normal*.05f), rot, Sc_GameManager.instance.CurrentLevel.gameObject.transform);
                 PlayerCharacter.Mesh.gameObject.SetActive(false);
             }
         }
 
-        Health.Death();
+        _crushed = true;
+        Vector3 anchorPoint = PlayerCharacter.Controller.transform.position;
+        Quaternion anchorRot = PlayerCharacter.Controller.transform.rotation;
+        PlayerCharacter.Controller.SetAnchorPointAndRot(anchorPoint, anchorRot);
+        Debug.LogError(PlayerCharacter.Controller.gameObject.name + " got crushed!");
+
+        Health.Death(4f);
     }
 
     private void OnTriggerStay(Collider other)
@@ -53,7 +54,7 @@ public class Sc_CrushingHandler : MonoBehaviour
         if (other.isTrigger) return;
         if (other.gameObject.layer == 0 || other.gameObject.layer == 8)
         {
-            Sc_Crusher crusher = other.gameObject.GetComponent<Sc_Crusher>();
+            Sc_Crusher crusher = other.gameObject.GetComponentInChildren<Sc_Crusher>();
             if (crusher)
             {
                 OnCharacterCrushed(crusher.transform.forward);

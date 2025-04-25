@@ -88,7 +88,7 @@ public class Sc_Item_Effigy : Sc_Item
         }
     }
 
-    public override void ThrowItem(Sc_Character throwingCharacter, Vector3 throwDirection)
+    public override void ThrowItem(Sc_Character_Player throwingCharacter, Vector3 throwDirection)
     {
         //base.ThrowItem(throwingCharacter, throwDirection);
         _interactible.CanBeInteractedWith = false;

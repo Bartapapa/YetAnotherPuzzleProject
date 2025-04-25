@@ -24,11 +24,8 @@ public class Sc_Interactible : MonoBehaviour
     public bool CanBeInteractedWithOnThrow = false;
     [SerializeField] private bool _canBeInteractedWith = true;
 
-    [Header("KEY")]
+    [Header("CONDITION")]
     public Condition _condition;
-    public bool _usesKey = false;
-    public bool _usesRoboArm = false;
-    public List<int> _keyIDs = new List<int>();
     public bool CanBeInteractedWith { get { return _canBeInteractedWith; } set { _canBeInteractedWith = value; } }
 
     private void Start()
@@ -89,57 +86,63 @@ public class Sc_Interactible : MonoBehaviour
             if (player)
             {
                 player.Interactor._lastInteractedInteractible = this;
-                if (_usesRoboArm && _usesKey)
-                {
-                    if (player.Inventory.CurrentlyHeldItem != null)
-                    {
-                        if (_condition.CheckPlayerItemCondition(player.Inventory.CurrentlyHeldItem._itemData.ID))
-                        {
-                            if (player.Inventory.CurrentlyHeldItem.UseItemAsKey(this))
-                            {
-                                OnInteractedWith?.Invoke(interactor);
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            if (player.HasRoboArm)
-                            {
-                                OnRoboArmInteraction?.Invoke(player);
-                                return;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (player.HasRoboArm)
-                        {
-                            OnRoboArmInteraction?.Invoke(player);
-                            return;
-                        }
-                    }
-                }
-                else if (_usesKey)
-                {
-                    if (player.Inventory.CurrentlyHeldItem.UseItemAsKey(this))
-                    {
-                        OnInteractedWith?.Invoke(interactor);
-                        return;
-                    }
-                }
-                else if (_usesRoboArm)
-                {
-                    if (player.HasRoboArm)
-                    {
-                        OnRoboArmInteraction?.Invoke(player);
-                        return;
-                    }
-                }
-                else
+
+                if (_condition.CheckPlayerCondition(player))
                 {
                     OnInteractedWith?.Invoke(interactor);
-                    return;
                 }
+
+                //if (_usesRoboArm && _usesKey)
+                //{
+                //    if (player.Inventory.CurrentlyHeldItem != null)
+                //    {
+                //        if (_condition.CheckPlayerItemCondition(player.Inventory.CurrentlyHeldItem._itemData.ID))
+                //        {
+                //            if (player.Inventory.CurrentlyHeldItem.UseItemAsKey(this))
+                //            {
+                //                OnInteractedWith?.Invoke(interactor);
+                //                return;
+                //            }
+                //        }
+                //        else
+                //        {
+                //            if (player.HasRoboArm)
+                //            {
+                //                OnRoboArmInteraction?.Invoke(player);
+                //                return;
+                //            }
+                //        }
+                //    }
+                //    else
+                //    {
+                //        if (player.HasRoboArm)
+                //        {
+                //            OnRoboArmInteraction?.Invoke(player);
+                //            return;
+                //        }
+                //    }
+                //}
+                //else if (_usesKey)
+                //{
+                //    if (player.Inventory.CurrentlyHeldItem.UseItemAsKey(this))
+                //    {
+                //        OnInteractedWith?.Invoke(interactor);
+                //        return;
+                //    }
+                //}
+                //else if (_usesRoboArm)
+                //{
+                //    if (player.HasRoboArm)
+                //    {
+                //        OnRoboArmInteraction?.Invoke(player);
+                //        return;
+                //    }
+                //}
+                //else
+                //{
+                //    OnInteractedWith?.Invoke(interactor);
+                //    return;
+                //}
             }
             else
             {
@@ -174,11 +177,6 @@ public class Sc_Interactible : MonoBehaviour
         {
             OnThrownInteraction?.Invoke();
         }
-    }
-
-    public bool InteractorHasCorrectKey(int id)
-    {
-        return _keyIDs.Contains(id);
     }
 
     public bool InteractorMeetsConditions(Sc_Character_Player interactingCharacter)

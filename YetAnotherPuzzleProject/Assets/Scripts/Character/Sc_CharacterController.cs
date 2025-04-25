@@ -58,8 +58,8 @@ public class Sc_CharacterController : MonoBehaviour
     public bool IsAnchoring { get { return _anchorCo != null ? true : false; } }
     private Vector3 _anchorFromPoint;
     private Quaternion _anchorFromRot;
-    private Vector3 _anchorToPoint;
-    private Quaternion _anchorToRot;
+    private Vector3 _anchorToPoint = Vector3.zero;
+    private Quaternion _anchorToRot = Quaternion.identity;
     private Coroutine _anchorCo;
     private Action _anchorEndAction;
     private Transform _anchor;
@@ -328,7 +328,8 @@ public class Sc_CharacterController : MonoBehaviour
 
             case CharacterState.Anchored:
                 if (!_canRotate) break;
-                _rb.rotation = _anchor.rotation;
+                Quaternion rot = _anchor != null ? _anchor.rotation : _anchorToRot;
+                _rb.rotation = rot;
                 InheritedYaw = 0f;
                 break;
 
@@ -418,7 +419,10 @@ public class Sc_CharacterController : MonoBehaviour
                 break;
 
             case CharacterState.Anchored:
-                _rb.MovePosition(_anchor.position);
+                if (!_canMove) break;
+                Vector3 toPos = _anchor != null ? _anchor.position : _anchorToPoint;
+                _rb.MovePosition(toPos);
+                InheritedVelocity = Vector3.zero;
                 break;
         }    
     }
@@ -501,9 +505,16 @@ public class Sc_CharacterController : MonoBehaviour
         IgnoreInputs = false;
     }
 
-    public void SetAnchor(Transform anchor)
+    public void SetAnchorTransform(Transform anchor)
     {
         _anchor = anchor;
+        CurrentState = CharacterState.Anchored;
+    }
+
+    public void SetAnchorPointAndRot(Vector3 point, Quaternion rot)
+    {
+        _anchorToPoint = point;
+        _anchorToRot = rot;
         CurrentState = CharacterState.Anchored;
     }
 
@@ -683,7 +694,7 @@ public class Sc_CharacterController : MonoBehaviour
         _currentValve = valve;
 
         AnchorTo(valve._anchor.position, valve._anchor.rotation, .5f,
-            () => SetAnchor(valve._anchor));
+            () => SetAnchorTransform(valve._anchor));
     }
 
     public void DisconnectFromCurrentValve()
@@ -728,9 +739,9 @@ public class Sc_CharacterController : MonoBehaviour
             case CharacterState.Default:
                 break;
             case CharacterState.Anchored:
-                if (_anchor == null)
+                if (_anchor == null && _anchorToPoint == Vector3.zero)
                 {
-                    Debug.LogWarning(gameObject.name + " doesn't have an anchor, returning to default character state!");
+                    Debug.LogWarning(gameObject.name + " doesn't have an anchor transform or point, returning to default character state!");
                     CurrentState = CharacterState.Default;
                     return;
                 }

@@ -162,6 +162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GlobalLight: 0
+  VisualStimuliInRange: []
 --- !u!135 &2825177946575364842
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -905,6 +906,7 @@ MonoBehaviour:
     type: 3}
   MeshCenterPoint: {fileID: 1486637517623303449}
   _inInventory: {fileID: 0}
+  Mesh: {fileID: 9185459489784782141}
   _itemData: {fileID: 11400000, guid: 27a83cebb19a73f44a7918966278d98c, type: 2}
   IsEquipped: 0
   IsBeingThrown: 0
@@ -944,15 +946,27 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnRoboArmInteraction:
+    m_PersistentCalls:
+      m_Calls: []
   OnThrownInteraction:
     m_PersistentCalls:
       m_Calls: []
+  _interactibleHighlightMeshes: []
+  useDebug: 1
   _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
   _debugUnselectedMat: {fileID: 2100000, guid: ac46e7ad30ef99e4e8a400e0539d21b9, type: 2}
   _mesh: {fileID: 2499518664835882637}
   _priority: 0
-  _usesKey: 0
-  _keyIDs: 
+  CanBeInteractedWithOnThrow: 0
+  _canBeInteractedWith: 1
+  _condition:
+    Type: 0
+    Step_QuestID: -1
+    Comparison: 0
+    Step_QuestStep: -1
+    Finished_QuestID: -1
+    Item: 0
 --- !u!65 &2667976183517772263
 BoxCollider:
   m_ObjectHideFlags: 0

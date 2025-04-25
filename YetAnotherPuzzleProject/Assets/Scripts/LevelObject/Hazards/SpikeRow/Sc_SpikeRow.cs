@@ -155,6 +155,7 @@ public class Sc_SpikeRow : MonoBehaviour
         if (health)
         {
             Debug.LogWarning(other.gameObject.name + " has been hit by spikes!");
+            health.Death();
         }
     }
 }

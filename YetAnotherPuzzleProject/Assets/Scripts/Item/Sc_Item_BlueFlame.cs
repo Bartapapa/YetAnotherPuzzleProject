@@ -29,20 +29,20 @@ public class Sc_Item_BlueFlame : Sc_Item
         //If character has already equipped object, then store it
         //Otherwise, just equip this item without storing
 
-        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
-        if (player)
-        {
-            if (!player.Inventory.CanStoreNewItem) return;
+        //Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        //if (player)
+        //{
+        //    if (!player.Inventory.CanStoreNewItem) return;
 
-            if (player.Inventory.IsCurrentlyHoldingItem)
-            {
-                if (!player.Inventory.Store(player.Inventory.CurrentlyHeldItem)) return;
-            }
+        //    if (player.Inventory.IsCurrentlyHoldingItem)
+        //    {
+        //        if (!player.Inventory.Store(player.Inventory.CurrentlyHeldItem)) return;
+        //    }
 
-            player.Inventory.PickUpItemAndEquip(this);
-        }
+        //    player.Inventory.PickUpItemAndEquip(this);
+        //}
 
-        _interactible.EndInteract(interactor);
+        //_interactible.EndInteract(interactor);
     }
 
     public override void UseItem()
@@ -60,7 +60,7 @@ public class Sc_Item_BlueFlame : Sc_Item
         return true;
     }
 
-    public override void ThrowItem(Sc_Character throwingCharacter, Vector3 throwDirection)
+    public override void ThrowItem(Sc_Character_Player throwingCharacter, Vector3 throwDirection)
     {
         //Flame goes back to origin spot.
         ReturnToBowl();

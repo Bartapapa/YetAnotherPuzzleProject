@@ -175,7 +175,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 777417243090285201}
         m_TargetAssemblyTypeName: Sc_Player, Assembly-CSharp
-        m_MethodName: OnUse
+        m_MethodName: OnUseLantern
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

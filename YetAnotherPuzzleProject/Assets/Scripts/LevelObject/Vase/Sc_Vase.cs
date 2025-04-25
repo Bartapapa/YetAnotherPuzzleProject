@@ -113,19 +113,19 @@ public class Sc_Vase : MonoBehaviour
             case ItemType.None:
                 break;
             case ItemType.Item:
-                if (interactor != null)
-                {
-                    Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
-                    if (player)
-                    {
-                        if (!player.Inventory.IsCurrentlyHoldingItem)
-                        {
-                            newItem.OnInteractedWith(interactor);
-                        }
+                //if (interactor != null)
+                //{
+                //    Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+                //    if (player)
+                //    {
+                //        if (!player.Inventory.IsCurrentlyHoldingItem)
+                //        {
+                //            newItem.OnInteractedWith(interactor);
+                //        }
 
-                        player.Inventory.FoundItem(newItem);                      
-                    }
-                }
+                //        player.Inventory.FoundItem(newItem);                      
+                //    }
+                //}
                 break;
             case ItemType.Treasure:
                 if (interactor != null)

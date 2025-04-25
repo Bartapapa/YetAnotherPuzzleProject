@@ -6,7 +6,7 @@ using UnityEngine;
 public class Sc_Inventory : MonoBehaviour
 {
     [Header("OBJECT REFS")]
-    public Sc_Character Character;
+    public Sc_Character_Player Character;
     public Transform _itemHoldAnchor;
     public Transform _itemThrowPoint;
 

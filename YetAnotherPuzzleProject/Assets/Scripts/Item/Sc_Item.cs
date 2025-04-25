@@ -9,9 +9,10 @@ public class Sc_Item : MonoBehaviour
     public ParticleSystem ItemDestroyParticles;
     public Transform MeshCenterPoint;
     [ReadOnly] public Sc_Inventory _inInventory;
+    public Transform Mesh;
     protected Rigidbody _rb;
     protected Collider _coll;
-    private Renderer[] _renderers;
+    protected Renderer[] _renderers;
 
     [Header("ITEM DATA")]
     public SO_ItemData _itemData;
@@ -21,7 +22,7 @@ public class Sc_Item : MonoBehaviour
 
     [Header("THROW PARAMETERS")]
     [ReadOnly] public bool IsBeingThrown = false;
-    protected Sc_Character _thrownByCharacter;
+    protected Sc_Character_Player _thrownByCharacter;
 
     [Header("Sounds")]
     public AudioSource Source;
@@ -32,6 +33,8 @@ public class Sc_Item : MonoBehaviour
 
     private float _destroyItemDuration = .25f;
     private float _destroyItemFlashIntensity = 2f;
+    private Coroutine _destroyItemCo;
+    public bool IsBeingDestroyed { get { return _destroyItemCo != null; } }
 
     private Vector3 _treasureAcquireOffset = new Vector3(0f, 2f, 0f);
     private Transform _treasureAcquireAnchor = null;
@@ -54,20 +57,20 @@ public class Sc_Item : MonoBehaviour
 
     public virtual void OnInteractedWith(Sc_Character interactor)
     {
-        Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
-        if (player)
-        {
-            if (player.Inventory.IsCurrentlyHoldingItem)
-            {
-                player.Inventory.PickUpItem(this);
-            }
-            else
-            {
-                player.Inventory.PickUpItemAndEquip(this);
-            }
+        //Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        //if (player)
+        //{
+        //    if (player.Inventory.IsCurrentlyHoldingItem)
+        //    {
+        //        player.Inventory.PickUpItem(this);
+        //    }
+        //    else
+        //    {
+        //        player.Inventory.PickUpItemAndEquip(this);
+        //    }
 
-            _interactible.EndInteract(interactor);
-        }
+        //    _interactible.EndInteract(interactor);
+        //}
     }
 
     public virtual void UseItem()
@@ -146,7 +149,7 @@ public class Sc_Item : MonoBehaviour
         TreasureDisappear();
     }
 
-    public virtual void ThrowItem(Sc_Character throwingCharacter, Vector3 throwDirection)
+    public virtual void ThrowItem(Sc_Character_Player throwingCharacter, Vector3 throwDirection)
     {
         _interactible.CanBeInteractedWith = false;
         _rb.isKinematic = false;
@@ -165,6 +168,11 @@ public class Sc_Item : MonoBehaviour
         //Start throwing coroutine, wherein the object's velocity is set by an animation curve. It flies in a straight direction before starting to fall.
         //During this coroutine, it constantly checks in the direction of its trajectory with a spheretrace. If it hits anything, it breaks.
         //After a definite amount of time, it is self-destroyed anyhow to prevent it from actually going waaaay away.
+    }
+
+    public virtual void ResetItem()
+    {
+        
     }
 
     private IEnumerator ThrowCoroutine()
@@ -224,7 +232,7 @@ public class Sc_Item : MonoBehaviour
         {
             _inInventory.DropItem(this);
         }
-        StartCoroutine(DestroyItemCo());
+        _destroyItemCo = StartCoroutine(DestroyItemCo());
     }
 
     private IEnumerator DestroyItemCo()
@@ -249,6 +257,7 @@ public class Sc_Item : MonoBehaviour
             ParticleSystem particles = Instantiate<ParticleSystem>(ItemDestroyParticles, MeshCenterPoint.position, Quaternion.identity);
         }
 
+        _destroyItemCo = null;
         OnItemDestroyed();
     }
 

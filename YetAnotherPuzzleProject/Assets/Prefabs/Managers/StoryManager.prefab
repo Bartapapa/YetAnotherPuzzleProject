@@ -45,3 +45,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   QuestDB: {fileID: 11400000, guid: fa9372a870cae534a953bd39fe59c096, type: 2}
+  ActiveQuests: []
+  OnStartQuests:
+  - {x: 3, y: 1}
+  - {x: 1, y: 1}
+  - {x: 2, y: 1}
+  - {x: 5, y: 1}

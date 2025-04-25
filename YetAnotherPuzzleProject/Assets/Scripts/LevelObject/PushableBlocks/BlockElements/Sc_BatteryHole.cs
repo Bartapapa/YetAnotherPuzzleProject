@@ -29,20 +29,35 @@ public class Sc_BatteryHole : Sc_Activator
 
     public void OnInteract(Sc_Character interactor)
     {
-        if (!StopDelayedActivation())
-        {
-            if (!DelayActivation())
-            {
-                return;
-            }
-        }
-        PlaceBattery();
-
         Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
         if (player)
         {
-            _interactible.EndInteract(player);
+            if (!StopDelayedActivation())
+            {
+                if (!DelayActivation())
+                {
+                    return;
+                }
+            }
+            player.RoboArm.SetRAILS(RoboArmInputListeners);
+            RoboArmEnergize();
+            player.RoboArm.StartInputingCode();
         }
+
+        //if (!StopDelayedActivation())
+        //{
+        //    if (!DelayActivation())
+        //    {
+        //        return;
+        //    }
+        //}
+        //PlaceBattery();
+
+        //Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
+        //if (player)
+        //{
+        //    _interactible.EndInteract(player);
+        //}
     }
 
     public void OnRoboArmInteract(Sc_Character_Player interactor)
@@ -50,16 +65,16 @@ public class Sc_BatteryHole : Sc_Activator
         //Put here entire sequence for animation, turning around etc etc;
 
 
-        if (!StopDelayedActivation())
-        {
-            if (!DelayActivation())
-            {
-                return;
-            }
-        }
-        interactor.RoboArm.SetRAILS(RoboArmInputListeners);
-        RoboArmEnergize();
-        interactor.RoboArm.StartInputingCode();
+        //if (!StopDelayedActivation())
+        //{
+        //    if (!DelayActivation())
+        //    {
+        //        return;
+        //    }
+        //}
+        //interactor.RoboArm.SetRAILS(RoboArmInputListeners);
+        //RoboArmEnergize();
+        //interactor.RoboArm.StartInputingCode();
     }
 
     private void PlaceBattery()

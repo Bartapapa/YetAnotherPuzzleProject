@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public class QuestObject
 {
     private SO_QuestData _data;
     public SO_QuestData Data { get { return _data; } }
     public int CurrentStep = -1;
+    public bool IsQuestFinished { get { return CurrentStep >= Data.Steps.Count; } }
 
     public QuestObject(SO_QuestData data)
     {
@@ -55,6 +57,9 @@ public class Sc_StoryManager : MonoBehaviour
     public SO_QuestDatabase QuestDB;
     [ReadOnly] public List<QuestObject> ActiveQuests = new List<QuestObject>();
 
+    [Header("DEBUG")]
+    public List<Vector2Int> OnStartQuests = new List<Vector2Int>();
+
     public StoryContext Context { get
         {
             StoryContext context = new StoryContext(ActiveQuests);
@@ -73,6 +78,14 @@ public class Sc_StoryManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        foreach(Vector2Int questIdAndStep in OnStartQuests)
+        {
+            AddQuestToActiveQuests(questIdAndStep.x, questIdAndStep.y);
+        }
+    }
+
     private SO_QuestData GetQuestFromDB(int id)
     {
         SO_QuestData quest = null;
@@ -88,7 +101,7 @@ public class Sc_StoryManager : MonoBehaviour
         return quest;
     }
 
-    public void AddQuestToActiveQuests(int id, int toStep = 0)
+    public void AddQuestToActiveQuests(int id, int toStep = 1)
     {
         SO_QuestData foundQuest = GetQuestFromDB(id);
         if (foundQuest == null)

@@ -294,7 +294,7 @@ public class Sc_GameManager : MonoBehaviour
         {
             int[] savedInventory = CurrentData.CharacterSaveProfiles[i].PlayerCharacterInventoryIDs;
             int savedCurrentHeldItem = CurrentData.CharacterSaveProfiles[i].CurrentHeldItemIndex;
-            players[i].PlayerCharacter.Inventory.PopulateInventory(savedInventory, savedCurrentHeldItem);
+            //players[i].PlayerCharacter.Inventory.PopulateInventory(savedInventory, savedCurrentHeldItem);
         }
     }
 

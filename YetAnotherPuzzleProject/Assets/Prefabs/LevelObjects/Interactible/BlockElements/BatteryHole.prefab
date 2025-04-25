@@ -284,19 +284,7 @@ MonoBehaviour:
         m_CallState: 2
   OnRoboArmInteraction:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 217489669567972189}
-        m_TargetAssemblyTypeName: Sc_BatteryHole, Assembly-CSharp
-        m_MethodName: OnRoboArmInteract
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   OnThrownInteraction:
     m_PersistentCalls:
       m_Calls: []
@@ -313,21 +301,12 @@ MonoBehaviour:
   CanBeInteractedWithOnThrow: 0
   _canBeInteractedWith: 1
   _condition:
-    Type: 2
-    _andConditions: []
-    _orConditions:
-    - Type: 3
-      _andConditions: []
-      _orConditions: []
-      _itemIdToEquip: 0
-      _checkIfNoRoboArm: 0
-    - Type: 4
-      _andConditions: []
-      _orConditions: []
-      _itemIdToEquip: 0
-      _checkIfNoRoboArm: 0
-    _itemIdToEquip: 0
-    _checkIfNoRoboArm: 0
+    Type: 3
+    Step_QuestID: -1
+    Comparison: 0
+    Step_QuestStep: -1
+    Finished_QuestID: -1
+    Item: 6
   _usesKey: 1
   _usesRoboArm: 1
   _keyIDs: 00000000

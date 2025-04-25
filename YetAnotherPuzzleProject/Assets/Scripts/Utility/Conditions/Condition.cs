@@ -8,24 +8,47 @@ using UnityEngine.ProBuilder.Shapes;
 public enum ConditionType
 {
     None,
-    And,
-    Or,
-    InteractorHasItemEquipped,
-    InteractorHasRoboArm,
+    QuestStep,
+    InteractorHasFinishedQuest,
+    InteractorHasItem,
+}
+
+public enum Comparator
+{
+    EqualTo,
+    NotEqualTo,
+    LessOrEqualThan,
+    LessThan,
+    GreaterOrEqualThan,
+    GreaterThan,
+}
+
+public enum ConditionItems
+{
+    None,
+    Lantern,
+    Rocks,
+    Seeds,
+    Pickax,
+    Effigy,
+    Roboarm,
 }
 
 [System.Serializable]
 public class Condition
 {
     public ConditionType Type = ConditionType.None;
-    [Header("And")]
-    public List<Condition> _andConditions = new List<Condition>();
-    [Header("Or")]
-    public List<Condition> _orConditions = new List<Condition>();
-    [Header("InteractorHasItemEquipped")]
-    public int _itemIdToEquip = -1;
-    [Header("InteractorHasRoboArm")]
-    public bool _checkIfNoRoboArm = false;
+
+    [Header("QUEST STEP")]
+    public int Step_QuestID = -1;
+    public Comparator Comparison = Comparator.EqualTo;
+    public int Step_QuestStep = -1;
+
+    [Header("FINISHED QUEST")]
+    public int Finished_QuestID = -1;
+
+    [Header("HAS ITEM")]
+    public ConditionItems Item = ConditionItems.None;
 
     public virtual bool CheckPlayerCondition(Sc_Character_Player playerCharacter)
     {
@@ -35,89 +58,112 @@ public class Condition
         {
             case ConditionType.None:
                 return true;
-            case ConditionType.And:
-                return AndConditionCheck(playerCharacter);
-            case ConditionType.Or:
-                return OrConditionCheck(playerCharacter);
-            case ConditionType.InteractorHasItemEquipped:
-                if (playerCharacter.Inventory == null) return false;
-                if (playerCharacter.Inventory.CurrentlyHeldItem == null) return false;
-                int currentHeldItemKey = playerCharacter.Inventory.CurrentlyHeldItem._itemData.ID;
-                return currentHeldItemKey == _itemIdToEquip;
-            case ConditionType.InteractorHasRoboArm:
-                return _checkIfNoRoboArm ? !playerCharacter.HasRoboArm : playerCharacter.HasRoboArm;
+            case ConditionType.QuestStep:
+                if (Sc_StoryManager.instance == null) return false;
+                else
+                {
+                    StoryContext context = Sc_StoryManager.instance.Context;
+                    int questStep = context.GetQuestCurrentStep(Step_QuestID);
+                    switch (Comparison)
+                    {
+                        case Comparator.EqualTo:
+                            return questStep == Step_QuestStep;
+                        case Comparator.NotEqualTo:
+                            return questStep != Step_QuestStep;
+                        case Comparator.LessOrEqualThan:
+                            return questStep <= Step_QuestStep;
+                        case Comparator.LessThan:
+                            return questStep < Step_QuestStep;
+                        case Comparator.GreaterOrEqualThan:
+                            return questStep >= Step_QuestStep;
+                        case Comparator.GreaterThan:
+                            return questStep > Step_QuestStep;
+                        default:
+                            return false;
+                    }
+                }
+            case ConditionType.InteractorHasFinishedQuest:
+                if (Sc_StoryManager.instance == null) return false;
+                else
+                {
+                    StoryContext context = Sc_StoryManager.instance.Context;
+                    QuestObject quest = context.GetActiveQuest(Finished_QuestID);
+                    if (quest != null)
+                    {
+                        return quest.IsQuestFinished;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            case ConditionType.InteractorHasItem:
+                Sc_Inventory_New inventory = playerCharacter.Inventory;
+                switch (Item)
+                {
+                    case ConditionItems.None:
+                        return true;
+                    case ConditionItems.Lantern:
+                        return inventory.HasUnlockedLantern;
+                    case ConditionItems.Rocks:
+                        return inventory.HasUnlockedRocks;
+                    case ConditionItems.Seeds:
+                        return inventory.HasUnlockedSeeds;
+                    case ConditionItems.Pickax:
+                        return inventory.HasUnlockedPickax;
+                    //case ConditionItems.Effigy:
+                    //return inventory.HasUnlockedLantern;
+                    case ConditionItems.Roboarm:
+                        return inventory.HasUnlockedRoboarm;
+                    default:
+                        return false;
+                }
+            default:
+                return true;
         }
-
-        return false;
     }
 
     public virtual bool CheckPlayerItemCondition(int itemID)
     {
-        List<int> passingItemIDs = new List<int>();
+        return true;
 
-        switch (Type)
-        {
-            case ConditionType.And:
-                foreach (Condition cond in _andConditions)
-                {
-                    switch (cond.Type)
-                    {
-                        case ConditionType.InteractorHasItemEquipped:
-                            passingItemIDs.Add(cond._itemIdToEquip);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                break;
-            case ConditionType.Or:
-                foreach (Condition cond in _orConditions)
-                { 
-                    switch (cond.Type)
-                    {
-                        case ConditionType.InteractorHasItemEquipped:
-                            passingItemIDs.Add(cond._itemIdToEquip);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                break;
-            case ConditionType.InteractorHasItemEquipped:
-                passingItemIDs.Add(_itemIdToEquip);
-                break;
-            default:
-                break; 
-        }
+        //List<int> passingItemIDs = new List<int>();
 
-        return passingItemIDs.Contains(itemID);
-    }
+        //switch (Type)
+        //{
+        //    case ConditionType.And:
+        //        foreach (Condition cond in _andConditions)
+        //        {
+        //            switch (cond.Type)
+        //            {
+        //                case ConditionType.InteractorHasItemEquipped:
+        //                    passingItemIDs.Add(cond._itemIdToEquip);
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //        break;
+        //    case ConditionType.Or:
+        //        foreach (Condition cond in _orConditions)
+        //        { 
+        //            switch (cond.Type)
+        //            {
+        //                case ConditionType.InteractorHasItemEquipped:
+        //                    passingItemIDs.Add(cond._itemIdToEquip);
+        //                    break;
+        //                default:
+        //                    break;
+        //            }
+        //        }
+        //        break;
+        //    case ConditionType.InteractorHasItemEquipped:
+        //        passingItemIDs.Add(_itemIdToEquip);
+        //        break;
+        //    default:
+        //        break; 
+        //}
 
-    private bool AndConditionCheck(Sc_Character_Player playerCharacter)
-    {
-        bool andCheck = true;
-        foreach(Condition cond in _andConditions)
-        {
-            if (cond.CheckPlayerCondition(playerCharacter) == false)
-            {
-                andCheck = false;
-                break;
-            }
-        }
-        return andCheck;
-    }
-
-    private bool OrConditionCheck(Sc_Character_Player playerCharacter)
-    {
-        bool orCheck = false;
-        foreach (Condition cond in _orConditions)
-        {
-            if (cond.CheckPlayerCondition(playerCharacter) == true)
-            {
-                orCheck = true;
-                break;
-            }
-        }
-        return orCheck;
+        //return passingItemIDs.Contains(itemID);
     }
 }

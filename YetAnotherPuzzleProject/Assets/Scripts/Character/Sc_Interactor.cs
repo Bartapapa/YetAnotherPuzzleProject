@@ -7,7 +7,7 @@ public class Sc_Interactor : MonoBehaviour
 {
     [Header("OBJECT REFS")]
     public Sc_Character_Player Character;
-    public Sc_Inventory _inventory;
+    public Sc_Inventory_New Inventory;
     [ReadOnly] public Sc_Interactible _lastInteractedInteractible;
 
     [Header("PARAMETERS")]
@@ -17,7 +17,6 @@ public class Sc_Interactor : MonoBehaviour
     [ReadOnly][SerializeField] private Sc_Interactible _currentSelectedInteractible;
     [ReadOnly][SerializeField] private List<Sc_Interactible> _potentialInteractibles = new List<Sc_Interactible>();
     public bool CanInteract { get { return
-                    _inventory.IsUsingItem ||
                     Character.Controller.IsClimbing ||
                     Character.Controller.IsAnchoring ||
                     Character.Controller.IsAnchoredToValve ||
@@ -96,44 +95,7 @@ public class Sc_Interactor : MonoBehaviour
                 if (interactible.InteractorMeetsConditions(Character))
                 {
                     localChosenInteractibles.Add(interactible);
-                }
-
-
-                //if (interactible._usesKey)
-                //{
-                //    if (_inventory == null)
-                //    {
-                //        //Do nothing
-                //    }
-                //    else
-                //    {
-                //        if (!_inventory.IsCurrentlyHoldingItem)
-                //        {
-                //            //Do nothing
-                //        }
-                //        else
-                //        {
-                //            if (interactible.InteractorMeetsConditions(Character))
-                //            {
-                //                localChosenInteractibles.Add(interactible);
-                //            }
-
-                //            //int currentHeldItemKey = _inventory.CurrentlyHeldItem._itemData.ID;
-                //            //if (interactible.InteractorHasCorrectKey(currentHeldItemKey))
-                //            //{
-                //            //    localChosenInteractibles.Add(interactible);
-                //            //}
-                //            //else
-                //            //{
-                //            //    //Do nothing
-                //            //}
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    localChosenInteractibles.Add(interactible);
-                //}            
+                }       
             }
         }
 

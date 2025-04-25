@@ -60,7 +60,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Use",
+                    "name": "Lantern",
                     "type": "Button",
                     "id": "87f41881-1295-4fcb-810b-94c975e9f29a",
                     "expectedControlType": "Button",
@@ -395,7 +395,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Use",
+                    "action": "Lantern",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -406,7 +406,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse",
-                    "action": "Use",
+                    "action": "Lantern",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
