@@ -34,6 +34,11 @@ public class Sc_CameraFocus : MonoBehaviour
         _originalPosition = transform.position;
     }
 
+    public void SnapToAveragePosition()
+    {
+        transform.position = FindAveragePosition();
+    }
+
     private void LateUpdate()
     {
         HandleFocus();

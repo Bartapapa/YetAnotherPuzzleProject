@@ -3320,30 +3320,70 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -109.67
       objectReference: {fileID: 0}
+    - target: {fileID: 3922203171632677228, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_Name
+      value: DialogueCamera
+      objectReference: {fileID: 0}
+    - target: {fileID: 4503927942155642188, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: _dialogueVC
+      value: 
+      objectReference: {fileID: 5722388672235836794}
+    - target: {fileID: 4503927942155642188, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: _dialogueCameraFocus
+      value: 
+      objectReference: {fileID: 5722388672235836795}
     - target: {fileID: 4716560221558328300, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_RenderingLayers
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064487315403792610, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064487315403792610, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6064487315403792610, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 8.61
       objectReference: {fileID: 0}
     - target: {fileID: 6101913765097330401, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: _focusOriginalPosition
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6238263825211596986, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_Lens.ModeOverride
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6238263825211596986, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.6858582
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.4428377
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.230449
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353703891479748519, guid: 46d26a525fcbf604199b78a4d0ef5f39,
         type: 3}
@@ -3400,17 +3440,63 @@ PrefabInstance:
       propertyPath: m_RenderingLayerMask
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 9125166141624788642, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_Lens.ModeOverride
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9125166141624788642, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+        type: 3}
+      propertyPath: m_Lens.OrthographicSize
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 46d26a525fcbf604199b78a4d0ef5f39, type: 3}
+--- !u!114 &5722388672235836794 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6238263825211596986, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+    type: 3}
+  m_PrefabInstance: {fileID: 5722388672235836793}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45e653bab7fb20e499bda25e1b646fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5722388672235836795 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6665008412396045972, guid: 46d26a525fcbf604199b78a4d0ef5f39,
+    type: 3}
+  m_PrefabInstance: {fileID: 5722388672235836793}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0482f66d937e651448f516032e4fe2de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &6071288818460251132 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3876951407492631533, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
     type: 3}
   m_PrefabInstance: {fileID: 6904648793309662403}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6071288818460251133 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 955411990075963134, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
+    type: 3}
+  m_PrefabInstance: {fileID: 6904648793309662403}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5378aeeaabdaead49ba4c957f6a387d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &6356414390974008888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3601,6 +3687,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 154158916}
     m_Modifications:
+    - target: {fileID: 3460426768365474241, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
+        type: 3}
+      propertyPath: _preventRepel
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3876951407492631533, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3683,6 +3774,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6743875906391160869, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
         type: 3}
+      propertyPath: Character
+      value: 
+      objectReference: {fileID: 6071288818460251133}
+    - target: {fileID: 6743875906391160869, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
+        type: 3}
       propertyPath: Interactible
       value: 
       objectReference: {fileID: 2067802924}
@@ -3713,6 +3809,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FriendCharacter
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909152169438359982, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
+        type: 3}
+      propertyPath: _minMaxRepelForce.x
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8909152169438359982, guid: 12bf8cb1d0d6eda4784ddd519433ad86,
+        type: 3}
+      propertyPath: _minMaxRepelForce.y
+      value: 50
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

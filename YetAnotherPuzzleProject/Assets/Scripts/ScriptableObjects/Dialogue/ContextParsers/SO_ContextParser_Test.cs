@@ -17,7 +17,7 @@ public class SO_ContextParser_Test : SO_ContextParser
             Debug.LogWarning("Context found!");
         }
 
-        if (context.GetQuestCurrentStep(0) == 0)
+        if (context.GetQuestCurrentStep(0) == 1)
         {
             //Has already spoken to the test character. Use dialogue 1.
             return 1;

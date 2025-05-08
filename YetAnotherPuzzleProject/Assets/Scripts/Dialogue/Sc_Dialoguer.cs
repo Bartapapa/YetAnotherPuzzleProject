@@ -5,12 +5,21 @@ using UnityEngine;
 public class Sc_Dialoguer : MonoBehaviour
 {
     [Header("DIALOGUE OBJECT REFS")]
+    public Sc_Character Character;
     public Sc_Interactible Interactible;
     public SO_ContextParser ContextParser;
     public List<SO_Dialogue> Dialogues = new List<SO_Dialogue>();
 
     private Sc_Character_Player _currentInteractingPlayerCharacter;
     private Sc_DialogueManager _dialogueManager;
+    private Sc_CameraManager _camManager;
+
+    private Vector3 _originalLookDirection;
+
+    private void Start()
+    {
+        _originalLookDirection = transform.forward;
+    }
 
     private SO_Dialogue GetDialogueFromContext(StoryContext context)
     {
@@ -48,9 +57,6 @@ public class Sc_Dialoguer : MonoBehaviour
         dialogueManager.DialogueStarted += OnDialogueStart;
         dialogueManager.DialogueEnded += OnDialogueEnd;
 
-        //Finds a dialogue among the list of dialogues by parsing the current story context, and plays it.
-        dialogueManager.StartDialogue(GetDialogueFromContext(Sc_StoryManager.instance.Context));
-
         //Make interactor in dialogue - notably to change player input and how that reacts. Perhaps change input mapping completely?
         Sc_Character_Player playerCharacter = interactor.GetComponent<Sc_Character_Player>();
         if (playerCharacter)
@@ -58,15 +64,41 @@ public class Sc_Dialoguer : MonoBehaviour
             _currentInteractingPlayerCharacter = playerCharacter;
             playerCharacter.ControllingPlayer.SwitchActionMap("Dialogue");
         }
+
+        //Finds a dialogue among the list of dialogues by parsing the current story context, and plays it.
+        dialogueManager.StartDialogue(GetDialogueFromContext(Sc_StoryManager.instance.Context));
     }
 
     private void OnDialogueStart()
     {
+        Sc_CameraManager camManager = Sc_CameraManager.instance;
+        if (!camManager)
+        {
+            Debug.LogWarning("No cameramanager found! Returning.");
+            return;
+        }
+        _camManager = camManager;
 
+        List<Transform> chars = new List<Transform>();
+        chars.Add(this.transform);
+        chars.Add(_currentInteractingPlayerCharacter.transform);
+
+        _camManager.StartDialogueCamera(chars);
+
+
+        Vector3 dir = _currentInteractingPlayerCharacter.transform.position - transform.position;
+        dir = new Vector3(dir.x, 0f, dir.z);
+        dir = dir.normalized;
+        Character.Controller.LookInDirection(dir);
+        _currentInteractingPlayerCharacter.Controller.LookInDirection(-dir);
     }
 
     private void OnDialogueEnd()
     {
+        Character.Controller.StopLookAt();
+        _currentInteractingPlayerCharacter.Controller.StopLookAt();
+        Character.Controller.LookInDirection(_originalLookDirection);
+
         _currentInteractingPlayerCharacter.ControllingPlayer.SwitchActionMap("Player");
         _currentInteractingPlayerCharacter = null;
         Interactible.CanBeInteractedWith = true;
@@ -74,5 +106,8 @@ public class Sc_Dialoguer : MonoBehaviour
         _dialogueManager.DialogueStarted -= OnDialogueStart;
         _dialogueManager.DialogueEnded -= OnDialogueEnd;
         _dialogueManager = null;
+
+        _camManager.EndDialogueCamera();
+        _camManager = null;
     }
 }

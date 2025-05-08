@@ -70,7 +70,8 @@ public class Sc_CharacterController : MonoBehaviour
     public float _characterRadius = .5f;
     public float _pushRequestTime = .5f;
     public LayerMask _pushableObjectLayers;
-    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || IsPushingBlock) ? false : true; } }
+    [SerializeField] private bool _preventRepel = false;
+    public bool CanBeRepelled { get { return (IsAnchoring || IsClimbing || IsPushingBlock || _preventRepel) ? false : true; } }
     private RaycastHit _pushableHit;
     private float _pushRequestTimer = 0f;
     private bool _pushRequested = false;
@@ -186,14 +187,7 @@ public class Sc_CharacterController : MonoBehaviour
         Vector3 desiredMoveInputVector = controlRotation * moveInputVector;
         _desiredMoveInputVector = desiredMoveInputVector;
 
-        if (_forcedLookAtDir != Vector3.zero)
-        {
-            _lookInputVector = _forcedLookAtDir;
-        }
-        else
-        {
-            _lookInputVector = _moveInputVector.normalized;
-        }
+        _lookInputVector = _moveInputVector.normalized;
         
         _climbInputVector = climbInputVector;
 
@@ -213,14 +207,7 @@ public class Sc_CharacterController : MonoBehaviour
 
         _moveInputVector = moveInputVector;
 
-        if (_forcedLookAtDir != Vector3.zero)
-        {
-            _lookInputVector = _forcedLookAtDir;
-        }
-        else
-        {
-            _lookInputVector = _moveInputVector.normalized;
-        }
+        _lookInputVector = _moveInputVector.normalized;
 
         _climbInputVector = climbInputVector;
     }
@@ -286,11 +273,21 @@ public class Sc_CharacterController : MonoBehaviour
 
             case CharacterState.Default:
 
+                Vector3 toLookVector = Vector3.zero;
+                if (_forcedLookAtDir != Vector3.zero)
+                {
+                    toLookVector = _forcedLookAtDir;
+                }
+                else
+                {
+                    toLookVector = _lookInputVector;
+                }
+
                 if (!_isClimbing)
                 {
-                    if (_lookInputVector.sqrMagnitude > 0f && _rotationSharpness > 0f)
+                    if (toLookVector.sqrMagnitude > 0f && _rotationSharpness > 0f)
                     {
-                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, _lookInputVector, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, toLookVector, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
                         smoothedLookInputDirection = Quaternion.Euler(0f, InheritedYaw, 0f) * smoothedLookInputDirection;
 
                         if (_isPushingBlock)
@@ -314,7 +311,7 @@ public class Sc_CharacterController : MonoBehaviour
                 }
                 else
                 {
-                    if (_lookInputVector.sqrMagnitude > 0f && _rotationSharpness > 0f)
+                    if (toLookVector.sqrMagnitude > 0f && _rotationSharpness > 0f)
                     {
                         Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, transform.forward, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
 

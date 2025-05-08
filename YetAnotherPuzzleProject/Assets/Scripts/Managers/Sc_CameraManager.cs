@@ -12,6 +12,8 @@ public class Sc_CameraManager : MonoBehaviour
     [Header("CAMERAS")]
     public CinemachineVirtualCamera _defaultVC;
     public Sc_CameraFocus _defaultCameraFocus;
+    public CinemachineVirtualCamera _dialogueVC;
+    public Sc_CameraFocus _dialogueCameraFocus;
 
     [Header("ROTATION")]
     public AnimationCurve RotateCurve;
@@ -31,11 +33,17 @@ public class Sc_CameraManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        _dialogueVC.enabled = false;
+        _dialogueCameraFocus.enabled = false;
+    }
+
     #region CAMERAFOCUS
 
     public void AddFocus(Sc_CameraFocus toFocus, Transform focus, int weight = 1)
     {
-        Debug.Log(focus.gameObject.name + " has been added to camera focus.");
+        Debug.Log(focus.gameObject.name + " has been added to " + toFocus.gameObject.name + " focus.");
         FocusObject newFocusObject = new FocusObject(focus, weight);
         toFocus.FocusObjects.Add(newFocusObject);
     }
@@ -50,6 +58,11 @@ public class Sc_CameraManager : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void ClearFocusObjects(Sc_CameraFocus fromFocus)
+    {
+        fromFocus.FocusObjects.Clear();
     }
 
     public bool DoesCameraFocusHaveFocus(Sc_CameraFocus cameraFocus, Transform focus)
@@ -72,6 +85,28 @@ public class Sc_CameraManager : MonoBehaviour
     #endregion
 
     #region CAMERACOMMANDS
+
+    public void StartDialogueCamera(List<Transform> focusObjects)
+    {
+        _dialogueCameraFocus.enabled = true;
+
+        foreach(Transform fo in focusObjects)
+        {
+            AddFocus(_dialogueCameraFocus, fo);
+        }
+
+        _dialogueCameraFocus.SnapToAveragePosition();
+        _dialogueVC.enabled = true;
+    }
+
+    public void EndDialogueCamera()
+    {
+        _dialogueVC.enabled = false;
+
+        ClearFocusObjects(_dialogueCameraFocus);
+
+        _dialogueCameraFocus.enabled = false;
+    }
 
     public void ShiftCamera(float sign)
     {
