@@ -125,8 +125,10 @@ public class Sc_Player : MonoBehaviour
         PlayerCharacter.Health.Dead = false;
         PlayerCharacter.CrushingHandler.Crushed = false;
         PlayerCharacter.Controller.Capsule.enabled = true;
+        PlayerCharacter.Controller.SnapToGround = true;
+        PlayerCharacter.Controller._gravity = new Vector3(0f, -30f, 0f);
 
-        PlayerCharacter.Interactor.ClearPotentialInteractibles();
+    PlayerCharacter.Interactor.ClearPotentialInteractibles();
         PlayerCharacter.Controller.StopAnchoringSequence();
         PlayerCharacter.Controller.ResetAnchor();
         PlayerCharacter.Controller.StopClimbing();

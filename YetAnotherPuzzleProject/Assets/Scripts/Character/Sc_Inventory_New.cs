@@ -26,19 +26,18 @@ public class Sc_Inventory_New : MonoBehaviour
     [SerializeField] private Sc_Item _lanternItem;
     [SerializeField] private List<Sc_Item> _rockItems = new List<Sc_Item>();
     public Transform RockParent;
-    [SerializeField] private Sc_Item _seedItem;
-    [SerializeField] private Sc_Item _pickaxItem;
-    [SerializeField] private Sc_Item _effigyItem;
 
     private Sc_Item _currentRock;
     private Sc_Item CurrentRock { get { return SetCurrentRock(); } }
+    private Sc_Item_Haulable _currentHaulableItem;
+    public Sc_Item_Haulable CurrentHaulableItem { get { return _currentHaulableItem; } }
 
     [Header("THROWING")]
     public LayerMask ThrownObjectCollisionLayers;
     public LineRenderer TrajectoryLine;
     public GameObject ImpactSphere;
     private Vector3 _actualAimDir;
-    public bool CanAim { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded ? false : true; } }
+    public bool CanAim { get { return Character.Controller.IsClimbing || Character.Controller.IsAnchoring || Character.Controller.IsAnchoredToValve || !Character.Controller.IsGrounded || !CanEquipItem ? false : true; } }
     [ReadOnly] public bool IsAiming = false;
 
     public bool HasUnlockedLantern
@@ -155,6 +154,7 @@ public class Sc_Inventory_New : MonoBehaviour
             }
         }
     }
+    public bool CanEquipItem { get { return CurrentItem == EquippedItem.Hauled || Character.Controller.IsAnchoredToValve || Character.Controller.IsAnchoring ? false : true; } }
 
     public delegate void DefaultEvent();
     public DefaultEvent StartedAiming;
@@ -211,6 +211,7 @@ public class Sc_Inventory_New : MonoBehaviour
     public void EquipLantern()
     {
         if (!HasUnlockedLantern) return;
+        if (!CanEquipItem) return;
         if (CurrentItem == EquippedItem.Lantern)
         {
             StowItem(CurrentItem);
@@ -290,19 +291,12 @@ public class Sc_Inventory_New : MonoBehaviour
         SetRock(CurrentRock);
     }
 
-    public void SetRock(Sc_Item item)
+    private void SetRock(Sc_Item item)
     {
         SetForThrow(item);
         item.ThrowItem(Character, _actualAimDir);
         _currentRock = null;
         ItemThrown?.Invoke(item);
-
-        //CurrentItem = EquippedItem.None;
-
-        //if (GetIndexFromItem(item) >= 0)
-        //{
-
-        //}
     }
 
     private void SetForThrow(Sc_Item item)
@@ -328,7 +322,11 @@ public class Sc_Inventory_New : MonoBehaviour
         if (!HasUnlockedRocks) return;
         if (!CanAim) return;
         if (CurrentRock == null) return;
-        if (CurrentItem != EquippedItem.None)
+        if (CurrentItem == EquippedItem.Lantern)
+        {
+            ShowLanternMesh(false);
+        }
+        else if (CurrentItem != EquippedItem.None)
         {
             StowItem(CurrentItem);
         }
@@ -348,6 +346,22 @@ public class Sc_Inventory_New : MonoBehaviour
         TrajectoryLine.enabled = false;
         ImpactSphere.SetActive(false);
         Character.Controller.CanMove = true;
+
+        if (CurrentItem == EquippedItem.Lantern)
+        {
+            ShowLanternMesh(true);
+        }
+    }
+
+    public void StopThrow()
+    {
+        StopAiming();
+        if (CurrentRock != null)
+        {
+            CurrentRock.IsEquipped = false;
+            CurrentRock._interactible.CanBeInteractedWith = false;
+            CurrentRock.gameObject.SetActive(false);
+        }
     }
 
     #region AIMING
@@ -476,7 +490,72 @@ public class Sc_Inventory_New : MonoBehaviour
 
     }
     #endregion
+    #region HAULABLE
+    public void HaulItem(Sc_Item_Haulable haulable)
+    {
+        if (CurrentItem == EquippedItem.Lantern)
+        {
+            StowItem(CurrentItem);
+        }
+        StopThrow();
 
+        _internalEquippedItem = EquippedItem.Hauled;
+        _currentHaulableItem = haulable;
+
+        _currentHaulableItem.gameObject.SetActive(true);
+        _currentHaulableItem.IsEquipped = true;
+
+        _currentHaulableItem.transform.parent = ItemHoldAnchor;
+        _currentHaulableItem.transform.position = ItemHoldAnchor.position;
+        _currentHaulableItem.transform.rotation = ItemHoldAnchor.rotation;
+
+        _currentHaulableItem._interactible.CanBeInteractedWith = false;
+
+        Character.Controller.IsHauling = true;
+    }
+
+    public void DropCurrentlyHauledItem()
+    {
+        if (CurrentItem != EquippedItem.Hauled || _currentHaulableItem == null) return;
+        _currentHaulableItem.IsEquipped = false;
+        _currentHaulableItem.gameObject.SetActive(true);
+        _currentHaulableItem._interactible.CanBeInteractedWith = true;
+
+        if (Sc_Level.instance != null)
+        {
+            _currentHaulableItem.transform.parent = Sc_Level.instance.transform;
+        }
+        else
+        {
+            _currentHaulableItem.transform.parent = null;
+        }
+
+        Vector3 randomTorque = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+        _currentHaulableItem.RB.AddTorque(randomTorque, ForceMode.VelocityChange);
+        _currentHaulableItem.RB.AddForce(Character.Controller.RB.velocity * .5f, ForceMode.VelocityChange);
+
+        _currentHaulableItem.OnItemDrop();
+        ItemDropped?.Invoke(_currentHaulableItem);
+
+        _internalEquippedItem = EquippedItem.None;
+        _currentHaulableItem = null;
+
+        Character.Controller.IsHauling = false;
+    }
+
+    public void UseHaulableItem()
+    {
+        if (CurrentItem != EquippedItem.Hauled || _currentHaulableItem == null) return;
+        _currentHaulableItem.IsEquipped = false;
+        _currentHaulableItem.gameObject.SetActive(true);
+        _currentHaulableItem.UseItem();
+
+        _internalEquippedItem = EquippedItem.None;
+        _currentHaulableItem = null;
+
+        Character.Controller.IsHauling = false;
+    }
+    #endregion
     #region TREASURE
     public void FoundTreasure(Sc_Item item)
     {

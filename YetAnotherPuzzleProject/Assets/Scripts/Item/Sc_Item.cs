@@ -11,6 +11,7 @@ public class Sc_Item : MonoBehaviour
     [ReadOnly] public Sc_Inventory _inInventory;
     public Transform Mesh;
     protected Rigidbody _rb;
+    public Rigidbody RB { get { return _rb; } }
     protected Collider _coll;
     protected Renderer[] _renderers;
 
@@ -57,20 +58,12 @@ public class Sc_Item : MonoBehaviour
 
     public virtual void OnInteractedWith(Sc_Character interactor)
     {
-        //Sc_Character_Player player = interactor.GetComponent<Sc_Character_Player>();
-        //if (player)
-        //{
-        //    if (player.Inventory.IsCurrentlyHoldingItem)
-        //    {
-        //        player.Inventory.PickUpItem(this);
-        //    }
-        //    else
-        //    {
-        //        player.Inventory.PickUpItemAndEquip(this);
-        //    }
+        //Base start interaction logic.
+    }
 
-        //    _interactible.EndInteract(interactor);
-        //}
+    public virtual void OnEndInteraction(Sc_Character interactor)
+    {
+        //Base end interaction logic.
     }
 
     public virtual void UseItem()

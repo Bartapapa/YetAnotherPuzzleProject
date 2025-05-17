@@ -21,8 +21,10 @@ public class Sc_Interactor : MonoBehaviour
                     Character.Controller.IsAnchoring ||
                     Character.Controller.IsAnchoredToValve ||
                     !Character.Controller.IsGrounded ||
+                    Character.Controller.IsHauling ||
                     Character.RoboArm.IsChanneling ||
-                    Character.RoboArm.IsInputingCode
+                    Character.RoboArm.IsInputingCode ||
+                    Character.Health.Dead
                     ? false : true; } }
     public Sc_Interactible CurrentSelectedInteractible { get { return _currentSelectedInteractible; } }
 

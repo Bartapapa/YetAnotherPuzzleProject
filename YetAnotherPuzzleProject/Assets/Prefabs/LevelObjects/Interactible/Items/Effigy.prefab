@@ -5397,6 +5397,7 @@ GameObject:
   - component: {fileID: 2161925395333028353}
   - component: {fileID: 3400845810517198304}
   - component: {fileID: 5526729543854211091}
+  - component: {fileID: 2033278777667222745}
   m_Layer: 9
   m_Name: Effigy
   m_TagString: Untagged
@@ -5438,6 +5439,7 @@ MonoBehaviour:
     type: 3}
   MeshCenterPoint: {fileID: 5958354735920927791}
   _inInventory: {fileID: 0}
+  Mesh: {fileID: 0}
   _itemData: {fileID: 11400000, guid: 07a19d16c5c037e44a4b9f31bf2d0c1a, type: 2}
   IsEquipped: 0
   IsBeingThrown: 0
@@ -5446,12 +5448,12 @@ MonoBehaviour:
   Equip: {fileID: 8300000, guid: 42805680f5119fb49bb647093b69c68e, type: 3}
   Drop: {fileID: 8300000, guid: ad72b7dad0b500a4da51ec7cf97cb2e7, type: 3}
   Break: {fileID: 8300000, guid: 8d77e2c4e6960cc4aa3d121a3f694c60, type: 3}
-  WeightedObject: {fileID: 2161925395333028353}
-  ImpulseSource: {fileID: 3400845810517198304}
-  Dust: {fileID: 1484470257301904812}
   Ground:
     serializedVersion: 2
     m_Bits: 257
+  WeightedObject: {fileID: 2161925395333028353}
+  ImpulseSource: {fileID: 3400845810517198304}
+  Dust: {fileID: 1484470257301904812}
 --- !u!114 &7069857723681842973
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5479,15 +5481,42 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnRoboArmInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndInteraction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: -516602080759757730}
+        m_TargetAssemblyTypeName: Sc_Item_Haulable, Assembly-CSharp
+        m_MethodName: OnEndInteraction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnThrownInteraction:
     m_PersistentCalls:
       m_Calls: []
+  _interactibleHighlightMeshes: []
+  useDebug: 1
   _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
   _debugUnselectedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
   _mesh: {fileID: 2239723589458809593}
   _priority: 0
-  _usesKey: 0
-  _keyIDs: 
+  CanBeInteractedWithOnThrow: 0
+  _canBeInteractedWith: 1
+  _condition:
+    Type: 0
+    Step_QuestID: -1
+    Comparison: 0
+    Step_QuestStep: -1
+    Finished_QuestID: -1
+    Item: 0
 --- !u!54 &3224877861351975070
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5496,7 +5525,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6722241946343355045}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 50
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -5510,11 +5539,11 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &2161925395333028353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5603,6 +5632,27 @@ CapsuleCollider:
   m_Radius: 0.4
   m_Height: 1
   m_Direction: 1
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!65 &2033278777667222745
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6722241946343355045}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1 &8309745171270017501
 GameObject:

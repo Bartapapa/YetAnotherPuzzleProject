@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8285203906497221230}
   - component: {fileID: 3915608859386995735}
   - component: {fileID: 2510109697067852846}
+  - component: {fileID: 3012326883631312884}
   m_Layer: 9
   m_Name: Key
   m_TagString: Untagged
@@ -54,6 +55,7 @@ MonoBehaviour:
     type: 3}
   MeshCenterPoint: {fileID: 8153871694686653581}
   _inInventory: {fileID: 0}
+  Mesh: {fileID: 0}
   _itemData: {fileID: 11400000, guid: 8ac85627940078046a90982205073d9b, type: 2}
   IsEquipped: 0
   IsBeingThrown: 0
@@ -62,6 +64,9 @@ MonoBehaviour:
   Equip: {fileID: 8300000, guid: 42805680f5119fb49bb647093b69c68e, type: 3}
   Drop: {fileID: 8300000, guid: 6a0cb31535833024eb35c77562208c67, type: 3}
   Break: {fileID: 8300000, guid: 8d77e2c4e6960cc4aa3d121a3f694c60, type: 3}
+  Ground:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &8285203906497221230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,16 +94,42 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnRoboArmInteraction:
+    m_PersistentCalls:
+      m_Calls: []
+  OnEndInteraction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7998893684659358588}
+        m_TargetAssemblyTypeName: Sc_Item_Haulable, Assembly-CSharp
+        m_MethodName: OnEndInteraction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnThrownInteraction:
     m_PersistentCalls:
       m_Calls: []
+  _interactibleHighlightMeshes: []
+  useDebug: 1
   _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
   _debugUnselectedMat: {fileID: 2100000, guid: 75fb7b437b28aef48b50bad69d2a77c0, type: 2}
   _mesh: {fileID: 9151496905835594646}
   _priority: 0
   CanBeInteractedWithOnThrow: 0
-  _usesKey: 0
-  _keyIDs: 
+  _canBeInteractedWith: 1
+  _condition:
+    Type: 0
+    Step_QuestID: -1
+    Comparison: 0
+    Step_QuestStep: -1
+    Finished_QuestID: -1
+    Item: 0
 --- !u!65 &3915608859386995735
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -142,11 +173,32 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
+--- !u!65 &3012326883631312884
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54452754733584579}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 0.25, z: 1}
+  m_Center: {x: 0, y: 0, z: 0.05}
 --- !u!1 &888544655931820994
 GameObject:
   m_ObjectHideFlags: 0

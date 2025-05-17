@@ -43,7 +43,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6423395487638498873}
-  - component: {fileID: 4722305613564460319}
   - component: {fileID: 8315999142448352922}
   - component: {fileID: 8135647381034914934}
   - component: {fileID: 8492874989148189297}
@@ -71,45 +70,9 @@ Transform:
   - {fileID: 6505654073304174080}
   - {fileID: 4949016288159209971}
   - {fileID: 5882995134481606714}
+  - {fileID: 771836168375507189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4722305613564460319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 951109013125180684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 276a178735880f2459a0a7ae18454d60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnInteractedWith:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8315999142448352922}
-        m_TargetAssemblyTypeName: Sc_KeyLock, Assembly-CSharp
-        m_MethodName: OnInteractedWith
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  OnThrownInteraction:
-    m_PersistentCalls:
-      m_Calls: []
-  _debugSelectedMat: {fileID: 2100000, guid: dab00a7e0e0512f46b0bec5a12851c52, type: 2}
-  _debugUnselectedMat: {fileID: 2100000, guid: 5e45a529e3fe79e46adefff4a23adae4, type: 2}
-  _mesh: {fileID: 2017585440467374847}
-  _priority: 0
-  CanBeInteractedWithOnThrow: 0
-  _usesKey: 1
-  _keyIDs: 08000000
 --- !u!114 &8315999142448352922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,7 +91,7 @@ MonoBehaviour:
   OnLockOpened:
     m_PersistentCalls:
       m_Calls: []
-  Interactible: {fileID: 4722305613564460319}
+  PlayerDetector: {fileID: 0}
   Particles: {fileID: 6973125513716097746}
   Impulse: {fileID: 8958207620879537734}
   Source: {fileID: 3789705237328481339}
@@ -5541,3 +5504,70 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8965534442729224210
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 771836168375507189}
+  - component: {fileID: 8283634761126909445}
+  - component: {fileID: 3596525817414238714}
+  m_Layer: 8
+  m_Name: PlayerDetector
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &771836168375507189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8965534442729224210}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6423395487638498873}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8283634761126909445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8965534442729224210}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba4521af1f0cd346b00bf1a77fa6e73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ColliderType: 2
+--- !u!135 &3596525817414238714
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8965534442729224210}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1
+  m_Center: {x: 0, y: 0, z: -0.5}

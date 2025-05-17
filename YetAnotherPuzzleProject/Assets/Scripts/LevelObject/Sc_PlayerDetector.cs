@@ -21,7 +21,7 @@ public class Sc_PlayerDetector : MonoBehaviour
     private CapsuleCollider _capsuleCollider;
     private MeshCollider _meshCollider;
 
-    public delegate void CharacterEvent(Sc_CharacterController character);
+    public delegate void CharacterEvent(Sc_Character character);
     public event CharacterEvent CharacterDetected;
     public event CharacterEvent CharacterUndetected;
 
@@ -33,8 +33,11 @@ public class Sc_PlayerDetector : MonoBehaviour
                 break;
             case ColliderType.Box:
                 _boxCollider = GetComponent<BoxCollider>();
+                _boxCollider.isTrigger = true;
                 break;
             case ColliderType.Sphere:
+                _sphereCollider = GetComponent<SphereCollider>();
+                _sphereCollider.isTrigger = true;
                 break;
             case ColliderType.Capsule:
                 break;
@@ -55,6 +58,8 @@ public class Sc_PlayerDetector : MonoBehaviour
                 _boxCollider.size = size;
                 break;
             case ColliderType.Sphere:
+                _sphereCollider.center = offset;
+                _sphereCollider.radius = size.x;
                 break;
             case ColliderType.Capsule:
                 break;
@@ -67,7 +72,7 @@ public class Sc_PlayerDetector : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        Sc_Character character = other.GetComponent<Sc_Character>();
         if (character)
         {
             Debug.Log(this.name + " has detected: " + character.name + "!");
@@ -79,7 +84,7 @@ public class Sc_PlayerDetector : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Sc_CharacterController character = other.GetComponent<Sc_CharacterController>();
+        Sc_Character character = other.GetComponent<Sc_Character>();
         if (character)
         {
             Debug.Log(character.name + " has left " + this.name + "'s detection.");

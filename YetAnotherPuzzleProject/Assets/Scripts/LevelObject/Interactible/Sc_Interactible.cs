@@ -8,6 +8,7 @@ public class Sc_Interactible : MonoBehaviour
     [Header("UNITY EVENTS")]
     public UnityEvent<Sc_Character> OnInteractedWith;
     public UnityEvent<Sc_Character_Player> OnRoboArmInteraction;
+    public UnityEvent<Sc_Character> OnEndInteraction;
     public UnityEvent OnThrownInteraction;
 
     [Header("OBJECT REFS")]
@@ -91,58 +92,6 @@ public class Sc_Interactible : MonoBehaviour
                 {
                     OnInteractedWith?.Invoke(interactor);
                 }
-
-                //if (_usesRoboArm && _usesKey)
-                //{
-                //    if (player.Inventory.CurrentlyHeldItem != null)
-                //    {
-                //        if (_condition.CheckPlayerItemCondition(player.Inventory.CurrentlyHeldItem._itemData.ID))
-                //        {
-                //            if (player.Inventory.CurrentlyHeldItem.UseItemAsKey(this))
-                //            {
-                //                OnInteractedWith?.Invoke(interactor);
-                //                return;
-                //            }
-                //        }
-                //        else
-                //        {
-                //            if (player.HasRoboArm)
-                //            {
-                //                OnRoboArmInteraction?.Invoke(player);
-                //                return;
-                //            }
-                //        }
-                //    }
-                //    else
-                //    {
-                //        if (player.HasRoboArm)
-                //        {
-                //            OnRoboArmInteraction?.Invoke(player);
-                //            return;
-                //        }
-                //    }
-                //}
-                //else if (_usesKey)
-                //{
-                //    if (player.Inventory.CurrentlyHeldItem.UseItemAsKey(this))
-                //    {
-                //        OnInteractedWith?.Invoke(interactor);
-                //        return;
-                //    }
-                //}
-                //else if (_usesRoboArm)
-                //{
-                //    if (player.HasRoboArm)
-                //    {
-                //        OnRoboArmInteraction?.Invoke(player);
-                //        return;
-                //    }
-                //}
-                //else
-                //{
-                //    OnInteractedWith?.Invoke(interactor);
-                //    return;
-                //}
             }
             else
             {
@@ -168,6 +117,8 @@ public class Sc_Interactible : MonoBehaviour
             //Debug.Log("INTERACTION ENDED - ITEM");
             player.Interactor._lastInteractedInteractible = null;
         }
+
+        OnEndInteraction?.Invoke(interactor);
         //Base EndInteract method
     }
 

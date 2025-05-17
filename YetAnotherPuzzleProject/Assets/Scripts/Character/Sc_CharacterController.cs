@@ -33,12 +33,18 @@ public class Sc_CharacterController : MonoBehaviour
     public bool CanMove { get { return _canMove; } set { _canMove = value; } }
     public bool CanRotate { get { return _canRotate; } set { _canRotate = value; } }
     private Vector3 _forcedLookAtDir = Vector3.zero;
-    private float _currentMoveSpeed = 0f;
+    private float _targetMoveSpeed = 0f;
     [ReadOnly] public Vector3 InheritedVelocity = Vector3.zero;
     [ReadOnly] public float InheritedYaw = 0f;
 
+    [Header("HAULING MOVEMENT")]
+    public bool IsHauling = false;
+    public float _maxHaulingMoveSpeed = 3.5f;
+    public float _haulingRotationSharpness = 5f;
+
     [Header("PARTICLES")]
     public ParticleSystem _runParticles;
+    public ParticleSystem _sweatParticles;
 
     [Header("WEIGHT")]
     public float _weight = 10f;
@@ -46,6 +52,7 @@ public class Sc_CharacterController : MonoBehaviour
     [Header("GROUNDCHECK")]
     public Transform _groundCheckEmissionPoint;
     public LayerMask _groundLayers;
+    public bool SnapToGround = true;
     public float _maxVerticalBalancingForce = 10f;
     public float _groundCheckDistance = 1f;
     private bool _isGrounded = false;
@@ -253,7 +260,8 @@ public class Sc_CharacterController : MonoBehaviour
         //Make RB float above ground, giving a force that 'attaches' it to the ground if too far away, and pushes it back if too close
         float distanceToGround = _groundHit.distance;
         float alpha = distanceToGround / _groundCheckDistance;
-        float strength = Mathf.Lerp(_maxVerticalBalancingForce, -_maxVerticalBalancingForce, alpha);
+        float maximumDownwardsBalancingForce = SnapToGround ? -_maxVerticalBalancingForce : 0f;
+        float strength = Mathf.Lerp(_maxVerticalBalancingForce, maximumDownwardsBalancingForce, alpha);
         Vector3 balancingForce = new Vector3(0f, strength, 0f);
         _rb.AddForce(balancingForce, ForceMode.Force);
     }
@@ -285,14 +293,24 @@ public class Sc_CharacterController : MonoBehaviour
 
                 if (!_isClimbing)
                 {
-                    if (toLookVector.sqrMagnitude > 0f && _rotationSharpness > 0f)
+                    float toRotationSharpness;
+                    if (IsHauling)
                     {
-                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, toLookVector, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+                        toRotationSharpness = _haulingRotationSharpness;
+                    }
+                    else
+                    {
+                        toRotationSharpness = _rotationSharpness;
+                    }
+
+                    if (toLookVector.sqrMagnitude > 0f && toRotationSharpness > 0f)
+                    {
+                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, toLookVector, 1 - Mathf.Exp(-toRotationSharpness * Time.fixedDeltaTime)).normalized;
                         smoothedLookInputDirection = Quaternion.Euler(0f, InheritedYaw, 0f) * smoothedLookInputDirection;
 
                         if (_isPushingBlock)
                         {
-                            smoothedLookInputDirection = Vector3.Slerp(transform.forward, _pushDirection, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+                            smoothedLookInputDirection = Vector3.Slerp(transform.forward, _pushDirection, 1 - Mathf.Exp(-toRotationSharpness * Time.fixedDeltaTime)).normalized;
                         }
 
                         if (!_canRotate) break;
@@ -301,7 +319,7 @@ public class Sc_CharacterController : MonoBehaviour
                     }
                     else
                     {
-                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, transform.forward, 1 - Mathf.Exp(-_rotationSharpness * Time.fixedDeltaTime)).normalized;
+                        Vector3 smoothedLookInputDirection = Vector3.Slerp(transform.forward, transform.forward, 1 - Mathf.Exp(-toRotationSharpness * Time.fixedDeltaTime)).normalized;
                         smoothedLookInputDirection = Quaternion.Euler(0f, InheritedYaw, 0f) * smoothedLookInputDirection;
 
                         if (!_canRotate) break;
@@ -358,7 +376,16 @@ public class Sc_CharacterController : MonoBehaviour
                         }
 
                         //Set velocity, add inheritedVelocity given by pushes and moving pillars.
-                        Vector3 targetMovementVelocity = reorientedInput * _maxGroundedMoveSpeed;
+                        float toMaxSpeed;
+                        if (IsHauling)
+                        {
+                            toMaxSpeed = _maxHaulingMoveSpeed;
+                        }
+                        else
+                        {
+                            toMaxSpeed = _maxGroundedMoveSpeed;
+                        }
+                        Vector3 targetMovementVelocity = reorientedInput * toMaxSpeed;
                         if (!_canMove) targetMovementVelocity = Vector3.zero;
 
                         targetMovementVelocity = targetMovementVelocity + InheritedVelocity;
@@ -526,7 +553,7 @@ public class Sc_CharacterController : MonoBehaviour
     #region PUSHING
     private void CheckRequestPush()
     {
-        if (_isClimbing || !_isGrounded)
+        if (_isClimbing || !_isGrounded || IsHauling)
         {
             EndPush();
             return;
@@ -776,16 +803,30 @@ public class Sc_CharacterController : MonoBehaviour
     private void HandleParticles()
     {       
         Vector3 horizontalVelocity = new Vector3(_rb.velocity.x, 0f, _rb.velocity.z);
-        if (Mathf.Abs(horizontalVelocity.magnitude) >= 2f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f && _currentValve == null)
+        if (Mathf.Abs(horizontalVelocity.magnitude) >= 4f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f && _currentValve == null)
         {
-            if (!_runParticles.isPlaying)
-            {
-                _runParticles.Play();
-            }          
+            _runParticles.emissionRate = 20;
         }
         else
         {
-            _runParticles.Stop();
+            _runParticles.emissionRate = 0;
+        }
+
+        if (IsHauling)
+        {
+            if (Mathf.Abs(horizontalVelocity.magnitude) >= 1f && IsGrounded && !_isPushingBlock && _moveInputVector.magnitude > 0f && _currentValve == null)
+            {
+                _sweatParticles.emissionRate = 3;
+            }
+            else
+            {
+                _sweatParticles.emissionRate = 1;
+            }
+            
+        }
+        else
+        {
+            _sweatParticles.emissionRate = 0;
         }
     }
 

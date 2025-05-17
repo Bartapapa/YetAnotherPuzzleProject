@@ -3,76 +3,40 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Sc_Item_Effigy : Sc_Item
+public class Sc_Item_Effigy : Sc_Item_Haulable
 {
     [Header("EFFIGY OBJECT REFERENCES")]
     public Sc_WeightedObject WeightedObject;
     public CinemachineImpulseSource ImpulseSource;
     public ParticleSystem Dust;
 
-    [Header("GROUND MASK")]
-    public LayerMask Ground;
-
-    private void FixedUpdate()
-    {
-        if (IsBeingThrown)
-        {
-            if (HasLanded())
-            {
-                OnItemDrop();
-                OnEffigyLand();
-            }
-        }
-    }
-
-    private bool HasLanded()
-    {
-        bool hasLanded = Physics.Raycast(transform.position, Vector3.down, .1f, Ground, QueryTriggerInteraction.Ignore);
-        if (!hasLanded)
-        {
-            WeightedObject.RBVelocity = _rb.velocity;
-        }
-        else
-        {
-            WeightedObject.RBVelocity = Vector3.zero;
-        }
-        return hasLanded;
-    }
-
     public override void UseItem()
     {
-        WeightedObject.StateChange();
+        //WeightedObject.StateChange();
     }
 
-    public override void OnItemEquip()
+    protected override void OnLanded()
     {
-        base.OnItemEquip();
-        WeightedObject.StateChange();
-    }
-
-    public override void OnItemStore()
-    {
-        base.OnItemStore();
-        WeightedObject.StateChange();
+        OnEffigyLand();
     }
 
     public override void OnItemDrop()
     {
-        base.OnItemDrop();
-        WeightedObject.StateChange();
-        GroundShake();
+        //base.OnItemDrop();
     }
 
     private void OnEffigyLand()
     {
         _interactible.CanBeInteractedWith = true;
-        _rb.isKinematic = true;
-        _rb.useGravity = true;
-        _coll.isTrigger = true;
+        _grounded = true;
+        WeightedObject.StateChange();
 
-        IsBeingThrown = false;
+        if (Sc_GameManager.instance != null)
+        {
+            Sc_GameManager.instance.SoundManager.PlaySFX(Source, Drop, new Vector2(.9f, 1f));
+        }
 
-        SpreadContact();
+        //SpreadContact();
         GroundShake();
     }
 
@@ -86,25 +50,5 @@ public class Sc_Item_Effigy : Sc_Item
         {
             Dust.Play();
         }
-    }
-
-    public override void ThrowItem(Sc_Character_Player throwingCharacter, Vector3 throwDirection)
-    {
-        //base.ThrowItem(throwingCharacter, throwDirection);
-        _interactible.CanBeInteractedWith = false;
-        _rb.isKinematic = false;
-        _rb.useGravity = true;
-        _coll.isTrigger = false;
-
-        Vector3 throwDir = throwDirection * _itemData.ThrowForce;
-        _rb.AddForce(throwDir, ForceMode.Impulse);
-
-        IsBeingThrown = true;
-        _thrownByCharacter = throwingCharacter;
-    }
-
-    protected override void OnCollisionEnter(Collision collision)
-    {
-
     }
 }

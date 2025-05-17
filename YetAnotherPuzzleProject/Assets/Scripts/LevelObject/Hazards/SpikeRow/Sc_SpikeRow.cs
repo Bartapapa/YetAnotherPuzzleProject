@@ -10,16 +10,19 @@ public class Sc_SpikeRow : MonoBehaviour
 
     [Header("PLAYER DETECTION PARAMETERS")]
     public float PlayerDetectionTimeThreshold = .5f;
+    public float SpikeEjectionDelay = .3f;
     private float _currentPlayerDetectionDuration = 0f;
 
     [Header("RESET PARAMETERS")]
     public float ResetTime = 3f;
 
     private bool _ejected = false;
+    private bool _prepping { get { return _prepCo == null ? false : true; } }
+    private Coroutine _prepCo;
     private Coroutine _postEjectWaitCo;
     private Coroutine _resetIntoPlaceCo;
     private Coroutine _ejectSpikesDamagerCo;
-    private List<Sc_CharacterController> _detectedCharacters = new List<Sc_CharacterController>();
+    private List<Sc_Character> _detectedCharacters = new List<Sc_Character>();
 
     public delegate void DefaultEvent();
     public event DefaultEvent Ejected;
@@ -48,13 +51,13 @@ public class Sc_SpikeRow : MonoBehaviour
 
     private void HandleDetectionThreshold()
     {
-        if (_ejected) return;
+        if (_ejected || _prepping) return;
         if (_detectedCharacters.Count >= 1)
         {
             _currentPlayerDetectionDuration += Time.deltaTime;
             if (_currentPlayerDetectionDuration >= PlayerDetectionTimeThreshold)
             {
-                EjectSpikes();
+                PrepareSpikeEjection();
                 _currentPlayerDetectionDuration = 0f;
             }
         }
@@ -62,6 +65,17 @@ public class Sc_SpikeRow : MonoBehaviour
         {
             _currentPlayerDetectionDuration = 0f;
         }
+    }
+
+    private void PrepareSpikeEjection()
+    {
+        if (_resetIntoPlaceCo != null)
+        {
+            StopCoroutine(_resetIntoPlaceCo);
+            _resetIntoPlaceCo = null;
+        }
+
+        _prepCo = StartCoroutine(PrepSpikesEjectionCo());
     }
 
     private void EjectSpikes()
@@ -99,14 +113,28 @@ public class Sc_SpikeRow : MonoBehaviour
         _resetIntoPlaceCo = StartCoroutine(ResetIntoPlaceCo());
     }
 
-    private void OnCharacterDetected(Sc_CharacterController character)
+    private void OnCharacterDetected(Sc_Character character)
     {
         _detectedCharacters.Add(character);
     }
 
-    private void OnCharacterUndetected(Sc_CharacterController character)
+    private void OnCharacterUndetected(Sc_Character character)
     {
         _detectedCharacters.Remove(character);
+    }
+
+    private IEnumerator PrepSpikesEjectionCo()
+    {
+        float timer = 0f;
+        float duration = SpikeEjectionDelay;
+        while (timer <= duration)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        _prepCo = null;
+        EjectSpikes();
     }
 
     private IEnumerator EjectSpikesDamagerCo()
@@ -151,11 +179,15 @@ public class Sc_SpikeRow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Sc_Health health = other.gameObject.GetComponent<Sc_Health>();
-        if (health)
+        Sc_Character_Player character = other.gameObject.GetComponent<Sc_Character_Player>();
+        if (character)
         {
             Debug.LogWarning(other.gameObject.name + " has been hit by spikes!");
-            health.Death();
+            character.Health.Death();
+            character.Controller.SnapToGround = false;
+            Vector3 randomLateralForce = new Vector3(UnityEngine.Random.Range(-1f, 1f), 0f, UnityEngine.Random.Range(-1f, 1f));
+            character.Controller._gravity = new Vector3(0f, -10f, 0f);
+            character.Controller.RB.AddForce(Vector3.up * 10f + randomLateralForce, ForceMode.Impulse);
         }
     }
 }

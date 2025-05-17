@@ -194,7 +194,7 @@ public class Sc_RamBlock : MonoBehaviour
         _cachedPos = transform.position;
     }
 
-    private void OnCharacterDetected(Sc_CharacterController character)
+    private void OnCharacterDetected(Sc_Character character)
     {
         if (!_canDetect) return;
         Sc_CrushingHandler crushHandler = character.GetComponentInChildren<Sc_CrushingHandler>();
@@ -207,7 +207,7 @@ public class Sc_RamBlock : MonoBehaviour
         }   
     }
 
-    private void OnCharacterUndetected(Sc_CharacterController character)
+    private void OnCharacterUndetected(Sc_Character character)
     {
         Sc_CrushingHandler crushHandler = character.GetComponentInChildren<Sc_CrushingHandler>();
         if (crushHandler)

@@ -16,6 +16,9 @@ public class Sc_Health : MonoBehaviour
     public void Death(float deathSequenceTime = 3f)
     {
         DeathParticles.Play();
+
+        PlayerCharacter.Inventory.DropCurrentlyHauledItem();
+
         PlayerCharacter.Controller.IgnoreInputs = true;
         PlayerCharacter.Controller.Capsule.enabled = false;
         Dead = true;

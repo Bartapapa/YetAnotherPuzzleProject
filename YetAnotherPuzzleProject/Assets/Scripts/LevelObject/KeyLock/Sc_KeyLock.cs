@@ -10,7 +10,7 @@ public class Sc_KeyLock : Sc_Activator
     public UnityEvent OnLockOpened;
 
     [Header("OBJECT REFS")]
-    public Sc_Interactible Interactible;
+    public Sc_PlayerDetector PlayerDetector;
     public ParticleSystem Particles;
     public CinemachineImpulseSource Impulse;
     public AudioSource Source;
@@ -23,16 +23,18 @@ public class Sc_KeyLock : Sc_Activator
     private void Start()
     {
         _rb = GetComponent<Rigidbody>();
-    }
 
-    public void OnInteractedWith(Sc_Character interactor)
-    {
-        OpenLock();
+        PlayerDetector.CharacterDetected -= OnCharacterDetected;
+        PlayerDetector.CharacterUndetected -= OnCharacterUndetected;
+
+        PlayerDetector.CharacterDetected += OnCharacterDetected;
+        PlayerDetector.CharacterUndetected += OnCharacterUndetected;
     }
 
     public void OpenLock()
     {
-        Interactible.CanBeInteractedWith = false;
+        PlayerDetector.enabled = false;
+
         DelayActivation();
         OnLockOpened?.Invoke();
 
@@ -50,5 +52,29 @@ public class Sc_KeyLock : Sc_Activator
         {
             Sc_GameManager.instance.SoundManager.PlaySFX(Source, Open);
         }
+    }
+
+    private void OnCharacterDetected(Sc_Character detectedCharacter)
+    {
+        Sc_Character_Player player = detectedCharacter.GetComponent<Sc_Character_Player>();
+        if (player)
+        {
+            if (player.Inventory.CurrentItem == EquippedItem.Hauled)
+            {
+                if (player.Inventory.CurrentHaulableItem != null)
+                {
+                    if (player.Inventory.CurrentHaulableItem._itemData.ID == 8)
+                    {
+                        player.Inventory.UseHaulableItem();
+                        OpenLock();
+                    }
+                }
+            }
+        }
+    }
+
+    private void OnCharacterUndetected(Sc_Character undetectedCharacter)
+    {
+
     }
 }

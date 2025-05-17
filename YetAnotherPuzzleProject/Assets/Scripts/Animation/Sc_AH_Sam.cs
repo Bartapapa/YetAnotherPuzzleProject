@@ -11,6 +11,10 @@ public class Sc_AH_Sam : Sc_AnimationHandler
     public Sc_Inventory_New Inventory;
     public Sc_RoboArm RoboArm;
 
+    [Header("SAM RUN ANIM PARAMETERS")]
+    public float _maxMovementBTAnimSpeedFactor = 2f;
+    public float _maxMovementAnimSpeedVelocity = 5f;
+
     private void Start()
     {
         Controller.OnLanded -= OnCharacterLanded;
@@ -51,6 +55,7 @@ public class Sc_AH_Sam : Sc_AnimationHandler
         float lateralMovement = 0f;
         lateralMovement = Mathf.Abs(Vector3.Magnitude(new Vector3(Controller.RB.velocity.x * lateralMovementMultiplier, 0f, Controller.RB.velocity.z * lateralMovementMultiplier)));
         lateralMovement = Mathf.Lerp(Anim.GetFloat("LateralSpeed"), lateralMovement, .05f);
+        float movementBTSpeedFactor = Mathf.Lerp(1, _maxMovementBTAnimSpeedFactor, lateralMovement / _maxMovementAnimSpeedVelocity);
         if (lateralMovement <= .1f)
         {
             lateralMovement = 0f;
@@ -58,6 +63,7 @@ public class Sc_AH_Sam : Sc_AnimationHandler
         float verticalMovement = Mathf.Clamp(Controller.RB.velocity.y / 10f, -1f, 1f);
 
         Anim.SetFloat("LateralSpeed", lateralMovement);
+        Anim.SetFloat("MovementBTSpeed", movementBTSpeedFactor);
         Anim.SetFloat("VerticalSpeed", verticalMovement);
         Anim.SetBool("isGrounded", isGrounded);
         Anim.SetBool("isPushing", isPushing);
